@@ -29,13 +29,13 @@ void Show_elements_stack(Stack* stack_)
 	}
 }
 
-Stack* Pop_Stack(Stack* stack_)
+int Pop_Stack(Stack** stack_)
 {
 	if (stack_ == NULL)
 		return;
-	Stack* tmp = stack_;
+	Stack* tmp = *stack_;
 	int data = tmp->data;
-	stack_ = stack_->next;
+	*stack_ = tmp->next;
 	free(tmp);
-	return stack_;
+	return data;
 }
