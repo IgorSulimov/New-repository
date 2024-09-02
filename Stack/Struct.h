@@ -8,6 +8,6 @@ typedef struct Stack
 
 Stack* Push_stack(Stack* stack_, int data);
 void Show_elements_stack(Stack* stack_);
-Stack* Pop_Stack(Stack* stack_);
+int Pop_Stack(Stack** stack_);
 
 
