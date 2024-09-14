@@ -4,11 +4,13 @@
 #include <stdbool.h>
 int main()
 {
-	char* name = "d:/1.txt";
+	char name[] = "1.txt";
 	int elements;
 	int size;
 	FILE* f1;
 	fopen_s(&f1, name, "w");
+	if (!f1)
+		return -1;
 	printf("Print SIZE\n");
 	scanf_s("%d", &size);
 	fprintf(f1, "%d\n", size);
@@ -22,9 +24,9 @@ int main()
 
 	fclose(f1);
 
-	int** matrix = calloc(size, sizeof(int));
+	int** matrix = new int* [size];
 	for (unsigned i = 0; i < size; i++)
-		matrix[i] = calloc(size, sizeof(int));
+		matrix[i] = new int [size];
 
 
 	Creat_Matrix(name, matrix);
@@ -37,5 +39,8 @@ int main()
 	else
 		printf("\nMagick Square: False\n");
 
-//matrix values and its size: 3|| 4 9 2 3 5 7 8 1 6
+	delete(matrix);
+	return 0;
+	//matrix values and its size: 3|| 4 9 2 3 5 7 8 1 6
 }
+
