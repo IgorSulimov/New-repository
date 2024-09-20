@@ -4,30 +4,23 @@
 #include <stdbool.h>
 int main()
 {
-	char name[] = "1.txt";
-	int elements;
-	int size;
-	FILE* f1;
-	fopen_s(&f1, name, "w");
-	if (!f1)
-		return -1;
-	printf("Print SIZE\n");
-	scanf_s("%d", &size);
-	fprintf(f1, "%d\n", size);
-	int tmp_size = size * size;
-	printf("Print %d Elements\n", size * size);
-	for (; tmp_size > 0; tmp_size--)
+	int** matrix = 0;
+	int size = 0;
+	char format;
+	char name[20] = "d:/Matrix.txt";
+	printf("Choose what to do with the file:\nWrite to file 'w'\nRead from file 'r'\n");
+	scanf_s("%c", &format);
+	if (format == 'r')
+		size = Read_File(name, size);
+	if (format == 'w')
+		size = Write_File(name, size);
+
+
+	matrix = new int* [size];
+	for (int i = 0; i < size; i++)
 	{
-		scanf_s("%d", &elements);
-		fprintf(f1, "%d\n", elements);
+		matrix[i] = new int[size];
 	}
-
-	fclose(f1);
-
-	int** matrix = new int* [size];
-	for (unsigned i = 0; i < size; i++)
-		matrix[i] = new int [size];
-
 
 	Creat_Matrix(name, matrix);
 	printf("\nMatrix:\n\n");
@@ -38,9 +31,4 @@ int main()
 	}
 	else
 		printf("\nMagick Square: False\n");
-
-	delete(matrix);
-	return 0;
-	//matrix values and its size: 3|| 4 9 2 3 5 7 8 1 6
 }
-
