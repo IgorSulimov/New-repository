@@ -17,12 +17,15 @@ void Push_Back(SList** List, char* data_);
 
 void Push_Place(SList** List, char* data_, int place,int rep);
 
-SList* Push_F(SList* List, char* name_file);
+SList* Order_F(char* name_file);
 
 
 char* Pop_Back(SList** List);
 char* Pop_Top(SList** List);
+void Pop_Word(SList** List, char* data_);
 
-void Print_List(SList** List);
 
+void Print_List(SList* List);
+
+void Push_Word(SList** List, char* data_);
 
