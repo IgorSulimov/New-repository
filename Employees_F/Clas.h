@@ -12,7 +12,7 @@ class Sotrudnik
 private:
 	char* name;
 	int year;
-	float sell;
+	float salary;
 	char data[11];
 public:
 	//Konstructor
@@ -20,7 +20,7 @@ public:
 	{
 		name = new char[31];
 		year = 0;
-		sell = 0.0;
+		salary = 0.0;
 		data[0] = '\0';
 	}
 
@@ -28,7 +28,7 @@ public:
 	{
 		name = new char[n];
 		year = 0;
-		sell = 0.0;
+		salary = 0.0;
 		data[0] = '\0';
 	}
 
@@ -47,9 +47,9 @@ public:
 	{
 		year = year1;
 	}
-	void SetSell(float sel)
+	void Setsalary(float sel)
 	{
-		sell = sel;
+		salary = sel;
 	}
 	void SetData(char* dat)
 	{
@@ -66,9 +66,9 @@ public:
 	{
 		return year;
 	}
-	float GetSell()
+	float Getsalary()
 	{
-		return sell;
+		return salary;
 	}
 	char* GetData()
 	{
@@ -77,17 +77,38 @@ public:
 
 	void Printf()
 	{
-		printf("%s %d %5.2f %s\n", name, year, sell, data);
+		printf("%s %d %5.2f %s\n", name, year, salary, data);
 	}
 
 	void Vvod()
 	{
 		char inic[5];
-		scanf("%s %s %d %f %s", name, inic, &year, &sell, data);
+		scanf("%s %s %d %f %s", name, inic, &year, &salary, data);
 		strcat(name, " ");
 		strcat(name, inic);
 	}
 
+	Sotrudnik(Sotrudnik& B)
+	{
+		name = new char[strlen(B.name)+1] ;
+		strcpy(name, B.name);
+		year = B.year;
+		salary = B.salary;
+		strcpy(data, B.data);
+	}
+
+	Sotrudnik& operator = (Sotrudnik& b)
+	{
+		if (&b == this) return *this;
+		delete[] name;
+		name = new char[strlen(b.name) + 1];
+		strcpy(name, b.name);
+		year = b.year;
+		salary = b.salary;
+		strcpy(data, b.data);
+		return *this;
+	}
 };
+
 
 
