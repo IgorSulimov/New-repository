@@ -79,3 +79,4 @@ void Base::Add_emp(Sotrudnik emp)
 	}
 	base[current_size++] = emp;
 }
+
