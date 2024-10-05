@@ -12,16 +12,12 @@ const int maxn = 100;
 int main()
 {
 	Sotrudnik Bob;
-	Sotrudnik_Detals(Bob);
 	char d[] = "Bob K.P.";
 	Base arr;
 	int size_arr = 0;
-	char name_file[] = "d:/Sotrudnik.txt";
+	char name_file[] = "Sotrudnik.txt";
 	arr.Creat_Base_F(name_file);
-	arr.Print_Base();
-	arr.Del_El(d);
-	printf("\n\n\n");
-	arr.Print_Base();
+	Bob.Vvod();
 	arr.Add_emp(Bob);
 	printf("\n\n\n");
 	arr.Print_Base();
