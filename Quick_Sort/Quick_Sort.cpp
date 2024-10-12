@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include "Function.h"
 
  int Quick_Sort_Right(int* arr, int left, int right) {
@@ -72,14 +72,15 @@
 
 
 
-int Quick_Sort_Midl(int arr[], int n)
+int Quick_Sort_Midl(int* arr, int n)
 {
      int stack[100];
      int top = -1;  
 
      stack[++top] = 0;
      stack[++top] = n - 1;
-
+     int i;
+     int j;
      int d = 0;
      while (top >= 0) {
          d++;
@@ -107,17 +108,79 @@ int Quick_Sort_Midl(int arr[], int n)
                      j--;
                  }
              }
+             Print_Arr(arr, n);
 
              // Помещаем индексы подмассивов в стек
              if (left < j) {
                  stack[++top] = left;       // Левый подмассив
                  stack[++top] = j;
              }
-             if (i < right) {
-                 stack[++top] = i;         // Правый подмассив
+             if (i < right)
+             {
+                 stack[++top] = i;
                  stack[++top] = right;
              }
          }
      }
          return d;
  }
+
+
+void QQ(int* arr, int n) {
+    int stack[100];
+    int top = -1;   
+
+  
+    stack[++top] = 0;
+    stack[++top] = n - 1;
+
+    while (top >= 0) {
+      
+        int high = stack[top--];
+        int low = stack[top--];
+        int i = low;
+        int j = high;
+        while(i<j) 
+        {
+            if (low + 1 != high)
+            {
+                int mid = low + (high - low) / 2;
+                int pivot = arr[mid];
+
+          
+                while (i <= j) {
+                    while (arr[i] < pivot) {
+                        i++;
+                    }
+                    while (arr[j] > pivot) {
+                        j--;
+                    }
+                    if (i <= j) {
+                        swap(&arr[i], &arr[j]); 
+                        i++;
+                        j--;
+                    }
+                }
+                Print_Arr(arr, n);
+              
+                if (low < j) {
+                    stack[++top] = low;  
+                    stack[++top] = j;
+                }
+
+                if (i < high)
+                {
+                    low = i;
+                    j = high;
+                }
+            }
+            else
+            {
+                if (arr[i] > arr[j])
+                    swap(&arr[i], &arr[j]);
+                i = j + 1;
+            }
+            
+        }
+    }
+}
