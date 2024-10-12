@@ -45,13 +45,11 @@ public:
 	bool Del_El(char* name);
 	int Creat_Base_F(char* file_name);
 	void Print_Base();
-	char* Change_Surname(char* name,char inic[5]);
+	char* Change_Surname(char* name, char inic[5]);
 	void Change_Salary(char* name, float sel);
-	char* Change_Inic(char* name,char inic[5]);
-	void Copy_Base_F(char* file_name);
+	char* Change_Inic(char* name, char inic[5]);
+	int Copy_Base_F(char* file_name);
 
 };
 void Main_Menu();
 void Main_Change_Data();
-void Main_Add_El();
-
