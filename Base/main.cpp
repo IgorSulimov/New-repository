@@ -6,7 +6,6 @@
 #include "Function_Sotrudnik.h"
 #include "Base.h"
 #include <locale.h>
-#include <windows.h>
 using namespace std;
 #pragma warning(disable:4996)
 const int maxn = 100;
@@ -15,7 +14,7 @@ int main()
 {
 	char name_file[] = "Sotrudnik.txt";
 	setlocale(LC_ALL, ".1251");
-	Base* baze = new Base[1] ;
+	Base* baze = new Base[1];
 	int fl = 1;
 	while (fl != 0)
 	{
@@ -52,9 +51,12 @@ int main()
 			}
 			case 2:
 			{
+				char ini[5];
 				char del_name[40];
-				printf("Ââåäèòå èìÿ ñîòðóäíèêà, êîòîðîãî íóæíî óäàëèòü\n");
-				scanf_s("%s",del_name, 40);
+				printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ Ð¸ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹ ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ° ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ Ð½ÑƒÐ¶Ð½Ð¾ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ\n");
+				scanf("%s%s", del_name,ini);
+				strcat(del_name, " ");
+				strcat(del_name, ini);
 				baze->Del_El(del_name);
 				break;
 			}
@@ -63,48 +65,46 @@ int main()
 				char n_ini[5];
 				char ini[5];
 				char ch_name[40];
-				printf("Ââåäèòå èìÿ è èíèöèàëû ñîòðóäíèêà, êîòîðûå íóæíî èçìåíèòü\n");
-				scanf_s("%s", ch_name, 40);
-				scanf_s("%s", ini, 5);
-				strcpy(ch_name, "");
-				strcpy(ch_name, ini);
-				printf("Ââåäèòå íîâûå èíèöèàëû ñîòðóäíèêà\n");
-				scanf_s("%s", n_ini, 5);
+				printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð˜Ð¼Ñ Ð¸ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹ ÑÑ‚Ð¾Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ° Ð² ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¼ Ð½ÑƒÐ¶Ð½Ð¾ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹\n");
+				scanf("%s%s", ch_name, ini);
+				strcat(ch_name, " ");
+				strcat(ch_name, ini);
+				printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐÐ¾Ð²Ñ‹Ðµ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹\n");
+				scanf("%s", n_ini);
 				baze->Change_Surname(ch_name, n_ini);
 				break;
 			}
 			case 4:
 			{
-				float n_oklad = 0.0;
+				float n_oklad ;
 				char ini[5];
 				char ch_name[40];
-				printf("Ââåäèòå èìÿ è èíèöèàëû ñîòðóäíèêà, îêëàä êîòîðîãî íóæíî èçìåíèòü\n");
-				scanf_s("%s", ch_name, 40);
-				scanf_s("%s", ini, 5);
-				strcpy(ch_name, "");
-				strcpy(ch_name, ini);
-				printf("Ââåäèòå íîâûé îêëàä ñîòðóäíèêà");
-				scanf("%f", n_oklad);
+				printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð˜Ð¼Ñ Ð¸ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹ ÑÑ‚Ð¾Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ° Ð² ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¼ Ð½ÑƒÐ¶Ð½Ð¾ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¾ÐºÐ»Ð°Ð´\n");
+				scanf("%s%s", ch_name,ini);
+				strcat(ch_name, " ");
+				strcat(ch_name, ini);
+				printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð¾Ð²Ñ‹Ð¹ Ð¾ÐºÐ»Ð°Ð´ ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ°\n");
+				scanf("%f", &n_oklad);
 				baze->Change_Salary(ch_name, n_oklad);
 				break;
 			}
 			case 5:
 			{
+				char* n_name;
 				char n_ini[5];
-				float n_oklad = 0.0;
+				float n_oklad;
 				char ini[5];
 				char ch_name[40];
-				printf("Ââåäèòå èìÿ è èíèöèàëû ñîòðóäíèêà, îêëàä è èíèöèàëû êîòîðîãî íóæíî èçìåíèòü\n");
-				scanf_s("%s", ch_name, 40);
-				scanf_s("%s", ini, 5);
-				strcpy(ch_name, "");
-				strcpy(ch_name, ini);
-				printf("Ââåäèòå íîâûå èíèöèàëû ñîòðóäíèêà\n");
-				scanf_s("%s", n_ini, 5);
-				baze->Change_Surname(ch_name, n_ini);
-				printf("Ââåäèòå íîâûé îêëàä ñîòðóäíèêà");
-				scanf("%f", n_oklad);
-				baze->Change_Salary(baze->Change_Surname(ch_name, n_ini), n_oklad);
+				printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð˜Ð¼Ñ Ð¸ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹ ÑÑ‚Ð¾Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ° Ð² ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¼ Ð½ÑƒÐ¶Ð½Ð¾ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹ Ð¸ Ð¾ÐºÐ»Ð°Ð´\n");
+				scanf("%s%s", ch_name, ini);
+				strcat(ch_name, " ");
+				strcat(ch_name, ini);
+				printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐÐ¾Ð²Ñ‹Ðµ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹\n");
+				scanf("%s", n_ini);
+				n_name = baze->Change_Surname(ch_name, n_ini);
+				printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð¾Ð²Ñ‹Ð¹ Ð¾ÐºÐ»Ð°Ð´ ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ°\n");
+				scanf("%f", &n_oklad);
+				baze->Change_Salary(n_name, n_oklad);
 				break;
 			}
 			}
@@ -112,10 +112,7 @@ int main()
 		}
 		case 4:
 		{
-			char file[50];
-			printf("Ââåäèòå íàçâàíèå ôàéëà, êóäà ñêîïèðîâàòü äàííûå ñ áàçû\n");
-			scanf("%s", file, 50);
-			baze->Copy_Base_F(file);
+			baze->Copy_Base_F(name_file);
 			break;
 		}
 
