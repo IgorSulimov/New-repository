@@ -31,6 +31,7 @@ int Base::Creat_Base_F(char* file_name)
 			}
 		}
 	}
+	fclose(f);
 	return 0;
 }
 
@@ -45,8 +46,9 @@ void Base::Print_Base()
 char* Base::Change_Surname(char* name, char inic[5])
 {
 	int i = 0;
-	for (i; strcmp(base[i].GetName(), name) != 0;i++)
-	{ }
+	for (i; strcmp(base[i].GetName(), name) != 0; i++)
+	{
+	}
 
 	if (strcmp(base[i].GetName(), name) == 0)
 	{
@@ -61,7 +63,8 @@ char* Base::Change_Inic(char* name, char inic[5])
 	char new_char[50];
 	strcpy(new_char, name);
 	for (i; name[i] != ' '; i++)
-	{ }
+	{
+	}
 	i++;
 	for (int j = 0; inic[j]; j++, i++)
 	{
@@ -71,20 +74,24 @@ char* Base::Change_Inic(char* name, char inic[5])
 	return new_char;
 }
 
-void Base::Copy_Base_F(char* file_name)
+int Base::Copy_Base_F(char* file_name)
 {
 	FILE* f;
 	fopen_s(&f, file_name, "w");
+	if (!f)
+		return -1;
 
 	for (size_t i = 0; i < current_size; ++i)
-		fprintf_s(f,"%s %d %f %s\n",base[i].GetName(), base[i].Getyear(), base[i].Getsalary(), base[i].GetData());
+		fprintf_s(f, "%s %d %5.2f %s\n", base[i].GetName(), base[i].Getyear(), base[i].Getsalary(), base[i].GetData());
+	fclose(f);
 }
 
 void Base::Change_Salary(char* name, float sal)
 {
 	int i = 0;
 	for (i; strcmp(base[i].GetName(), name) != 0; i++)
-	{ }
+	{
+	}
 	base[i].Setsalary(sal);
 }
 bool Base::Del_El(char* name_)
@@ -134,7 +141,7 @@ void Base::Add_Sort_emp(Sotrudnik emp)
 	}
 	Sotrudnik* new_arr = new Sotrudnik[max_size];
 	int i = 0, j = 0;
-	for(i,j; i < current_size;)
+	for (i, j; i < current_size;)
 	{
 		if (strcmp(base[i].GetName(), emp.GetName()) == 1)
 		{
@@ -170,26 +177,18 @@ void Base::Add_Sort_emp(Sotrudnik emp)
 
 void Main_Menu()
 {
-	printf("1.Ñîçäàòü áàçó èç ôàéëà\n");
-	printf("2.Âûâåñòè áàçó\n");
-	printf("3.Èçìåíèòü äàííûå â áàçå\n");
-	printf("4.Êîïèðîâàòü äàííûå â ôàéë\n");
-	printf("0.Âûõîä\n");
+	printf("1.Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð±Ð°Ð·Ñƒ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð°\n");
+	printf("2.Ð’Ñ‹Ð²ÐµÑÑ‚Ð¸ Ð±Ð°Ð·Ñƒ\n");
+	printf("3.Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð² Ð±Ð°Ð·Ðµ\n");
+	printf("4.ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð±Ð°Ð·Ñ‹ Ð² Ñ„Ð°Ð¹Ð»\n");
+	printf("0.Ð’Ñ‹Ñ…Ð¾Ð´\n");
 }
 void Main_Change_Data()
 {
-	printf("1.Äîáàâèòü ýëåìåíò â áàçó\n");
-	printf("2.Óäàëèòü ýëåìåíò èç áàçû\n");
-	printf("3.Èçìåíèòü ôàìèëèþ ñîòðóäíèêà\n");
-	printf("4.Èçìåíèòü îêëàä ñîòðóäíèêà\n");
-	printf("5.Èçìåíèòü îêëàä è ôàìèëèþ ñîòðóäèêà\n");
-	printf("0.Îòìåíà\n");
-}
-void Main_Add_El()
-{
-	printf("Èìÿ:\n");
-	printf("Ôàìèëèÿ:\n");
-	printf("Êîëè÷åñòâî ëåò:\n");
-	printf("Îêëàä:\n");
-	printf("Äàòà ðîæäåíèÿ:\n");
+	printf("1.Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð­Ð»ÐµÐ¼ÐµÐ½Ñ‚ Ð² Ð±Ð°Ð·Ñƒ\n");
+	printf("2.Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ Ð¸Ð· Ð±Ð°Ð·Ñ‹\n");
+	printf("3.Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹ ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ°\n");
+	printf("4.Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¾ÐºÐ»Ð°Ð´ ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ°\n");
+	printf("5.Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ñ‹ Ð¸ Ð¾ÐºÐ»Ð°Ð´ ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ°\n");
+	printf("0.ÐžÑ‚Ð¼ÐµÐ½Ð°\n");
 }
