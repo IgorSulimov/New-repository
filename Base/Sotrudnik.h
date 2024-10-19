@@ -83,19 +83,19 @@ public:
 	void Vvod()
 	{
 		char inic[5];
-		printf("Имя:");
+		printf("РРјСЏ:");
 		scanf("%s", name);
 		printf("\n");
-		printf("Инициалы:");
+		printf("РРЅРёС†РёР°Р»С‹:");
 		scanf("%s", inic);
 		printf("\n");
-		printf("Год:");
+		printf("Р“РѕРґ:");
 		scanf("%d", &year);
 		printf("\n");
-		printf("Оклад:");
+		printf("РћРєР»Р°Рґ:");
 		scanf("%s", &salary);
 		printf("\n");
-		printf("Дата:");
+		printf("Р”Р°С‚Р°:");
 		scanf("%s", data);
 		printf("\n");
 		//scanf("%s %s %d %f %s", name, inic, &year, &salary, data);
@@ -105,7 +105,7 @@ public:
 
 	Sotrudnik(Sotrudnik& B)
 	{
-		name = new char[strlen(B.name)+1] ;
+		name = new char[strlen(B.name) + 1];
 		strcpy(name, B.name);
 		year = B.year;
 		salary = B.salary;
@@ -129,5 +129,4 @@ public:
 	}
 
 };
-
 
