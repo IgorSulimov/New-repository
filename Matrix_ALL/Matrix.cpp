@@ -138,10 +138,11 @@ void Matrix::Input()
 {
     for (int i = 0; i < row; i++)
         for (int j = 0; j < column; j++) {
-            printf("Ââåäèòå ýëåìåíò [%d][%d]: ", i, j);
+            printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ [%d][%d]: ", i, j);
             if (!scanf("%lf", &matrix[i][j])) return;
         }
 }
+
 
 void Matrix::Output() const
 {
