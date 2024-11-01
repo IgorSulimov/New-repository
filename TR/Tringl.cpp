@@ -81,23 +81,23 @@ bool Tringle::Tringle_In(Tringle tring)
 	Point tr1 = tring.V1;
 	Point tr2 = tring.V2;
 	Point tr3 = tring.V3;
-	// Провека каждой точки (tr1)
+	// РџСЂРѕРІРµРєР° РєР°Р¶РґРѕР№ С‚РѕС‡РєРё (tr1)
 	S_tmp = tring.Sum_Square_Point(V1, V2, V3, tr1);
 
 	if (round(S_tmp) == round(S))
 	{
-		// Проверкав точки (tr2)
+		// РџСЂРѕРІРµСЂРєР°РІ С‚РѕС‡РєРё (tr2)
 		S_tmp = 0;
 		S_tmp = tring.Sum_Square_Point(V1, V2, V3, tr2);
 
 		if (round(S_tmp) == round(S))
 		{
-			// Проверка точки tr3
+			// РџСЂРѕРІРµСЂРєР° С‚РѕС‡РєРё tr3
 			S_tmp = 0;
 			S_tmp = tring.Sum_Square_Point(V1, V2, V3, tr3);
 
 			if (round(S_tmp) == round(S))
-			{// Возврат Векторов
+			{// Р’РѕР·РІСЂР°С‚ Р’РµРєС‚РѕСЂРѕРІ
 				tring.a = sqrt((tr1.Get_x() - tr2.Get_x()) * (tr1.Get_x() - tr2.Get_x()) + (tr1.Get_y() - tr2.Get_y()) * (tr1.Get_y() - tr2.Get_y()));
 				tring.b = sqrt((tr2.Get_x() - tr3.Get_x()) * (tr2.Get_x() - tr3.Get_x()) + (tr2.Get_y() - tr3.Get_y()) * (tr2.Get_y() - tr3.Get_y()));
 				tring.c = sqrt((tr1.Get_x() - tr3.Get_x()) * (tr1.Get_x() - tr3.Get_x()) + (tr1.Get_y() - tr3.Get_y()) * (tr1.Get_y() - tr3.Get_y()));
@@ -123,27 +123,47 @@ int Tringle::operator >(Tringle& other)
 
 void Tringle::Print_Tring()
 {
-	printf("Точки:\n");
-	printf("(%d,%d)||(%d,%d)||(%d,%d)\n", V1.Get_x(), V1.Get_y(), V2.Get_x(), V2.Get_y(), V3.Get_x(), V3.Get_y());
-	printf("Вектора:\n");
-	printf("a =%5.2f, b =%5.2f, c =%5.2f\n", a, b, c);
-	printf("Имя треугольника:\n");
+	printf("РРјСЏ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР°:\n");
 	printf("%s\n", name);
-	printf("Площадь треугольника:\n");
+	printf("РўРѕС‡РєРё:\n");
+	printf("(%d,%d)||(%d,%d)||(%d,%d)\n", V1.Get_x(), V1.Get_y(), V2.Get_x(), V2.Get_y(), V3.Get_x(), V3.Get_y());
+	printf("Р’РµРєС‚РѕСЂР°:\n");
+	printf("a =%5.2f, b =%5.2f, c =%5.2f\n", a, b, c);
+	printf("РџР»РѕС‰Р°РґСЊ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР°:\n");
 	printf("%5.2f\n", this->Find_Square());
+	printf("\n\n\n");
+}
+
+void Tringle::Creat_Trin()
+{
+	int x1, y1, x2, y2, x3, y3;
+	char nam[40];
+	scanf("%d%d%d%d%d%d%s", &x1, &y1, &x2, &y2, &x3, &y3, nam);
+	Point a1(x1, y1), a2(x2, y2), a3(x3, y3);
+	V1.Set_x(a1.Get_x());
+	V1.Set_y(a1.Get_y());
+	V2.Set_x(a2.Get_x());
+	V2.Set_y(a2.Get_y());
+	V3.Set_x(a3.Get_x());
+	V3.Set_y(a3.Get_y());
+	a = sqrt((V1.Get_x() - V2.Get_x()) * (V1.Get_x() - V2.Get_x()) + (V1.Get_y() - V2.Get_y()) * (V1.Get_y() - V2.Get_y()));
+	b = sqrt((V2.Get_x() - V3.Get_x()) * (V2.Get_x() - V3.Get_x()) + (V2.Get_y() - V3.Get_y()) * (V2.Get_y() - V3.Get_y()));
+	c = sqrt((V1.Get_x() - V3.Get_x()) * (V1.Get_x() - V3.Get_x()) + (V1.Get_y() - V3.Get_y()) * (V1.Get_y() - V3.Get_y()));
+	delete[] name;
+	name = new char[strlen(nam) + 1];
+	Set_name(nam);
 }
 
 void Menu_Tring()
 {
-	printf("1.Вывести все треугольники\n");
-	printf("2.Создать треугольник\n");
-	printf("3.Функции с треугольниками\n");
+	printf("1.Р’С‹РІРµСЃС‚Рё РІСЃРµ С‚СЂРµСѓРіРѕР»СЊРЅРёРєРё\n");
+	printf("2.РЎРѕР·РґР°С‚СЊ С‚СЂРµСѓРіРѕР»СЊРЅРёРє\n");
+	printf("3.Р¤СѓРЅРєС†РёРё СЃ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР°РјРё\n");
 }
 
 void Menu_Tring_Func()
 {
-	printf("Перемещение треугольника\n");
-	printf("Сравнение треугольников >\n");
-	printf("Вычисление площади\n");
-	printf("Включение треугольника 1 в треугольник 2\n");
+	printf("1.РџРµСЂРµРјРµС‰РµРЅРёРµ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР°\n");
+	printf("2.РЎСЂР°РІРЅРµРЅРёРµ С‚СЂРµСѓРіРѕР»СЊРЅРёРєРѕРІ >\n");
+	printf("3.Р’РєР»СЋС‡РµРЅРёРµ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР° 1 РІ С‚СЂРµСѓРіРѕР»СЊРЅРёРє 2\n");
 }
