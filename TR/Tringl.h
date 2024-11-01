@@ -76,6 +76,7 @@ public:
 	bool Tringle_In(Tringle tring);
 	int operator >(Tringle& other);
 	void Print_Tring();
+	void Creat_Trin();
 };
 
 void Menu_Tring();
