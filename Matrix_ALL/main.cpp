@@ -6,18 +6,18 @@
 int main() {
     setlocale(LC_ALL, "RUS");
     SquareMatrix a(3);
-    printf("Введите матрицу а:\n");
+    printf("Р’РІРµРґРёС‚Рµ РјР°С‚СЂРёС†Сѓ Р°:\n");
     Vector vect;
     a.Input();
     vect = Maxfromdiag(a);
     vect.Print_elem();
-    //printf("Введите матрицу b:\n");
+    //printf("Р’РІРµРґРёС‚Рµ РјР°С‚СЂРёС†Сѓ b:\n");
     //b.Input();
     //try
     //{
     //    a.Set_Element(6, 5, 100);
     //    Matrix c = a + b;
-    //    printf("сумма матрицы:\n");
+    //    printf("СЃСѓРјРјР° РјР°С‚СЂРёС†С‹:\n");
     //    c.Output();
     //}
     //catch (int x)
@@ -26,10 +26,10 @@ int main() {
     //    switch (x)
     //    {
     //    case 1:
-    //        printf("Выход за границы матрицы\n");
+    //        printf("Р’С‹С…РѕРґ Р·Р° РіСЂР°РЅРёС†С‹ РјР°С‚СЂРёС†С‹\n");
     //        break;
     //    case 2:
-    //        printf("Не савпадают размеры матрицы\n");
+    //        printf("РќРµ СЃР°РІРїР°РґР°СЋС‚ СЂР°Р·РјРµСЂС‹ РјР°С‚СЂРёС†С‹\n");
     //        break;
     //    }
     //}
