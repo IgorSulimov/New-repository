@@ -1,4 +1,4 @@
-#include "Tringl.h"
+#include "Tringle.hpp"
 using namespace std;
 #include <stdlib.h>
 #include <math.h>
@@ -15,7 +15,7 @@ Tringle::Tringle(Point a1, Point a2, Point a3, char* name_)
 	b = sqrt((V2.Get_x() - V3.Get_x()) * (V2.Get_x() - V3.Get_x()) + (V2.Get_y() - V3.Get_y()) * (V2.Get_y() - V3.Get_y()));
 	c = sqrt((V1.Get_x() - V3.Get_x()) * (V1.Get_x() - V3.Get_x()) + (V1.Get_y() - V3.Get_y()) * (V1.Get_y() - V3.Get_y()));
 	delete[] name;
-	name = new char[strlen(name_)+1];
+	name = new char[strlen(name_) + 1];
 	Set_name(name_);
 	printf("KONSTRUKTOR\n");
 
@@ -136,6 +136,7 @@ void Tringle::Print_Tring()
 
 void Tringle::Creat_Trin()
 {
+
 	int x1, y1, x2, y2, x3, y3;
 	char nam[40];
 	scanf("%d%d%d%d%d%d%s", &x1, &y1, &x2, &y2, &x3, &y3, nam);
@@ -154,6 +155,37 @@ void Tringle::Creat_Trin()
 	Set_name(nam);
 }
 
+Tringle& Tringle::operator=(const Tringle other_)
+{
+	if (this == &other_)
+		return *this;
+	V1 = (other_.V1);
+	V2 = (other_.V2);
+	V3 = (other_.V3);
+	a = (other_.a);
+	b = (other_.b);
+	c = (other_.c);
+	name = new char[strlen(other_.name) + 1];
+	Set_name(other_.name);
+
+	return *this;
+}
+
+void Inc_Size(Tringle* Trin, int size)
+{
+	Tringle* tmp_ = new Tringle[size + 1];
+	for (int i = 0; i < size; i++)
+	{
+		tmp_[i] = Trin[i];
+	}
+	delete[] Trin;
+	Trin = new Tringle[size+1];
+	for (int i = 0; i < size; i++)
+	{
+		Trin[i] = tmp_[i];
+	}
+}
+
 void Menu_Tring()
 {
 	printf("1.Вывести все треугольники\n");
@@ -167,3 +199,19 @@ void Menu_Tring_Func()
 	printf("2.Сравнение треугольников >\n");
 	printf("3.Включение треугольника 1 в треугольник 2\n");
 }
+
+//void Inc_Size(Tringle* Trin, int size)
+//{
+//	Tringle* tmp_ = new Tringle[size+1];
+//	for (int i = 0; i < size; i++)
+//	{
+//		tmp_[i] = Trin[i];
+//	}
+//	delete[] Trin;
+//	Tringle* Trin = new Tringle[size + 1];
+//	for (int i = 0; i < size; i++)
+//	{
+//		Trin[i] = tmp_[i];
+//	}
+//
+//}
