@@ -1,10 +1,10 @@
-#include "Tringl.h"
+#include "Tringle.hpp"
 #include <stdio.h>
 int main()
 {
 	setlocale(LC_ALL, ".1251");
 	int fl = 1;
-	Tringle* Trin = new Tringle[3];
+	Tringle* Trin = new Tringle[1];
 	int counter = 0;
 	while (fl != 0)
 	{
@@ -22,8 +22,9 @@ int main()
 			}
 			break;
 		}
-		case 2: 
+		case 2:
 		{
+			Inc_Size(Trin, counter);
 			Trin[counter].Creat_Trin();
 			counter++;
 			break;
@@ -39,13 +40,13 @@ int main()
 			{
 				printf("Введите имя треугольника:\n");
 				char nam[40];
-				scanf("%s",nam);
+				scanf("%s", nam);
 				printf("Введите на сколько хотите сдвинуть\n");
 				int x, y;
 				scanf("%d%d", &x, &y);
 				Point a(x, y);
 				char* nam_T;
-				for (int i = 0; i < counter+1; i++)
+				for (int i = 0; i < counter + 1; i++)
 				{
 					if (strcmp(Trin[i].Get_name(), nam) == 0)
 					{
@@ -64,7 +65,7 @@ int main()
 				char nam2[40];
 				scanf("%s", nam2);
 				int i = 0, j = 0, fl1 = 1, fl2 = 1;
-				for (i, j;(fl1 &&fl2);)
+				for (i, j; (fl1 && fl2);)
 				{
 					if (strcmp(Trin[i].Get_name(), nam1) != 0)
 					{
@@ -116,6 +117,6 @@ int main()
 			break;
 		}
 		break;
-		}	
+		}
 	}
 }
