@@ -11,7 +11,7 @@ class Point
 	int x;
 	int y;
 public:
-	Point(int x_=0, int y_=0)
+	Point(int x_ = 0, int y_ = 0)
 	{
 		x = x_;
 		y = y_;
@@ -77,7 +77,8 @@ public:
 	int operator >(Tringle& other);
 	void Print_Tring();
 	void Creat_Trin();
+	Tringle& operator=(const Tringle other_);
 };
-
+void Inc_Size(Tringle* Trin, int size);
 void Menu_Tring();
 void Menu_Tring_Func();
