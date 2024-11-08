@@ -45,7 +45,6 @@ class Tringle
 	char* name;
 
 public:
-	int counter = 1;
 	void Set_name(char* name_)
 	{
 		strcpy(name, name_);
@@ -65,8 +64,6 @@ public:
 		c = 0;
 
 		name = new char[20];
-		strcat(name, "Triangle ");
-		sprintf(name, "Triangle %d", counter);
 	}
 
 	double Find_Square();
