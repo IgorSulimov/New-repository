@@ -29,4 +29,8 @@ public:
     void Output() const;
     int Get_Row();
     int Get_Col();
+    friend ostream& operator <<(ostream& stream, Matrix& mat);
+    friend istream& operator >>(istream& stream, Matrix& mat);
 };
+ostream& operator <<(ostream& stream, Matrix& mat);
+istream& operator >>(istream& stream, Matrix& mat);
