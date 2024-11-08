@@ -1,4 +1,4 @@
-#include "Tringle.hpp"
+#include "Tringl.h"
 using namespace std;
 #include <stdlib.h>
 #include <math.h>
@@ -150,7 +150,6 @@ void Tringle::Creat_Trin()
 	a = sqrt((V1.Get_x() - V2.Get_x()) * (V1.Get_x() - V2.Get_x()) + (V1.Get_y() - V2.Get_y()) * (V1.Get_y() - V2.Get_y()));
 	b = sqrt((V2.Get_x() - V3.Get_x()) * (V2.Get_x() - V3.Get_x()) + (V2.Get_y() - V3.Get_y()) * (V2.Get_y() - V3.Get_y()));
 	c = sqrt((V1.Get_x() - V3.Get_x()) * (V1.Get_x() - V3.Get_x()) + (V1.Get_y() - V3.Get_y()) * (V1.Get_y() - V3.Get_y()));
-	delete[] name;
 	name = new char[strlen(nam) + 1];
 	Set_name(nam);
 }
@@ -171,16 +170,16 @@ Tringle& Tringle::operator=(const Tringle other_)
 	return *this;
 }
 
-void Inc_Size(Tringle* Trin, int size)
+void Inc_Size(Tringle* Trin, int size_)
 {
-	Tringle* tmp_ = new Tringle[size + 1];
-	for (int i = 0; i < size; i++)
+	Tringle* tmp_ =new Tringle[size_ + 1];
+	for (int i = 0; i < size_; i++)
 	{
 		tmp_[i] = Trin[i];
 	}
 	delete[] Trin;
-	Trin = new Tringle[size+1];
-	for (int i = 0; i < size; i++)
+	Trin = new Tringle[size_ + 1];
+	for (int i = 0; i < size_; i++)
 	{
 		Trin[i] = tmp_[i];
 	}
@@ -199,19 +198,3 @@ void Menu_Tring_Func()
 	printf("2.Сравнение треугольников >\n");
 	printf("3.Включение треугольника 1 в треугольник 2\n");
 }
-
-//void Inc_Size(Tringle* Trin, int size)
-//{
-//	Tringle* tmp_ = new Tringle[size+1];
-//	for (int i = 0; i < size; i++)
-//	{
-//		tmp_[i] = Trin[i];
-//	}
-//	delete[] Trin;
-//	Tringle* Trin = new Tringle[size + 1];
-//	for (int i = 0; i < size; i++)
-//	{
-//		Trin[i] = tmp_[i];
-//	}
-//
-//}
