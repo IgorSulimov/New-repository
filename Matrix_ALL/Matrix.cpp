@@ -162,3 +162,34 @@ int Matrix::Get_Col()
 {
     return column;
 }
+
+
+ostream& operator<<(ostream& stream, Matrix& mat)
+{
+    stream << "Матрица:";
+    if (mat.Get_Row() == 0 && mat.Get_Col() == 0)
+        stream << " Пустая";
+    for (int i = 0; i < mat.Get_Row(); i++)
+    {
+        stream << "\n";
+        for (int j = 0; j < mat.Get_Col(); j++)
+        {
+            stream << mat.Get_Element(i, j) << "|";
+        }
+    }
+    return stream;
+}
+
+istream& operator >>(istream& in, Matrix& mat)
+{
+    double value;
+    for (int i = 0; i < mat.Get_Row(); i++)
+    {
+        for (int j = 0; j < mat.Get_Col(); j++)
+        {
+            in >> value;
+        }
+    }
+    return in;
+}
+
