@@ -1,5 +1,6 @@
-#include "Tringle.hpp"
+#include "Tringl.h"
 #include <stdio.h>
+using namespace std;
 int main()
 {
 	setlocale(LC_ALL, ".1251");
@@ -34,6 +35,15 @@ int main()
 			Menu_Tring_Func();
 			int fl3;
 			scanf("%d", &fl3);
+			try{
+				if ((fl3 == 2 || fl3 == 3) && counter <= 1)
+					throw 1;
+			}
+			catch (int x)
+			{
+				cout << "Недостаточно треугольников" << endl;
+				fl3 = 0;
+			}
 			switch (fl3)
 			{
 			case 1:
@@ -79,9 +89,9 @@ int main()
 					}
 				}
 				if (Trin[i] > Trin[j])
-					printf("Треугольник %s > чем треугольник %s", nam1, nam2);
+					printf("Треугольник %s > чем треугольник %s\n", nam1, nam2);
 				else
-					printf("Треугольник %s > чем треугольник %s", nam2, nam1);
+					printf("Треугольник %s > чем треугольник %s\n", nam2, nam1);
 				break;
 			}
 			case 3:
@@ -107,9 +117,9 @@ int main()
 					}
 				}
 				if (Trin[i].Tringle_In(Trin[j]))
-					printf("Треугольник %s Входит в треугольник %s", nam2, nam1);
+					printf("Треугольник %s Входит в треугольник %s\n", nam2, nam1);
 				else
-					printf("Треугольник %s НЕ входит в треугольник %s", nam2, nam1);
+					printf("Треугольник %s НЕ входит в треугольник %s\n", nam2, nam1);
 				break;
 			}
 			break;
