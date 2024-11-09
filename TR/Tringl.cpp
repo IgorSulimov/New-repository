@@ -184,7 +184,22 @@ void Inc_Size(Tringle* Trin, int size_)
 		Trin[i] = tmp_[i];
 	}
 }
-
+ostream& operator<<(ostream& stream, Tringle& Trin)
+{
+	stream << "Имя треугольника\n";
+	stream << Trin.Get_name() << endl;
+	stream << "Точки:\n";
+	stream << "(" << Trin.V1.Get_x() << "," << Trin.V1.Get_y() << ")";
+	stream << "(" << Trin.V2.Get_x() << "," << Trin.V2.Get_y() << ")";
+	stream << "(" << Trin.V3.Get_x() << "," << Trin.V3.Get_y() << ")" << endl;
+	stream << "Вектора:\n";
+	stream << "a=" << Trin.Get_a() << endl;
+	stream << "b=" << Trin.Get_b() << endl;
+	stream << "c=" << Trin.Get_c() << endl;
+	stream << "Площадь:\n";
+	stream << Trin.Find_Square() << endl;
+	return stream;
+}
 void Menu_Tring()
 {
 	printf("1.Вывести все треугольники\n");
