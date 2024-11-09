@@ -182,12 +182,11 @@ ostream& operator<<(ostream& stream, Matrix& mat)
 
 istream& operator >>(istream& in, Matrix& mat)
 {
-    double value;
     for (int i = 0; i < mat.Get_Row(); i++)
     {
         for (int j = 0; j < mat.Get_Col(); j++)
         {
-            in >> value;
+            in >> (mat[i][j]);
         }
     }
     return in;
