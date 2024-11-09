@@ -3,6 +3,7 @@
 using namespace std;
 int main()
 {
+	// 1,1 2,2 1,3 || 0,0 5,5 0,5
 	setlocale(LC_ALL, ".1251");
 	int fl = 1;
 	Tringle* Trin = new Tringle[1];
@@ -19,7 +20,7 @@ int main()
 		{
 			for (int i = 0; i != counter; ++i)
 			{
-				Trin[i].Print_Tring();
+				cout << Trin[i];
 			}
 			break;
 		}
@@ -35,7 +36,7 @@ int main()
 			Menu_Tring_Func();
 			int fl3;
 			scanf("%d", &fl3);
-			try{
+			try {
 				if ((fl3 == 2 || fl3 == 3) && counter <= 1)
 					throw 1;
 			}
@@ -125,6 +126,29 @@ int main()
 			break;
 			}
 			break;
+		}
+		case 4:
+		{
+			try
+			{
+				if (counter == 0)
+					throw 1;
+			}
+			catch (int x)
+			{
+				cout<<"Нет треугольников для удаления\n";
+				break;
+			}
+				char name_[20];
+				printf("Введите имя:");
+				scanf("%s", name_);
+				Delete_Tringle(name_, Trin, counter);
+				counter--;
+			break;
+		}
+		case 0:
+		{
+			exit(0);
 		}
 		break;
 		}
