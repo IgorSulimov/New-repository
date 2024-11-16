@@ -4,6 +4,19 @@
 #include <cmath>
 #pragma warning(disable : 4996)
 using namespace std;
+double expT(double x)
+{
+	int number_memb = 100;
+	double res = 1.0;
+	double tmp = 1.0;
+
+	for (int i = 1; i < number_memb; ++i) {
+		tmp = tmp * x / i;
+		res = res + tmp;
+	}
+
+	return res;
+}
 class Function
 {
 protected:
@@ -55,18 +68,3 @@ public:
 		cout << expT(x);
 	}
 };
-
-
-double expT(double x)
-{
-	int number_memb = 100;
-	double res = 1.0;
-	double tmp = 1.0;
-
-	for (int i = 1; i < number_memb; ++i) {
-		tmp = tmp * x / i;
-		res = res + tmp;
-	}
-
-	return res;
-}
