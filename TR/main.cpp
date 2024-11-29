@@ -4,6 +4,7 @@ using namespace std;
 int Tringle::count = 0;
 int main()
 {
+	// 0 0 1 1 2 0 || 0 0 1 3 5 0
 	setlocale(LC_ALL, ".1251");
 	int fl = 1;
 	Tringle* Trin = new Tringle;
