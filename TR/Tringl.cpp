@@ -14,9 +14,7 @@ Tringle::Tringle(Point a1, Point a2, Point a3, char* name_)
 	a = sqrt((V1.Get_x() - V2.Get_x()) * (V1.Get_x() - V2.Get_x()) + (V1.Get_y() - V2.Get_y()) * (V1.Get_y() - V2.Get_y()));
 	b = sqrt((V2.Get_x() - V3.Get_x()) * (V2.Get_x() - V3.Get_x()) + (V2.Get_y() - V3.Get_y()) * (V2.Get_y() - V3.Get_y()));
 	c = sqrt((V1.Get_x() - V3.Get_x()) * (V1.Get_x() - V3.Get_x()) + (V1.Get_y() - V3.Get_y()) * (V1.Get_y() - V3.Get_y()));
-	delete[] name;
-	name = new char[strlen(name_) + 1];
-	Set_name(name_);
+	Set_name();
 	printf("KONSTRUKTOR\n");
 
 }
@@ -117,8 +115,12 @@ int Tringle::operator >(Tringle& other)
 {
 	if (this->Find_Square() > other.Find_Square())
 		return 1;
-	else
+	if(this->Find_Square() < other.Find_Square())
 		return 0;
+	else
+	{
+		return -1;
+	}
 }
 
 void Tringle::Print_Tring()
@@ -136,10 +138,8 @@ void Tringle::Print_Tring()
 
 void Tringle::Creat_Trin()
 {
-
 	int x1, y1, x2, y2, x3, y3;
-	char nam[40];
-	scanf("%d%d%d%d%d%d%s", &x1, &y1, &x2, &y2, &x3, &y3, nam);
+	scanf("%d%d%d%d%d%d", &x1, &y1, &x2, &y2, &x3, &y3);
 	Point a1(x1, y1), a2(x2, y2), a3(x3, y3);
 	V1.Set_x(a1.Get_x());
 	V1.Set_y(a1.Get_y());
@@ -150,11 +150,11 @@ void Tringle::Creat_Trin()
 	a = sqrt((V1.Get_x() - V2.Get_x()) * (V1.Get_x() - V2.Get_x()) + (V1.Get_y() - V2.Get_y()) * (V1.Get_y() - V2.Get_y()));
 	b = sqrt((V2.Get_x() - V3.Get_x()) * (V2.Get_x() - V3.Get_x()) + (V2.Get_y() - V3.Get_y()) * (V2.Get_y() - V3.Get_y()));
 	c = sqrt((V1.Get_x() - V3.Get_x()) * (V1.Get_x() - V3.Get_x()) + (V1.Get_y() - V3.Get_y()) * (V1.Get_y() - V3.Get_y()));
-	name = new char[strlen(nam) + 1];
-	Set_name(nam);
+	count++;
+	Set_name();
 }
 
-Tringle& Tringle::operator=(const Tringle other_)
+Tringle& Tringle::operator=(const Tringle& other_)
 {
 	if (this == &other_)
 		return *this;
@@ -164,28 +164,28 @@ Tringle& Tringle::operator=(const Tringle other_)
 	a = (other_.a);
 	b = (other_.b);
 	c = (other_.c);
+	delete[] name;
 	name = new char[strlen(other_.name) + 1];
-	Set_name(other_.name);
+	strcpy(name, other_.name);
 
 	return *this;
 }
 
-void Inc_Size(Tringle* Trin, int size_)
+int Inc_Size(Tringle* Trin, int size_)
 {
-	Tringle* tmp_ =new Tringle[size_ + 1];
+	Tringle* tmp_ = new Tringle[size_+100];
 	for (int i = 0; i < size_; i++)
 	{
 		tmp_[i] = Trin[i];
 	}
 	delete[] Trin;
-	Trin = new Tringle[size_ + 1];
-	for (int i = 0; i < size_; i++)
-	{
-		Trin[i] = tmp_[i];
-	}
+	Trin = new Tringle[size_+100];
+	Trin = tmp_;
+	return size_+100;
 }
 ostream& operator<<(ostream& stream, Tringle& Trin)
 {
+	double Sq = Trin.Find_Square();
 	stream << "Имя треугольника\n";
 	stream << Trin.Get_name() << endl;
 	stream << "Точки:\n";
@@ -197,7 +197,7 @@ ostream& operator<<(ostream& stream, Tringle& Trin)
 	stream << "b=" << Trin.Get_b() << endl;
 	stream << "c=" << Trin.Get_c() << endl;
 	stream << "Площадь:\n";
-	stream << Trin.Find_Square() << endl;
+	stream << Sq << endl;
 	return stream;
 }
 void Menu_Tring()
@@ -205,6 +205,7 @@ void Menu_Tring()
 	printf("1.Вывести все треугольники\n");
 	printf("2.Создать треугольник\n");
 	printf("3.Функции с треугольниками\n");
+	printf("0.Выход\n");
 }
 
 void Menu_Tring_Func()
