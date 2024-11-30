@@ -13,7 +13,7 @@ public:
 	}
 	Menu(Function** arr_, int size_)
 	{
-		pObj = new Function*[size_ + 1];
+		pObj = new Function * [size_ + 1];
 		for (int i = 0; i < size_; i++)
 		{
 			pObj[i] = arr_[i];
@@ -21,36 +21,50 @@ public:
 		pObj[size_] = nullptr;
 		size_menu = size_ + 1;
 	}
-	Function* Select() const {
+	Function* Select() const
+	{
 		int nItem = size_menu;
-		cout << "\nSelect one of the following function:\n";
-		for (int i = 0; i < nItem; ++i) {
-			cout << i + 1 << ". "; // номер пункта меню на единицу 
-			// больше, чем индекс массива pObj 
+		cout << "\nВыберите одну из следующих функций:\n";
+		for (int i = 0; i < nItem; ++i)
+		{
+			cout << i + 1 << ".";
 			if (pObj[i]) cout << pObj[i]->Get_name() << endl;
-			else cout << "Exit" << endl;
 		}
+		cout  << "Exit" << endl;
 		int item = SelectItem(nItem);
+		if (item == -1)
+		{
+			cout << "\nВыберите одну из следующих функций:\n";
+			for (int i = 0; i < nItem; ++i)
+			{
+				cout << i + 1 << ".";
+				if (pObj[i]) cout << pObj[i]->Get_name() << endl;
+			}
+			cout << "Exit" << endl;
+			item = SelectItem(nItem);
+		}
 		return pObj[item - 1];
 	}
-	int SelectItem(int nItem) const 
+	int SelectItem(int nItem) const
 	{
-		cout << "---------------------------- \n";
 		int item;
-		while (true) {
+		while (true)
+		{
 			cin >> item;
-			if ((item > 0) && (item <= nItem) && (cin.peek() == '\n')) {
-				cin.get();break;
-			}
-			else {
-				cout << "Error (must be number from 1 to ";
-				cout << nItem << "): " << endl;
-				cin.clear();
-				while (cin.get() != '\n') {};
+			if ((item > 0) && (item < nItem))
+			{
 				return item;
-
+			}
+			if (item == nItem)
+			{
+				exit(0);
+			}
+			else
+			{
+				cout << "Ошибка (должно быть число от 1 до ";
+				cout << nItem << "): " << endl;
+				return -1;
 			}
 		}
-		return item;
 	}
 };
