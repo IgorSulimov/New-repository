@@ -44,8 +44,13 @@ public:
 	}
 	void Calculate()
 	{
-		cin >> a >> b;
+		cout << "a=";
+		cin >> a;
+		cout << "b=";
+		cin >> b;
+		cout << "x=";
 		cin >> x;
+		cout << "y(x)=";
 		cout << a * x + b;
 	}
 };
@@ -64,7 +69,29 @@ public:
 	}
 	void Calculate()
 	{
+		cout << "x=";
 		cin >> x;
+		cout << "y(x)=";
 		cout << expT(x);
+	}
+};
+
+class pow_3 : public Function
+{
+public:
+	pow_3()
+	{
+		strcpy(name, "y(x)= x^3");
+	}
+	char* Get_name()
+	{
+		return name;
+	}
+	void Calculate()
+	{
+		cout << "x=";
+		cin >> x;
+		cout << "y(x)=";
+		cout << (x * x * x);
 	}
 };
