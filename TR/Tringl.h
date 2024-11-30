@@ -58,9 +58,10 @@ public:
 	{
 		return a;
 	}
-	void Set_name()
+	void Set_name(char* name_)
 	{
 		char buf[40];
+		strcpy(buf, name_);
 		sprintf(buf, "Tr%d", count);
 		name = new char[strlen(buf) + 1];
 		strcpy(name, buf);
@@ -89,19 +90,15 @@ public:
 	bool Tringle_In(Tringle tring);
 	int operator >(Tringle& other);
 	void Print_Tring();
-	void Creat_Trin();
-	Tringle& operator=(const Tringle& other_);
+	int Creat_Trin();
+	Tringle& operator=(const Tringle other_);
 	friend ostream& operator<<(ostream& stream, Tringle& Trin);
 	//Tringle& operator [](int index)
 	//{
 	//	return Trin[i];
 	//}
-	void Clear()
-	{
-		delete[] name;
-	}
 };
-int Inc_Size(Tringle* Trin, int size);
+void Inc_Size(Tringle* Trin, int size);
 void Menu_Tring();
 void Menu_Tring_Func();
 ostream& operator<<(ostream& stream, Tringle& Trin);
