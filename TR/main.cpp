@@ -1,14 +1,14 @@
-#include "Tringle.hpp"
+#include "Tringl.h"
 #include <stdio.h>
 using namespace std;
 int Tringle::count = 0;
 int main()
 {
-	// 0 0 1 1 2 0 || 0 0 1 4 5 0
 	setlocale(LC_ALL, ".1251");
 	int fl = 1;
-	Tringle* Trin = new Tringle[1];
+	Tringle* Trin = new Tringle;
 	int counter = 0;
+	int size = 0;
 	while (fl != 0)
 	{
 		Menu_Tring();
@@ -27,7 +27,10 @@ int main()
 		}
 		case 2:
 		{
-			Inc_Size(Trin, counter);
+			if (counter >= size)
+			{
+				size = Inc_Size(Trin, size);
+			}
 			if (Trin[counter].Creat_Trin() == -1)
 			{
 				printf("Такого треугольника не существует\n");
@@ -36,8 +39,8 @@ int main()
 			else
 			{
 				counter++;
-				break;
 			}
+			break;
 		}
 		case 3:
 		{
@@ -47,6 +50,8 @@ int main()
 			try {
 				if ((fl3 == 2 || fl3 == 3) && counter <= 1)
 					throw 1;
+				if ((fl3 == 1 && counter == 0))
+					throw 2;
 			}
 			catch (int x)
 			{
@@ -64,7 +69,6 @@ int main()
 				int x, y;
 				scanf("%d%d", &x, &y);
 				Point a(x, y);
-				char* nam_T;
 				for (int i = 0; i < counter + 1; i++)
 				{
 					if (strcmp(Trin[i].Get_name(), nam) == 0)
@@ -97,10 +101,12 @@ int main()
 						fl2 = 0;
 					}
 				}
-				if (Trin[i] > Trin[j])
+				if (Trin[i] > Trin[j] == 1)
 					printf("Треугольник %s > чем треугольник %s\n", nam1, nam2);
-				else
+				if((Trin[i] > Trin[j] == 0))
 					printf("Треугольник %s > чем треугольник %s\n", nam2, nam1);
+				if ((Trin[i] > Trin[j] == -1))
+					printf("Треугольники одинаковые\n");
 				break;
 			}
 			case 3:
@@ -137,6 +143,7 @@ int main()
 		}
 		case 0:
 		{
+
 			exit(0);
 		}
 		break;
