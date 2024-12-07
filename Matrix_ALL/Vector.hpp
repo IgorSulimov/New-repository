@@ -43,4 +43,9 @@ public:
 	void Push_Back(double elem_);
 
 	void Print_Vectors();
+	friend istream& operator >>(istream& in, Vector& vect);
+	friend ostream& operator <<(ostream& stream,const Vector& vect);
 };
+
+istream& operator >>(istream& in, Vector& vect);
+ostream& operator <<(ostream& stream,const Vector& vect);
