@@ -9,30 +9,27 @@ int main() {
     printf("Введите матрицу а:\n");
     Vector vect;
     a.Input();
-    vect = Maxfromdiag(a);
-    vect.Print_elem();
-    //printf("Введите матрицу b:\n");
-    //b.Input();
-    //try
-    //{
-    //    a.Set_Element(6, 5, 100);
-    //    Matrix c = a + b;
-    //    printf("сумма матрицы:\n");
-    //    c.Output();
-    //}
-    //catch (int x)
-
-    //{
-    //    switch (x)
-    //    {
-    //    case 1:
-    //        printf("Выход за границы матрицы\n");
-    //        break;
-    //    case 2:
-    //        printf("Не савпадают размеры матрицы\n");
-    //        break;
-    //    }
-    //}
+    SquareMatrix a(2);
+    cin >> a;
+    cout << a;
+    Vector bb(4);
+    bb = tracematrix(a, 4);
+    cout << bb;
+    //Matrix b(2,2);
+    //cin >> b;
+    //cout << b;
+    //printf("Sum\n");
+    //Matrix sum = a + b;
+    //cout << sum;
+    //printf("Sub\n");
+    //Matrix sub = a - b;
+    //cout << sub;
+    //printf("Mult\n");
+    //Matrix mult = a * b;
+    //cout << mult;
+    //printf("Транеспонирование матрицы а");
+    //Matrix Tr = a.Transpose();
+    //cout << Tr;
     return 0;
 }
 
