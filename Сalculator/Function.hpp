@@ -6,15 +6,14 @@
 using namespace std;
 double expT(double x)
 {
-	int number_memb = 100;
+	double e = 0.00000001;
 	double res = 1.0;
-	double tmp = 1.0;
-
-	for (int i = 1; i < number_memb; ++i) {
-		tmp = tmp * x / i;
-		res = res + tmp;
+	double a_n = 1.0;
+	for (int i = 1; a_n >= e; i++)
+	{
+		a_n = x/i * a_n;
+		res += a_n;
 	}
-
 	return res;
 }
 class Function
