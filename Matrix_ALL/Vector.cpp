@@ -214,3 +214,12 @@ bool Vector::operator!()
 {
     return (size != 0);
 }
+ostream& operator<<(ostream& stream, const Vector& vect)
+{
+    for (int i = 0; i < vect.capasity; i++)
+    {
+        stream << vect.elements[i] << ',' << endl;
+    }
+    return stream;
+}
+
