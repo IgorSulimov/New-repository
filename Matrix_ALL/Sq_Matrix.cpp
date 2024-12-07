@@ -116,3 +116,30 @@ Vector Maxfromdiag(SquareMatrix matrix)
 	return vec;
 
 }
+double SquareMatrix::trace()
+{
+	int size = Get_Row();
+	double res = 0;
+	for (int i = 0; i < size; i++)
+	{
+		res += matrix[i][i];
+	}
+	return res;
+}
+
+Vector tracematrix(SquareMatrix& matrix, int n)
+{
+	if (n <= 0)
+	{
+		throw 5;
+	}
+	double trace = 0;
+	Vector result(n);
+	SquareMatrix duplicate = matrix;
+	for (int i = 0; i < n; i++)
+	{
+		result[i] = duplicate.trace();
+		duplicate = duplicate * matrix;
+	}
+	return result;
+}
