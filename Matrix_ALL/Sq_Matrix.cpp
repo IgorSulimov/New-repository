@@ -37,20 +37,6 @@ SquareMatrix& SquareMatrix::operator=(const SquareMatrix& other)
 	return *this;
 }
 
-SquareMatrix SquareMatrix::pow(int n)
-{
-	SquareMatrix temp(row);
-	for (int i = 0; i < row; i++)
-	{
-		temp.matrix[i][i] = 1;
-	}
-	for (int i = 1; i <= n; i++)
-	{
-		temp = temp * (*this);
-	}
-	return temp;
-}
-
 SquareMatrix SquareMatrix::operator*(SquareMatrix other)
 {
 	if (column != other.row)
@@ -75,15 +61,15 @@ SquareMatrix SquareMatrix::operator^(int n)
 	return result;
 }
 
-Vector Maxfromdiag(SquareMatrix matrix) 
+Vector Maxfromdiag(SquareMatrix matrix)
 {
 	int n = matrix.Get_Row();
-	int size_vec = 2*n-1;
+	int size_vec = 2 * n - 1;
 	Vector vec(size_vec);
 	double max_left;
 	double max_right;
 	int left_vect = 0;
-	int right_vect = size_vec-1;
+	int right_vect = size_vec - 1;
 	int n_ = n - 1;
 
 	for (int i = n_; i != 0; i--)
@@ -91,7 +77,7 @@ Vector Maxfromdiag(SquareMatrix matrix)
 		max_left = 0;
 		max_right = 0;
 
-		for (int row_ = i, colum_ = 0; (row_ <= n_) && ( colum_ <= n_);)
+		for (int row_ = i, colum_ = 0; (row_ <= n_) && (colum_ <= n_);)
 		{
 			if (matrix[row_][colum_] > max_left)
 				max_left = matrix[row_][colum_];
@@ -142,4 +128,73 @@ Vector tracematrix(SquareMatrix& matrix, int n)
 		duplicate = duplicate * matrix;
 	}
 	return result;
+}
+//- - | - 0 | - + | 0 - | 0 + | + -| + 0 | + +
+SquareMatrix& SquareMatrix::Arithmetic_mean()
+{
+	SquareMatrix tmp;
+	tmp.row = row;
+	tmp.column = column;
+	tmp.matrix = new double* [row];
+	for (int i = 0; i < row; i++) {
+		tmp.matrix[i] = new double[column];
+		for (int j = 0; j < column; j++)
+			tmp.matrix[i][j] = matrix[i][j];
+	}
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < column; j++)
+		{
+			matrix[i][j] = Arif(tmp, i, j);
+		}
+	}
+	return *this;
+}
+double SquareMatrix::Arif(SquareMatrix& mat, int r, int c)
+{
+	double sum = 0;
+	int i = r, j = c;
+	int count = 0;
+	if (((i - 1) >= 0 && (j - 1) >= 0))
+	{
+		sum += mat.matrix[i - 1][j - 1];
+		count++;
+	}
+	if (((i - 1) >= 0))
+	{
+		sum += mat.matrix[i - 1][j];
+		count++;
+	}
+	if (((i - 1) >= 0 && j + 1 <= mat.column-1))
+	{
+		sum += mat.matrix[i - 1][j + 1];
+		count++;
+	}
+	if
+	 (((j - 1) >= 0))
+	{
+		sum += mat.matrix[i][j - 1];
+		count++;
+	}
+	if(j + 1 <= mat.column-1)
+	{
+		sum += mat.matrix[i][j + 1];
+		count++;
+	}
+	if(((i + 1) <= mat.row-1 && j - 1 >= 0))
+	{
+		sum += mat.matrix[i + 1][j - 1];
+		count++;
+	}
+	if((i + 1) <= mat.row-1)
+	{
+		sum += mat.matrix[i + 1][j];
+		count++;
+	}
+	if(((i + 1) <= mat.row-1 && j + 1 <= mat.column-1))
+	{
+		sum += mat.matrix[i + 1][j + 1];
+		count++;
+	}
+	return (sum/count);
 }
