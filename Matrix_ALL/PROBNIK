@@ -233,3 +233,43 @@ public:
         return in;
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int main() {
+    setlocale(LC_ALL, "RUS");
+    Matrix<double> a(3,3);
+    cin >> a;
+    cout << a;
+    Matrix<double> b(3,3);
+    cin >> b;
+    cout << b;
+    Matrix<double> c = a + b;
+    printf("\nCумма матриц:\n");
+    cout << c;
+    printf("\n\n");
+    Matrix<double> d = a * b;
+    printf("\nПроизведение матриц:\n");
+    cout << d;
+    printf("\n\n");
+    Matrix<double> e = a - b;
+    printf("\nРазность матриц:\n");
+    cout << e;
+    printf("\n\n");
