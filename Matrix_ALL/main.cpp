@@ -28,11 +28,14 @@ int main() {
     printf("Транспонирование матрицы\n");
     cout << g;
     printf("\n\n");
-    SquareMatrix h = a^3;
+    SquareMatrix h = a ^ 3;
     printf("Матрица в 3 степени\n");
     cout << h;
     printf("\n\n");
 
+    SquareMatrix p = a.Arithmetic_mean();
+    printf("Среднее арифметическое\n");
+    cout << a;
     printf("Максимальные диагонали\n");
     Vector bb;
     bb = Maxfromdiag(a);
@@ -45,4 +48,5 @@ int main() {
     cout << cc;
 
     return 0;
+}
 
