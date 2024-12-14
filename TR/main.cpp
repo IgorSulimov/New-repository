@@ -2,6 +2,7 @@
 #include <stdio.h>
 using namespace std;
 int Tringle::count = 0;
+// 0 0 1 3  4 0 || 0 0 1 1 2 0 || 0 0 2 3  4 0 |
 int main()
 {
 	setlocale(LC_ALL, ".1251");
