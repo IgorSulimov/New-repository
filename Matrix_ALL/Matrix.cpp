@@ -166,18 +166,27 @@ int Matrix::Get_Col()
 
 ostream& operator<<(ostream& stream, Matrix& mat)
 {
+ ostream& operator<<(ostream& stream, Matrix& mat)
+{
     stream << "Матрица:";
-    if (mat.Get_Row() == 0 && mat.Get_Col() == 0)
+    if (mat.row == 0 && mat.column == 0)
         stream << " Пустая";
-    for (int i = 0; i < mat.Get_Row(); i++)
+    stream << setw(0) << left;
+    for (int i = 0; i < mat.row; i++)
     {
         stream << "\n";
-        for (int j = 0; j < mat.Get_Col(); j++)
+        stream << setw(0) << left;
+        for (int j = 0; j < mat.column; j++)
         {
-            stream << mat.Get_Element(i, j) << "|";
+
+            stream <<right << setw(6) << mat.matrix[i][j] << "|";
+            stream.precision(4);
+            stream <<left<< setw(0);
         }
     }
+    stream << endl;
     return stream;
+}
 }
 
 istream& operator >>(istream& in, Matrix& mat)
