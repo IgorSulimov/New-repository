@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
 #include <cmath>
+#include <fstream>
 #pragma warning(disable : 4996)
+using namespace std;
 
 class Matrix
 {
@@ -31,6 +33,8 @@ public:
     int Get_Col();
     friend ostream& operator <<(ostream& stream, Matrix& mat);
     friend istream& operator >>(istream& stream, Matrix& mat);
+    friend ifstream& operator>>(ifstream& in_, Matrix& matrix_);
 };
 ostream& operator <<(ostream& stream, Matrix& mat);
 istream& operator >>(istream& stream, Matrix& mat);
+ifstream& operator>>(ifstream& in_, Matrix& matrix_);
