@@ -39,26 +39,46 @@ SquareMatrix& SquareMatrix::operator=(const SquareMatrix& other)
 
 SquareMatrix SquareMatrix::operator*(SquareMatrix other)
 {
-	if (column != other.row)
-		throw 3;
-	SquareMatrix result(other.column);
-	for (int i = 0; i < row; i++)
-		for (int j = 0; j < other.column; j++)
-			for (int k = 0; k < column; k++)
-				result.matrix[i][j] += matrix[i][k] * other.matrix[k][j];
-	return result;
+	try
+	{
+		if (column != other.row)
+			throw exception("Столбцы первой матрицы не равны строкам второй матрицы");
+
+		SquareMatrix result(other.column);
+
+		for (int i = 0; i < row; i++)
+			for (int j = 0; j < other.column; j++)
+				for (int k = 0; k < column; k++)
+					result.matrix[i][j] += matrix[i][k] * other.matrix[k][j];
+		return result;
+	}
+	catch (const exception &ex)
+	{
+		cout << ex.what();
+		exit(1);
+	}
 }
 
-SquareMatrix SquareMatrix::operator^(int n)
+SquareMatrix& SquareMatrix::operator^(int n)
 {
-	if (column != row)
-		throw 3;
-	SquareMatrix result(column);
-	for (int i = 0; i < row; i++)
-		for (int j = 0; j < column; j++)
-			for (int k = 0; k < column; k++)
-				result.matrix[i][j] += matrix[i][k] * matrix[k][j];
-	return result;
+	try
+	{
+		if (column != row)
+			throw exception("Столбцы и строки матрицы должны быть равны");
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < column; j++)
+			{
+				matrix[i][j] = matrix[i][j] * matrix[i][j];
+			}
+		}
+		return *this;
+	}
+	catch (const exception& ex)
+	{
+		cout << ex.what();
+		exit(1);
+	}
 }
 
 Vector Maxfromdiag(SquareMatrix matrix)
@@ -115,24 +135,33 @@ double SquareMatrix::trace()
 
 Vector tracematrix(SquareMatrix& matrix, int n)
 {
-	if (n <= 0)
+	try
 	{
-		throw 5;
+		if (n <=0)
+			throw exception("Степень не может быть <= 0");
+		double trace = 0;
+		Vector result(n);
+		SquareMatrix duplicate = matrix;
+		for (int i = 0; i < n; i++)
+		{
+			result[i] = duplicate.trace();
+			duplicate = duplicate * matrix;
+		}
+		return result;
 	}
-	double trace = 0;
-	Vector result(n);
-	SquareMatrix duplicate = matrix;
-	for (int i = 0; i < n; i++)
+	catch (const exception& ex)
 	{
-		result[i] = duplicate.trace();
-		duplicate = duplicate * matrix;
+		cout << ex.what();
+		exit(1);
 	}
-	return result;
 }
 //- - | - 0 | - + | 0 - | 0 + | + -| + 0 | + +
 SquareMatrix& SquareMatrix::Arithmetic_mean()
 {
 	SquareMatrix tmp;
+	for (int i = 0; i < tmp.row; i++)
+		delete[] tmp.matrix[i];
+	delete[] tmp.matrix;
 	tmp.row = row;
 	tmp.column = column;
 	tmp.matrix = new double* [row];
