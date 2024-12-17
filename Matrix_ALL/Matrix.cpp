@@ -1,6 +1,8 @@
 #include <iostream>
 #include <math.h>
 #include "Matrix.hpp"
+#include <iomanip>
+using namespace std;
 
 Matrix::Matrix(int row_, int column_)
 {
@@ -53,36 +55,60 @@ Matrix& Matrix::operator=(const Matrix& other_)
 
 Matrix Matrix::operator+(const Matrix& other_) const
 {
-    if (row != other_.row || column != other_.column)
-        throw 2;
-    Matrix result(row, column);
-    for (int i = 0; i < row; i++)
-        for (int j = 0; j < column; j++)
-            result.matrix[i][j] = matrix[i][j] + other_.matrix[i][j];
-    return result;
+    try
+    {
+        if (row != other_.row || column != other_.column)
+            throw exception("Матрицы должны быть одного размера");
+        Matrix result(row, column);
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < column; j++)
+                result.matrix[i][j] = matrix[i][j] + other_.matrix[i][j];
+        return result;
+    }
+    catch (const exception& ex)
+    {
+        cout << ex.what();
+        exit(1);
+    }
 }
 
 Matrix Matrix::operator-(const Matrix& other_) const
 {
-    if (row != other_.row || column != other_.column)
-        throw 2;
-    Matrix result(row, column);
-    for (int i = 0; i < row; i++)
-        for (int j = 0; j < column; j++)
-            result.matrix[i][j] = matrix[i][j] - other_.matrix[i][j];
-    return result;
+    try
+    {
+        if (row != other_.row || column != other_.column)
+            throw exception("Матрицы должны быть одного размера");
+        Matrix result(row, column);
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < column; j++)
+                result.matrix[i][j] = matrix[i][j] - other_.matrix[i][j];
+        return result;
+    }
+    catch (const exception& ex)
+    {
+        cout << ex.what();
+        exit(1);
+    }
 }
 
 Matrix Matrix::operator*(const Matrix& other_) const
 {
-    if (column != other_.row)
-        throw 3;
-    Matrix result(row, other_.column);
-    for (int i = 0; i < row; i++)
-        for (int j = 0; j < other_.column; j++)
-            for (int k = 0; k < column; k++)
-                result.matrix[i][j] += matrix[i][k] * other_.matrix[k][j];
-    return result;
+    try
+    {
+        if (column != other_.row)
+            throw exception("Столбцы первой матрицы не равны строкам второй матрицы");
+        Matrix result(row, other_.column);
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < other_.column; j++)
+                for (int k = 0; k < column; k++)
+                    result.matrix[i][j] += matrix[i][k] * other_.matrix[k][j];
+        return result;
+    }
+    catch (const exception& ex)
+    {
+        cout << ex.what();
+        exit(1);
+    }
 }
 
 double* Matrix::operator[](int i)
@@ -162,13 +188,33 @@ int Matrix::Get_Col()
 {
     return column;
 }
+istream& operator >>(istream& in, Matrix& mat)
+{
+    for (int i = 0; i < mat.row; i++)
+        delete[] mat.matrix[i];
+    delete[] mat.matrix;
 
+
+    mat.matrix = new double* [mat.row];
+    for (int i = 0; i < mat.row; i++) {
+        mat.matrix[i] = new double[mat.column];
+    }
+    double value = 0;
+    for (int i = 0; i < mat.row; i++)
+    {
+        for (int j = 0; j < mat.column; j++)
+        {
+
+            in >> value;
+            mat[i][j] = value;
+        }
+    }
+    return in;
+}
 
 ostream& operator<<(ostream& stream, Matrix& mat)
 {
- ostream& operator<<(ostream& stream, Matrix& mat)
-{
-    stream << "Матрица:";
+    stream << "\n";
     if (mat.row == 0 && mat.column == 0)
         stream << " Пустая";
     stream << setw(0) << left;
@@ -179,25 +225,58 @@ ostream& operator<<(ostream& stream, Matrix& mat)
         for (int j = 0; j < mat.column; j++)
         {
 
-            stream <<right << setw(6) << mat.matrix[i][j] << "|";
+            stream << right << setw(6) << mat.matrix[i][j];
             stream.precision(4);
-            stream <<left<< setw(0);
+            stream << left << setw(0);
         }
     }
     stream << endl;
     return stream;
 }
-}
 
-istream& operator >>(istream& in, Matrix& mat)
+ifstream& operator>>(ifstream& in_, Matrix& matrix_)
 {
-    for (int i = 0; i < mat.Get_Row(); i++)
+    try
     {
-        for (int j = 0; j < mat.Get_Col(); j++)
-        {
-            in >> (mat[i][j]);
+        if (!in_.is_open())
+            throw exception("Ошибка открытия файла");
+
+        for (int i = 0; i < matrix_.row; i++)
+            delete[] matrix_.matrix[i];
+        delete[] matrix_.matrix;
+
+        in_ >> matrix_.row;
+
+        if (matrix_.row < 0)
+            throw exception("Количество строк введено неверно");
+
+        in_ >> matrix_.column;
+
+        if (matrix_.column < 0)
+            throw exception("Количество столбцов введено неверно");
+
+        matrix_.matrix = new double* [matrix_.row];
+        for (int i = 0; i < matrix_.row; i++) {
+            matrix_.matrix[i] = new double[matrix_.column];
         }
+
+        for (int i = 0; i < matrix_.row; ++i)
+        {
+            for (int j = 0; j < matrix_.column; ++j)
+            {
+                if (!(in_ >> matrix_.matrix[i][j]))
+                {
+                    throw exception("Данные матрицы введены неправильно");
+                }
+            }
+        }
+
+        return in_;
     }
-    return in;
+    catch (const exception& ex)
+    {
+        cout << ex.what();
+        exit(1);
+    }
 }
 
