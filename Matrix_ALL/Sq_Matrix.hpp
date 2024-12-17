@@ -1,5 +1,5 @@
 #pragma once
-#include "matrix.hpp" 
+#include "Matrix.hpp" 
 #include "Vector.hpp"
 
 class SquareMatrix : public Matrix
@@ -9,8 +9,12 @@ public:
     SquareMatrix(const SquareMatrix& other);
     void Transpon();
     SquareMatrix& operator=(const SquareMatrix& other);
-    SquareMatrix pow(int n);
     SquareMatrix operator*(SquareMatrix other);
-    SquareMatrix operator^(int n);
+    SquareMatrix& operator^(int n);
+    double trace();
+    SquareMatrix& Arithmetic_mean();
+    double Arif(SquareMatrix& mat, int r, int c);
+
 };
 Vector Maxfromdiag(SquareMatrix matrix);
+Vector tracematrix(SquareMatrix& matrix, int n);
