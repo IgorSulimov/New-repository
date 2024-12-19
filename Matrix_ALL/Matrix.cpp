@@ -110,6 +110,18 @@ Matrix Matrix::operator*(const Matrix& other_) const
         exit(1);
     }
 }
+Matrix Matrix::operator*(int data_) const
+{
+	Matrix result(row, column);
+
+	for (int i = 0; i < row; ++i)
+	{
+		for (int j = 0; j < column; ++j)
+			result.matrix[i][j] = matrix[i][j] * data_;
+	}
+
+	return result;
+}
 
 double* Matrix::operator[](int i)
 {
@@ -279,4 +291,3 @@ ifstream& operator>>(ifstream& in_, Matrix& matrix_)
         exit(1);
     }
 }
-
