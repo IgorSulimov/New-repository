@@ -14,12 +14,17 @@ int main() {
     SquareMatrix b(3);
     cin >> b;
     cout << b;
-    Matrix c = a + b;
-    printf("\n\n");
-    printf("\nCумма матриц:\n");
+    printf("\n Возведение матрицы в степень\n");
+    SquareMatrix c;
+    c = a.Pow11(4);
     cout << c;
     printf("\n\n");
-    Matrix d = a * b * a;
+    printf("\nCумма матриц:\n");
+    Matrix n;
+    n = a + b;
+    cout << n;
+    printf("\n\n");
+    SquareMatrix d = a * b;
     printf("\nПроизведение матриц:\n");
     cout << d;
     printf("\n\n");
@@ -33,19 +38,18 @@ int main() {
     cout << g;
     printf("\n\n");
 
-    SquareMatrix p = a.Arithmetic_mean();
-    printf("Среднее арифметическое\n");
-    cout << a;
-    printf("Максимальные диагонали\n");
+    printf("След\n");
+    Vector cc(3);
+    cc = tracematrix(a, 3);
+    cout << cc;
+    printf("\n\n");
+    printf("\nМаксимальные диагонали\n");
     Vector bb;
     bb = Maxfromdiag(a);
     cout << bb;
     printf("\n\n");
-
-    printf("След\n");
-    Vector cc(3);
-    cc = tracematrix(a, 5);
-    cout << cc;
+    SquareMatrix p = a.Arithmetic_mean();
+    printf("Среднее арифметическое\n");
+    cout << a;
 
     return 0;
-}
