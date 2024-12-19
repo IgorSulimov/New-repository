@@ -34,6 +34,7 @@ public:
     friend ostream& operator <<(ostream& stream, Matrix& mat);
     friend istream& operator >>(istream& stream, Matrix& mat);
     friend ifstream& operator>>(ifstream& in_, Matrix& matrix_);
+    Matrix operator*(int data_) const;
 };
 ostream& operator <<(ostream& stream, Matrix& mat);
 istream& operator >>(istream& stream, Matrix& mat);
