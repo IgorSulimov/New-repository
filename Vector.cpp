@@ -620,7 +620,7 @@ istream& operator>>(istream& in, Vector& vec)
 		vec.Arr_Vect = new Pair[ss];
 		in >> ch;
 		if (ch != '[')
-			throw exception("В начале должна идти [\n");
+			throw exception();
 
 		int value;
 		in >> value;
@@ -633,7 +633,7 @@ istream& operator>>(istream& in, Vector& vec)
 		vec.size++;
 		if (!in.good())
 		{
-			throw exception("Неправильный ввод\n");
+			throw exception();
 		}
 		while (in.peek() == ',')
 		{
@@ -660,7 +660,7 @@ istream& operator>>(istream& in, Vector& vec)
 			in >> value;
 			if (!in.good())
 			{
-				throw exception("Неправильный ввод\n");
+				throw exception();
 			}
 			if (value != 0)
 			{
@@ -675,7 +675,7 @@ istream& operator>>(istream& in, Vector& vec)
 			in.ignore();
 		else
 		{
-			throw exception("В конце должно стоять ]\n ");
+			throw exception();
 		}
 	}
 
