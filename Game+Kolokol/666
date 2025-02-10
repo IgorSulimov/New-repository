@@ -1,0 +1,242 @@
+#include "Circular_list.hpp"
+#include <algorithm>
+#include <iomanip>
+void CircularList::Game(int count_names, int drop, vector<string> Names)
+{
+    CircularList list;
+    for (int i = 0; i < count_names; i++) 
+    {
+        list.add(Names[i]);
+    }
+    Node* current = list.head;
+
+    Node* prev = new Node("");
+    prev->next = current;
+
+    vector<string> delete_names;
+
+    int count = count_names;
+    int j = 1;
+
+    while (count != 1)
+    {
+        if (j == drop)
+        {
+            j = 1;
+            prev->next = current->next;
+            if (current == list.head)
+            {
+                Node* temp = list.head;
+                list.head = list.head->next;
+                delete_names.push_back(temp->data);
+                delete temp;
+                list.size--;
+                current = list.head;
+            }
+            else
+            {
+                Node* temp = current;
+                current = current->next;
+                prev->next = current;
+                delete_names.push_back(temp->data);
+                delete temp;
+                list.size--;
+            }
+            count--;
+        }
+        else
+        {
+            j++;
+            prev = prev->next;
+            current = current->next;
+        }
+    }
+    cout << "Победитель:" << list.head->data << endl;
+    cout << "Проигравшие:";
+    for (int j = 0; j < delete_names.size(); j++)
+    {
+        cout << delete_names[j] << " ";
+    }
+    cout << endl;
+}
+void Game_2(int count_names, int drop, vector<string> Names)
+{
+    vector<string> delete_names;
+    int go = 0;
+    int count = count_names;
+    int j = 1;
+    int end_vec = count_names - 1;
+    while (count != 1)
+    {
+        if (go < end_vec)
+        {
+            if (j == drop)
+            {
+                j = 1;
+                delete_names.push_back(Names[go]);
+                Names.erase(Names.begin() + go);
+                count--;
+                end_vec--;
+            }
+            else
+            {
+                j++;
+                go++;
+            }
+        }
+        else
+        {
+            if (j == drop)
+            {
+                j = 1;
+                delete_names.push_back(Names[go]);
+                Names.erase(Names.begin() + go);
+                cout << endl;
+                count--;
+                end_vec--;
+            }
+            else
+            {
+                j++;
+            }
+            go = 0;
+        }
+    }
+    cout << "Победитель:" << Names.back() << endl;
+    cout << "Проигравшие:";
+    for (int j = 0; j < delete_names.size(); j++)
+    {
+        cout << delete_names[j] << " ";
+    }
+    cout << endl;
+}
+
+void Ball(vector<int> array, int size_array)
+{
+    if (size_array == 0)
+    {
+        return;
+    }
+    sort(array.begin(), array.end());
+    int l = size_array + 5;
+    int m = 1;
+    int r = size_array + 5;
+    int i = size_array;
+    if (i == size_array && size_array % 2 == 0)
+    {
+        cout << right << setw(l) << array.back();
+        array.pop_back();
+        cout << " ";
+        cout << right << setw(m) << array.back();
+        array.pop_back();
+        cout << endl;
+        m += 2;
+        r++;
+        l -= 2;
+        i -= 2;
+    }
+    if (i == size_array && size_array % 2 != 0)
+    {
+        cout << right << setw(size_array + 5) << array.back();
+        array.pop_back();
+        cout << endl;
+        r++;
+        l -= 2;
+        i--;
+    }
+    while (i > 0)
+    {
+        if ((i - 2) >= 0)
+        {
+            cout << right << setw(l) << array.back();
+            array.pop_back();
+            for (int j = 0; j != m; j++)
+                cout << " ";
+            cout << right << setw(r - l) << array.back();
+            array.pop_back();
+            cout << endl;
+            m++;
+            r++;
+            l -= 2;
+            i -= 2;
+        }
+        else
+        {
+            cout << right << setw(l) << array.back();
+            array.pop_back();
+            cout << endl;
+            r++;
+            l -= 2;
+            i--;
+        }
+    }
+}
+
+void Sort_Bell(vector<int>array, int size_array)
+{
+    int i;
+    int j;
+    int mid;
+    if (size_array % 2 == 0)
+    {
+        i = size_array / 2 - 1;
+        j = size_array / 2;
+    }
+    else
+    {
+        mid = size_array / 2;
+        i = mid-1;
+        j = mid+1;
+    }
+    int fl = 0;
+    int max = 0;
+    int p = 0;
+    int index;
+    while (i != 0 && j != size_array - 1)
+    {
+        if (fl == 0)
+        {
+            index = i;
+            while (p < size_array)
+            {
+                if (p <= i && p > j)
+                {
+                    if (array[p] > max)
+                    {
+                        max = array[p];
+                        index = p;
+                    }
+                }
+                p++;
+            }
+            int temp = array[i];
+            array[i] = max;
+            array[index] = temp;
+            fl = 1;
+            p = 0;
+            max = 0;
+        }
+        if (fl == 1)
+        {
+            index = j;
+            while (p < size_array)
+            {
+                if (p < i && p >= j)
+                {
+                    if (array[p] > max)
+                    {
+                        max = array[p];
+                        index = p;
+                    }
+                }
+                p++;
+            }
+            int temp = array[j];
+            array[j] = max;
+            array[index] = temp;
+            fl = 0;
+            p = 0;
+            max = 0;
+        }
+    }
+}
