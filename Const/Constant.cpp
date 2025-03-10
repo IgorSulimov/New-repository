@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 using namespace std;
 
@@ -259,15 +259,19 @@ void parse(const char* filename)
         // s_Stop - техническое состояние. Когда автомат попадает в s_Stop, цикл останавливается.
         if (state == s_Er)
         {
-            while (ch != '\n' || ch != EOF)
+            while (ch != '\n' && ch != EOF)
             {
                 ch = in.get();
             }
             if (ch == EOF)
                 break;
+            state = q0;
         }
         ch = in.get();
-        str += ch;
+        if (ch != EOF)
+            str += ch;
+        else
+            str += '\n';
         s = transliterator(ch);
         state = (*table[state][s.token_class])();
     }
