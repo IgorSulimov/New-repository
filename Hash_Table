@@ -1,6 +1,8 @@
+using namespace std;
+#include <iostream>
 struct EL_TS
 {
-	int lable; // значение метки
+	int label; // значение метки
 	int ind_TL; // номер в таблице лексем
 	int next; // альтератива
 };
@@ -8,7 +10,7 @@ class Hash
 {
 	int n_max; // максимальная размерность таблицы
 	int n_os; // текущая размерность
-	int NTS =101; // первая свободная запись в таблице строк
+	int NTS = 101; // первая свободная запись в таблице строк
 	EL_TS* t;
 
 	int Hash_function(int key)
@@ -25,7 +27,7 @@ public:
 		t = new EL_TS[n_max];
 		for (int i = 0; i < n_max; i++)
 		{
-			t[i].lable = t[i].ind_TL = -1;
+			t[i].label = t[i].ind_TL = -1;
 			t[i].next = 0;
 		}
 
@@ -39,29 +41,94 @@ public:
 		for (int i = 0; i < n_max; i++)
 		{
 			t[i].next = other.t[i].next;
-			t[i].lable = other.t[i].lable;
+			t[i].label = other.t[i].label;
 			t[i].ind_TL = other.t[i].ind_TL;
 		}
 	}
 	int find(int key)
 	{
 		int i = Hash_function(key);
-		if (t[i].lable == key)
+		if (t[i].label == key)
 			return i;
 		while (t[i].next != 0)
 		{
 			i = t[i].next;
-			if (t[i].lable == key)
+			if (t[i].label == key)
 				return i;
 		}
-			return -1;
+		return -1;
 	}
 	void add_el(int key)
 	{
-
+		int i = Hash_function(key);
+		if (t[i].label == -1)
+		{
+			t[i].label = key;
+			t[i].ind_TL = i;
+			t[i].next = 0;
+		}
+		else
+		{
+			EL_TS* tmp = t;
+			while (tmp[i].label != -1)
+			{
+				if (tmp[i].next != 0)
+					i = tmp[i].next;
+				else
+				{
+					tmp[i].next = NTS;
+					i = NTS;
+				}
+			}
+			tmp[i].label = key;
+			tmp[i].ind_TL = NTS;
+			tmp[i].next = 0;
+			NTS++;
+		}
 	}
-	void delete_el(int key)
+	void print_Hash()
 	{
-
+		int i = 0;
+		while (i < 11)
+		{
+			if (t[i].label != -1)
+			{
+				int g = i;
+				int fl = 1;
+				while (fl)
+				{
+					if (t[g].next != 0)
+					{
+						cout << "(" << t[g].label << "," << t[g].ind_TL << ")" << "->";
+						g = t[g].next;
+					}
+					else
+					{
+						cout << "(" << t[g].label << "," << t[g].ind_TL << ")" << endl;
+						fl = 0;
+						i++;
+					}
+				}
+				fl = 1;
+			}
+			else
+				i++;
+		}
 	}
+
 };
+
+int main()
+{
+	Hash table;
+	table.add_el(21);
+	table.add_el(121);
+	table.add_el(221);
+	table.add_el(1);
+	table.add_el(882);
+	table.add_el(522);
+	table.add_el(499);
+	table.add_el(341);
+	table.add_el(433);
+	table.print_Hash();
+}
