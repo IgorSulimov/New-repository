@@ -61,6 +61,7 @@ public:
 	void add_el(int key)
 	{
 		int i = Hash_function(key);
+		int fl = 0;
 		if (t[i].label == -1)
 		{
 			t[i].label = key;
@@ -69,6 +70,7 @@ public:
 		}
 		else
 		{
+			int k = t[0].ind_TL;
 			EL_TS* tmp = t;
 			while (tmp[i].label != -1)
 			{
@@ -76,14 +78,104 @@ public:
 					i = tmp[i].next;
 				else
 				{
-					tmp[i].next = NTS;
-					i = NTS;
+					if (k == -1)
+					{
+						tmp[i].next = NTS;
+						i = NTS;
+					}
+					else
+					{
+						tmp[i].next = k;
+						i = k;
+						int Nt = t[0].next;
+						t[0].ind_TL = t[Nt].ind_TL;
+						t[0].next = t[Nt].next;
+						fl = 1;
+					}
 				}
 			}
+			if (fl == 0)
+			{
+				tmp[i].ind_TL = NTS;
+				NTS++;
+			}
+			else
+			{
+				tmp[i].ind_TL = k;
+			}
 			tmp[i].label = key;
-			tmp[i].ind_TL = NTS;
 			tmp[i].next = 0;
-			NTS++;
+		}
+	}
+	void remove_el(int key)
+	{
+		int i = Hash_function(key);
+		if (t[i].label == key)
+		{
+			if (t[0].ind_TL == -1)
+			{
+				t[0].ind_TL = t[i].ind_TL;
+				t[0].next = 0;
+			}
+			else
+			{
+				int g = t[0].next;
+				while (t[g].ind_TL != -1)
+				{
+					g = t[g].next;
+				}
+				t[g].ind_TL = t[i].ind_TL;
+			}
+			if(t[i].next != 0)
+			{
+				int g = t[i].next;
+				while (t[i].next != 0)
+				{
+					t[i].label = t[g].label;
+					t[i].ind_TL = t[g].ind_TL;
+					t[i].next = t[g].next;
+					i = t[g].ind_TL;
+					g = t[g].next;
+				}
+			}
+			t[i].label = t[i].ind_TL = -1;
+		}
+		else
+		{
+			int g = t[i].next;
+			//g элемент, который удаляем
+			//i предыдущий
+			while (t[g].label != key)
+			{
+				i = t[i].next;
+				g = t[g].next;
+			}
+			int Nt = t[0].next;
+			if (t[0].ind_TL == -1)
+			{
+				t[0].ind_TL = t[g].ind_TL;
+				t[0].next = 0;
+				t[Nt].label = -1;
+				t[Nt].ind_TL = -1;
+			}
+			else
+			{
+				int g = t[0].next;
+				while (t[g].ind_TL != -1)
+				{
+					g = t[g].next;
+				}
+				t[g].ind_TL = t[i].ind_TL;
+			}
+			if (t[g].next == 0)
+			{
+				t[g].label = -1;
+				t[g].ind_TL = -1;
+			}
+			else
+			{
+				t[i].next = t[g].next;
+			}
 		}
 	}
 	void print_Hash()
@@ -115,8 +207,6 @@ public:
 				i++;
 		}
 	}
-
-};
 
 int main()
 {
