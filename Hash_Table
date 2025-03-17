@@ -50,7 +50,7 @@ public:
 		int i = Hash_function(key);
 		if (t[i].label == key)
 			return i;
-		while (t[i].next != 0)
+		while (t[i].next != -1)
 		{
 			i = t[i].next;
 			if (t[i].label == key)
@@ -70,111 +70,93 @@ public:
 		}
 		else
 		{
-			int k = t[0].ind_TL;
-			EL_TS* tmp = t;
-			while (tmp[i].label != -1)
+			int del_ch = t[0].next;
+			int i_next = t[i].next;
+			while (t[i_next].label != -1)
 			{
-				if (tmp[i].next != 0)
-					i = tmp[i].next;
-				else
-				{
-					if (k == -1)
-					{
-						tmp[i].next = NTS;
-						i = NTS;
-					}
-					else
-					{
-						tmp[i].next = k;
-						i = k;
-						int Nt = t[0].next;
-						t[0].ind_TL = t[Nt].ind_TL;
-						t[0].next = t[Nt].next;
-						fl = 1;
-					}
-				}
+				i = i_next;
+				i_next = t[i].next;
 			}
-			if (fl == 0)
+			if (del_ch == 0)
 			{
-				tmp[i].ind_TL = NTS;
-				NTS++;
+				i_next = NTS;
+				t[i_next].ind_TL = NTS;
+				t[i].next = i_next;
 			}
 			else
 			{
-				tmp[i].ind_TL = k;
+				i_next = del_ch;
+				t[i_next].ind_TL = del_ch;
+				t[i].next = i_next;
+				if (t[del_ch].next != 0)
+				{
+					t[0].next = t[del_ch].next;
+				}
+				fl = 1;
 			}
-			tmp[i].label = key;
-			tmp[i].next = 0;
+			if (fl == 0)
+			{
+				NTS++;
+			}
+			t[i_next].label = key;
+			t[i_next].next = 0;
+			int hh = t[i_next].next;
+			t[hh].label = -1;
+			t[hh].ind_TL = -1;
+			t[hh].next = 0;
 		}
 	}
 	void remove_el(int key)
 	{
+		//i = который дуаляем i_prev - перед i
 		int i = Hash_function(key);
 		if (t[i].label == key)
 		{
-			if (t[0].ind_TL == -1)
+			if (t[0].next == 0)
 			{
-				t[0].ind_TL = t[i].ind_TL;
-				t[0].next = 0;
+				t[0].next = t[i].next;
 			}
 			else
 			{
 				int g = t[0].next;
-				while (t[g].ind_TL != -1)
+				while (t[g].next != 0)
 				{
 					g = t[g].next;
 				}
-				t[g].ind_TL = t[i].ind_TL;
+				g = t[i].next;
 			}
-			if(t[i].next != 0)
-			{
-				int g = t[i].next;
-				while (t[i].next != 0)
-				{
-					t[i].label = t[g].label;
-					t[i].ind_TL = t[g].ind_TL;
-					t[i].next = t[g].next;
-					i = t[g].ind_TL;
-					g = t[g].next;
-				}
-			}
-			t[i].label = t[i].ind_TL = -1;
+			int i_next = t[i].next;
+			t[i].label = t[i_next].label;
+			t[i_next].ind_TL = t[i].ind_TL;
+			t[i].next = t[i_next].next;
+			i = i_next;
+
 		}
 		else
 		{
-			int g = t[i].next;
-			//g элемент, который удаляем
-			//i предыдущий
-			while (t[g].label != key)
+			int i_prev;
+			while (t[i].label != key)
 			{
+				i_prev = i;
 				i = t[i].next;
-				g = t[g].next;
+
 			}
-			int Nt = t[0].next;
-			if (t[0].ind_TL == -1)
+			// заносим в t[0] удаляемые значения 
+			if (t[0].next == 0)
 			{
-				t[0].ind_TL = t[g].ind_TL;
-				t[0].next = 0;
-				t[Nt].label = -1;
-				t[Nt].ind_TL = -1;
+				t[0].next = t[i].ind_TL;
 			}
 			else
 			{
 				int g = t[0].next;
-				while (t[g].ind_TL != -1)
+				int prev_g;
+				while (t[g].next != 0)
 				{
+					prev_g = g;
 					g = t[g].next;
 				}
-				t[g].ind_TL = t[i].ind_TL;
-			}
-			if (t[g].next == 0)
-			{
-				t[g].label = -1;
-				t[g].ind_TL = -1;
-			}
-			else
-			{
-				t[i].next = t[g].next;
+				g = t[i].ind_TL;
+				t[i_prev].next = t[i].next;
 			}
 		}
 	}
@@ -208,17 +190,18 @@ public:
 		}
 	}
 
+};
 int main()
 {
 	Hash table;
 	table.add_el(21);
 	table.add_el(121);
 	table.add_el(221);
-	table.add_el(1);
-	table.add_el(882);
-	table.add_el(522);
-	table.add_el(499);
-	table.add_el(341);
+	table.remove_el(121);
+	table.remove_el(221);
+	table.add_el(333);
 	table.add_el(433);
+	table.add_el(533);
+	//table.remove_el(433);
 	table.print_Hash();
 }
