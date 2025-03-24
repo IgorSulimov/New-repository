@@ -19,7 +19,7 @@ class Hash
 	}
 
 public:
-	Hash(int n1 = 50, int os = 10)
+	Hash(int n1 = 200, int os = 100)
 	{
 		n_max = n1;
 		n_os = os;
@@ -86,11 +86,14 @@ public:
 			else
 			{
 				i_next = del_ch;
-				t[i_next].ind_TL = del_ch;
-				t[i].next = i_next;
+				t[i].next = del_ch;
 				if (t[del_ch].next != 0)
 				{
 					t[0].next = t[del_ch].next;
+				}
+				else
+				{
+					t[0].next = 0;
 				}
 				fl = 1;
 			}
@@ -100,10 +103,6 @@ public:
 			}
 			t[i_next].label = key;
 			t[i_next].next = 0;
-			int hh = t[i_next].next;
-			t[hh].label = -1;
-			t[hh].ind_TL = -1;
-			t[hh].next = 0;
 		}
 	}
 	void remove_el(int key)
@@ -112,25 +111,33 @@ public:
 		int i = Hash_function(key);
 		if (t[i].label == key)
 		{
-			if (t[0].next == 0)
+			if ((t[i].next != 0) || (t[i].next == 0 && t[i].ind_TL >= 101))
 			{
-				t[0].next = t[i].next;
+				if (t[0].next == 0)
+				{
+					t[0].next = t[i].next;
+				}
+				else
+				{
+					//добавляем ind_TL в удаляемые индексы
+					int g = t[0].next;
+					while (t[g].next != 0)
+					{
+						g = t[g].next;
+					}
+					t[g].next = t[i].next;
+				}
+				int i_next = t[i].next;
+				t[i].label = t[i_next].label;
+				t[i].next = t[i_next].next;
+				t[i_next].next = 0;
 			}
 			else
 			{
-				int g = t[0].next;
-				while (t[g].next != 0)
-				{
-					g = t[g].next;
-				}
-				g = t[i].next;
+				t[i].label = -1;
+				t[i].ind_TL = -1;
+				t[i].next = 0;
 			}
-			int i_next = t[i].next;
-			t[i].label = t[i_next].label;
-			t[i_next].ind_TL = t[i].ind_TL;
-			t[i].next = t[i_next].next;
-			i = i_next;
-
 		}
 		else
 		{
@@ -141,29 +148,30 @@ public:
 				i = t[i].next;
 
 			}
-			// заносим в t[0] удаляемые значения 
 			if (t[0].next == 0)
 			{
-				t[0].next = t[i].ind_TL;
+				t[0].next = t[i].next;
 			}
 			else
 			{
+				//добавляем ind_TL в удаляемые индексы
 				int g = t[0].next;
-				int prev_g;
 				while (t[g].next != 0)
 				{
-					prev_g = g;
 					g = t[g].next;
 				}
-				g = t[i].ind_TL;
-				t[i_prev].next = t[i].next;
+				t[g].next = t[i].ind_TL;
 			}
+			t[i_prev].next = t[i].next;
+			t[i].next = 0;
+
+
 		}
 	}
 	void print_Hash()
 	{
 		int i = 0;
-		while (i < 11)
+		while (i < 101)
 		{
 			if (t[i].label != -1)
 			{
@@ -188,20 +196,38 @@ public:
 			else
 				i++;
 		}
+		cout << "\n\n";
+		cout << "t[0]:";
+		int j = 0;
+		while (t[j].next != 0)
+		{
+			if (t[j].next != 0)
+			{
+				cout << "(" << t[j].next << ")" << "->";
+				j = t[j].next;
+			}
+		}
+		cout << "(" << t[j].next << ")" << endl;
 	}
 
 };
 int main()
 {
 	Hash table;
-	table.add_el(21);
-	table.add_el(121);
-	table.add_el(221);
-	table.remove_el(121);
-	table.remove_el(221);
-	table.add_el(333);
-	table.add_el(433);
-	table.add_el(533);
-	//table.remove_el(433);
+	table.add_el(10);
+	table.add_el(25);
+	table.add_el(110);
+	table.add_el(35);
+	table.add_el(210);
+	table.add_el(135);
+	table.add_el(310);
+	table.add_el(235);
+	table.add_el(15);
+	table.remove_el(10);
+	table.remove_el(25);
+	table.remove_el(135);
+	table.add_el(115);
+	//table.add_el(410);
+	//table.add_el(510);
 	table.print_Hash();
 }
