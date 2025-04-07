@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+using namespace std;
+class Analyzator
+{
+private:
+	ofstream file_error;
+	string str;
+	typedef void(Analyzator::* pfuncType)();// указатель на функцию состояния
+	pfuncType pfunc;
+	int RCH, // регистр числа
+		RZ, // регистр знака
+		RP, // регистр порядка
+		RS, // регистр счётчика                                                                      
+		RKL, // регистр класса лексем
+		ROT, // регистр значения отношения
+		RZN, // регистр значения символа
+		RSOS, // регистр состояния 
+		ROB, // регистр обнаружения
+		RK, // регистр значения класса символа 
+		RSTR, // регистр строка
+		RI, // регистр номера буквы в имени переменной
+		RSE; // регистр счетчика ошибок
+	enum RK
+	{
+		Letter, Digit, Ar_Oper,Relationship, Left_Bracket, Right_Bracket, Point, Space, End_Line, End_File
+	};
+	void A1()
+	{
+		switch (RK)
+		{
+		case Digit:
+		{
+			E2a();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			break;
+		}
+		default:
+		{
+			BSE++;
+			G1b();
+		}
+		}
+	}
+	void A2()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			C2a();
+			break;
+		}
+		case Digit:
+		{
+			D1a();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2a();
+			break;
+		}
+		case Relationship:
+		{
+			
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			break;
+		}
+		default:
+		{
+			BSE++;
+			G1b();
+		}
+		}
+	}
+};
+main()
+{
+	double* TO;
+	FILE* f = fopen("1.txt", "r");
+}
