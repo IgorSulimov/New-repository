@@ -73,7 +73,23 @@ private:
 		}
 		case Relationship:
 		{
-			
+			H1a();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2h();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3b();
+			break;
+		}
+		case Point:
+		{
+			D6b();
+			break;
 		}
 		case Space:
 		{
@@ -81,6 +97,495 @@ private:
 		}
 		case End_Line:
 		{
+			pfunc = &Analyzator::A1;
+			break;
+		}
+		default:
+		{
+			BSE++;
+			G1b();
+		}
+		}
+	}
+	void A3()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			B1a();
+			break;
+		}
+		case Digit:
+		{
+			D1a();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2a();
+			break;
+		}
+		case Relationship:
+		{
+			H1a();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2h();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3b();
+			break;
+		}
+		case Point:
+		{
+			D6b();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			pfunc = &Analyzator::A1;
+			break;
+		}
+		default:
+		{
+			BSE++;
+			G1b();
+		}
+		}
+	}
+	void B1()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			M1();
+			break;
+		}
+		case End_Line:
+		{
+			A1f();
+			break;
+		}
+		default:
+		{
+			BSE++;
+			G1b();
+		}
+		}
+	}
+	void C1()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			C2d();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		default:
+		{
+			BSE++;
+			G1b();
+		}
+		}
+	}
+	void C2()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			B1b();
+			break;
+		}
+		case Digit:
+		{
+			A3a();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2g();
+			break;
+		}
+		case Relationship:
+		{
+			H1b();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2k();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3c();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			A1a();
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void D1()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			M2();
+			break;
+		}
+		case Digit:
+		{
+			D1b();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2c();
+			break;
+		}
+		case Relationship:
+		{
+			H1c();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2l();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3d();
+			break;
+		}
+		case Point:
+		{
+			D2c();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			A1b();
+			break;
+		}
+		default:
+		{
+			BSE++;
+			G1b();
+		}
+		}
+	}
+	void D2()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			M3();
+			break;
+		}
+		case Digit:
+		{
+			D2a();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2c();
+			break;
+		}
+		case Relationship:
+		{
+			H1c();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2l();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3d();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			A1c();
+			break;
+		}
+		default:
+		{
+			BSE++;
+			G1b();
+		}
+		}
+	}
+	void D3()
+	{
+		switch (RK)
+		{
+		case Digit:
+		{
+			D5a();
+			break;
+		}
+		case Ar_Oper:
+		{
+			D4a();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void D4()
+	{
+		switch (RK)
+		{
+		case Digit:
+		{
+			D5b();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void D5()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			B1c();
+			break;
+		}
+		case Digit:
+		{
+			D5c();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2c();
+			break;
+		}
+		case Relationship:
+		{
+			H1c();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2l();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3d();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			A1d();
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void D6()
+	{
+		switch (RK)
+		{
+
+		case Digit:
+		{
+			D2b();
+			break;
+		}
+
+		case Space:
+		{
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void E1()
+	{
+		switch (RK)
+		{
+
+		case Digit:
+		{
+			E2b();
+			break;
+		}
+
+		case Space:
+		{
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void E2()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			B1e();
+			break;
+		}
+		case Digit:
+		{
+			E2c();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2f();
+			break;
+		}
+		case Relationship:
+		{
+			H1f();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2j();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3g();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			A1e();
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void F1()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			C2a();
+			break;
+		}
+		case Digit:
+		{
+			D1a();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2a();
+			break;
+		}
+		case Relationship:
+		{
+			H1a();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2h();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3b();
+			break;
+		}
+		case Point:
+		{
+			D6b();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		case End_Line:
+		{
+			pfunc = &Analyzator::A1;
 			break;
 		}
 		default:
