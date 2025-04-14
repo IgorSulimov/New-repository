@@ -3,6 +3,9 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
+#include "Hesh_Table.hpp"
+#include "Lex_Table.hpp"
+#include <vector>
 using namespace std;
 class Analyzator
 {
@@ -24,10 +27,234 @@ private:
 		RSTR, // регистр строка
 		RI, // регистр номера буквы в имени переменной
 		RSE; // регистр счетчика ошибок
+	vector<int>InitialVector;
 	enum RK
 	{
 		Letter, Digit, Ar_Oper,Relationship, Left_Bracket, Right_Bracket, Point, Space, End_Line, End_File
 	};
+	enum RKL
+	{
+		ROWLABEL = 1,OPERAND,AR_OPER,RELATIONSHIP,NEXT,LET,FOR,GOTO,GOSUB,LEFT_BRACKET,RIGHT_BRACKET,IF,RETURN,END,TO_,STEP,REM,ERROR,END_FILE
+	};
+	void Start(char* filename)
+	{
+		ifstream in(filename);
+		if (!in)
+		{
+			cout << "Не удалось открыть файл";
+			return;
+		}
+		while (!in.eof())
+		{
+			getline(in,str);
+			str += '\n';
+			Parse();
+
+		}
+		in.close();
+	}
+	void Parse()
+	{
+		for (int i = 0; i < str.size(); i++)
+		{
+			Transliterator(str[i]);
+			(this->*pfunc)();
+		}
+	}
+	void Transliterator(char ch)
+	{
+		if (ch >= 'a' && ch <= 'z')
+		{
+			RK = Letter;
+			RZN = ch - 'a' + 1;
+		}
+		if (ch >= 'A' && ch <= 'Z')
+		{
+			RK = Letter;
+			RZN = ch - 'A' + 1;
+		}
+		if (ch >= '0' && ch <= '9')
+		{
+			RK = Digit;
+			RZN = ch - '0';
+		}
+		if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^')
+		{
+			RK = Ar_Oper;
+			if (ch == '+')
+				RZN = 1;
+			if (ch == '-')
+				RZN = 2;
+			if (ch == '*')
+				RZN = 3;
+			if (ch == '/')
+				RZN = 4;
+			if (ch == '^')
+				RZN = 5;
+		}
+		if (ch == ' ' || ch == '\t')
+		{
+			RK = Space;
+		}
+		if (ch == '.')
+		{
+			RK = Point;
+		}
+		if (ch == '\n')
+		{
+			RK = End_Line;
+		}
+		if (ch == '(')
+		{
+			RK = Left_Bracket;
+		}
+		if (ch == ')')
+		{
+			RK = Right_Bracket;
+		}
+		if (ch == '<' || ch == '>' || ch == '=')
+		{
+			RK = Relationship;
+			if (ch == '>')
+				RZN = 1;
+			if (ch == '<')
+				RZN = 2;
+			if (ch == '=')
+				RZN = 3;
+		}
+	}
+	Hash TS;
+	Table_Lex* TL;
+	double TO[1024];
+	int NTO; // указатель на первый свободный элемент в TO
+	int NTL; // Указатель на первый свободный элемент в TL
+
+	struct Token
+	{
+		int Class;
+		int Value;
+	};
+	void CreatToken()
+	{
+		Token t;
+		t.Class = RKL;
+		t.Value = -1;
+		if (RKL == ROWLABEL || RKL == GOTO || RKL == GOSUB)
+		{
+			bool fl = true;
+			for (int i = 0; i < TS.Get_NTS(); i++)
+			{
+				if (TS.find(RSTR))
+				{
+					t.Value = i;
+					fl = false;
+					break;
+				}
+			}
+			if (fl)
+			{
+				TS.add_el(RSTR);
+				t.Value = TS.Get_NTS();
+			}
+			RSTR = 0;
+		}
+		if (RKL == OPERAND || RKL == NEXT)
+		{
+			if (RI != 0)
+			{
+				int n;
+				if (RK == Digit)
+					n = RI + 26 * (RZN + 1);
+				else
+					n = RI;
+				TO[n] = 1;
+				t.Value = n;
+				RI = 0;
+			}
+			else
+			{
+				int n;
+				if (RZ == 1)
+					n = RCH * pow(10, RP - RS);
+				else
+					n = RCH / pow(10, RP + RS);
+				RCH = RP = RS = 0;
+				RZ = 1;
+				for (int i = 287; i < NTO; i++)
+				{
+					if (TO[i] == n)
+					{
+						t.Value = i;
+						TL[NTL].Value_Lex = t.Value;
+						TL[NTL].Class_Lex = t.Class;
+						NTL++;
+						return;
+					}
+				}
+				TO[NTO] = n;
+				t.Value = NTO;
+				NTO++;
+			}
+		}
+		if (RKL == LET || RKL == FOR)
+		{
+			TO[RI] = 1;
+			t.Value = RI;
+			RI = 0;
+		}
+		if (RKL == AR_OPER)
+			t.Value = RZN;
+		if (RKL == RELATIONSHIP)
+			t.Value = ROT;
+		TL[NTL].Value_Lex = t.Value;
+		TL[NTL].Class_Lex = t.Class;
+		NTL++;
+
+	}
+	void E2a()
+	{
+		RKL = ROWLABEL;
+		RSTR = RZN;
+		pfunc = &Analyzator::E2;
+	}
+	void E2c()
+	{
+		RSTR *= 10;
+		RSTR += RZN;
+		pfunc = &Analyzator::E2;
+	}
+	void B1e()
+	{
+		CreatToken();
+		ROB = InitialVector[RZN - 1];
+		pfunc = &Analyzator::B1;
+	}
+	void M1()
+	{
+		if (ROB == 0)
+		{
+			G1b();
+			return;
+		}
+		if (RZN == Table[ROB - 1].leter)
+		{
+			(this->*(Table[ROB - 1].pfunc))();
+		}
+		else
+		{
+			ROB = Table[ROB - 1].next;
+			if (ROB)
+				(this->*(Table[ROB - 1].pfunc))();
+			else
+				G1b();
+		}
+	}
+	void G1b()
+	{
+		RKL = ERROR;
+		CreatToken();
+		pfunc = &Analyzator::G1;
+	}
 	void A1()
 	{
 		switch (RK)
@@ -100,11 +327,6 @@ private:
 			pfunc = &Analyzator::A1;
 			break;
 		}
-		default:
-		{
-			BSE++;
-			G1b();
-		}
 		}
 	}
 	void A3()
@@ -155,11 +377,6 @@ private:
 			pfunc = &Analyzator::A1;
 			break;
 		}
-		default:
-		{
-			BSE++;
-			G1b();
-		}
 		}
 	}
 	void B1()
@@ -198,7 +415,6 @@ private:
 		}
 		default:
 		{
-			BSE++;
 			G1b();
 		}
 		}
@@ -546,37 +762,92 @@ private:
 		{
 		case Letter:
 		{
-			C2a();
+			F2a();
 			break;
 		}
+		case Space:
+		{
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void F2()
+	{
+		switch (RK)
+		{
 		case Digit:
 		{
-			D1a();
-			break;
-		}
-		case Ar_Oper:
-		{
-			A2a();
+			F3a();
 			break;
 		}
 		case Relationship:
 		{
-			H1a();
+			A2o();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void F3()
+	{
+		switch (RK)
+		{
+		case Relationship:
+		{
+			A2o();
+			break;
+		}
+		case Space:
+		{
+			break;
+		}
+		default:
+		{
+			G1b();
+		}
+		}
+	}
+	void G1()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			break;
+		}
+		case Digit:
+		{
+			break;
+		}
+		case Ar_Oper:
+		{
+			break;
+		}
+		case Relationship:
+		{
 			break;
 		}
 		case Left_Bracket:
 		{
-			A2h();
 			break;
 		}
 		case Right_Bracket:
 		{
-			A3b();
 			break;
 		}
 		case Point:
 		{
-			D6b();
 			break;
 		}
 		case Space:
@@ -585,15 +856,98 @@ private:
 		}
 		case End_Line:
 		{
-			pfunc = &Analyzator::A1;
+			A1();
 			break;
 		}
-		default:
+		case End_File:
 		{
-			BSE++;
-			G1b();
+			exit1();
+			break;
 		}
 		}
+	}
+	void H1()
+	{
+		switch (RK)
+		{
+		case Letter:
+		{
+			C2b();
+			break;
+		}
+		case Digit:
+		{
+			D1c();
+			break;
+		}
+		case Ar_Oper:
+		{
+			A2g();
+			break;
+		}
+		case Relationship:
+		{
+			A2p();
+			break;
+		}
+		case Left_Bracket:
+		{
+			A2k();
+			break;
+		}
+		case Right_Bracket:
+		{
+			A3c();
+			break;
+		}
+		case Point:
+		{
+			D6a();
+			break;
+		}
+		case Space:
+		{
+			H1();
+			break;
+		}
+		case End_Line:
+		{
+			A1a();
+			break;
+		}
+		case End_File:
+		{
+			exit2();
+			break;
+		}
+		}
+	}
+	//oooooooooooooooooooooooooooooo
+	void next()
+	{
+		ROB++;
+	}
+	void A1a()
+	{
+		Creat_Lex();
+		pfunc = &Analyzator::A1;
+	}
+	void A1b()
+	{
+		RP = 0;
+
+		pfunc = &Analyzator::A1;
+	}
+	void A1c()
+	{
+		RP = RS;
+
+		pfunc = &Analyzator::A1;
+		A1a();
+	}
+	void A1d()
+	{
+
 	}
 };
 main()
