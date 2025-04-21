@@ -34,24 +34,27 @@ private:
 	};
 	void Initial_Vect(Initial_vector* vec_)
 	{
-		vec_[0].symbol = 'p';
-		vec_[0].detection = 6;
-		vec_[1].symbol = 'w';
-		vec_[1].detection = 14;
-		vec_[2].symbol = 'r';
-		vec_[2].detection = 11;
-		vec_[3].symbol = 'e';
-		vec_[3].detection = 1;
-		vec_[4].symbol = 'j';
-		vec_[4].detection = 3;
-		vec_[5].symbol = 's';
-		vec_[5].detection = 23;
-		vec_[6].symbol = 'c';
-		vec_[6].detection = 18;
+		vec_[0].symbol = 'E';
+		vec_[0].detection = 1;
+		vec_[1].symbol = 'F';
+		vec_[1].detection = 3;
+		vec_[2].symbol = 'G';
+		vec_[2].detection = 5;
+		vec_[3].symbol = 'I';
+		vec_[3].detection = 11;
+		vec_[4].symbol = 'L';
+		vec_[4].detection = 12;
+		vec_[5].symbol = 'N';
+		vec_[5].detection = 14;
+		vec_[6].symbol = 'R';
+		vec_[6].detection = 17;
+		vec_[7].symbol = 'S';
+		vec_[7].detection = 23;
+		vec_[8].symbol = 'T';
+		vec_[8].detection = 26;
 	}
 	struct Detection_Table
 	{
-		int state = Sy_B1;
 		char symbol;
 		int alternative = 0;
 	};
@@ -59,54 +62,69 @@ private:
 	void Detection_Tab(Detection_Table* table_)
 	{
 		table_[0].state = Error;
-		table_[1].symbol = 'n';
-		table_[2].symbol = 'd';
-		table_[2].state = Sy_Z4;
-		table_[3].symbol = 'i';
-		table_[3].alternative = 4;
-		table_[3].state = Sy_Z10;
-		table_[4].symbol = 'm';
-		table_[5].symbol = 'p';
-		table_[5].state = Sy_Z5;
-		table_[6].symbol = 'o';
+		table_[1].symbol = 'N';
+		B1d();
+		table_[2].symbol = 'D';
+		A2q();
+
+		table_[3].symbol = 'O';
+		B1d();
+		table_[4].symbol = 'R';
+		F1b();
+
+		table_[5].symbol = 'O';
+		B1d();
+		table_[6].symbol = 'T';
 		table_[6].alternative = 8;
-		table_[7].symbol = 'p';
-		table_[7].state = Sy_Z1;
-		table_[8].symbol = 'u';
-		table_[9].symbol = 's';
-		table_[10].symbol = 'h';
-		table_[10].state = Sy_Z6;
-		table_[11].symbol = 'e';
-		table_[12].symbol = 'a';
-		table_[13].symbol = 'd';
-		table_[13].state = Sy_Z3;
-		table_[14].symbol = 'r';
-		table_[15].symbol = 'i';
-		table_[16].symbol = 't';
-		table_[17].symbol = 'e';
-		table_[17].state = Sy_Z2;
-		table_[18].symbol = 'o';
-		table_[19].symbol = 'n';
-		table_[20].symbol = 'c';
-		table_[21].symbol = 'a';
-		table_[22].symbol = 't';
-		table_[22].state = Sy_Z12;
-		table_[23].symbol = 'h';
-		table_[23].alternative = 29;
-		table_[24].symbol = 'i';
-		table_[25].symbol = 'f';
-		table_[26].symbol = 't';
-		table_[27].symbol = 'l';
-		table_[27].state = Sy_Z7;
-		table_[27].alternative = 28;
-		table_[28].symbol = 'r';
-		table_[28].state = Sy_Z8;
-		table_[29].symbol = 'u';
-		table_[30].symbol = 'b';
-		table_[31].symbol = 'v';
-		table_[32].symbol = 'e';
-		table_[33].symbol = 'c';
-		table_[33].state = Sy_Z11;
+		B1d();
+		table_[7].symbol = 'O';
+		E1a();
+		table_[8].symbol = 'S';
+		B1d();
+		table_[9].symbol = 'U';
+		B1d();
+		table_[10].symbol = 'B';
+		E1b();
+
+		table_[11].symbol = 'F';
+		A2r();
+
+		table_[12].symbol = 'E';
+		B1d();
+		table_[13].symbol = 'T';
+		F1a();
+
+		table_[14].symbol = 'E';
+		B1d();
+		table_[15].symbol = 'X';
+		B1d();
+		table_[16].symbol = 'T';
+		C1a();
+
+		table_[17].symbol = 'E';
+		B1d();
+		table_[18].symbol = 'T';
+		table_[18].alternative = 22;
+		B1d();
+		table_[19].symbol = 'U';
+		B1d();
+		table_[20].symbol = 'R';
+		B1d();
+		table_[21].symbol = 'N';
+		A2s();
+		table_[22].symbol = 'M';
+		G1a();
+
+
+		table_[23].symbol = 'T';
+		B1d();
+		table_[24].symbol = 'E';
+		B1d();
+		table_[25].symbol = 'P';
+		A2t();
+
+		table_[26].symbol = 'O';
+		A2u();
 	}
 	enum RK
 	{
