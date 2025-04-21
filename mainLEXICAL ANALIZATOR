@@ -27,7 +27,87 @@ private:
 		RSTR, // регистр строка
 		RI, // регистр номера буквы в имени переменной
 		RSE; // регистр счетчика ошибок
-	vector<int>InitialVector;
+	struct Initial_vector
+	{
+		char symbol;
+		int detection;
+	};
+	void Initial_Vect(Initial_vector* vec_)
+	{
+		vec_[0].symbol = 'p';
+		vec_[0].detection = 6;
+		vec_[1].symbol = 'w';
+		vec_[1].detection = 14;
+		vec_[2].symbol = 'r';
+		vec_[2].detection = 11;
+		vec_[3].symbol = 'e';
+		vec_[3].detection = 1;
+		vec_[4].symbol = 'j';
+		vec_[4].detection = 3;
+		vec_[5].symbol = 's';
+		vec_[5].detection = 23;
+		vec_[6].symbol = 'c';
+		vec_[6].detection = 18;
+	}
+	struct Detection_Table
+	{
+		int state = Sy_B1;
+		char symbol;
+		int alternative = 0;
+	};
+
+	void Detection_Tab(Detection_Table* table_)
+	{
+		table_[0].state = Error;
+		table_[1].symbol = 'n';
+		table_[2].symbol = 'd';
+		table_[2].state = Sy_Z4;
+		table_[3].symbol = 'i';
+		table_[3].alternative = 4;
+		table_[3].state = Sy_Z10;
+		table_[4].symbol = 'm';
+		table_[5].symbol = 'p';
+		table_[5].state = Sy_Z5;
+		table_[6].symbol = 'o';
+		table_[6].alternative = 8;
+		table_[7].symbol = 'p';
+		table_[7].state = Sy_Z1;
+		table_[8].symbol = 'u';
+		table_[9].symbol = 's';
+		table_[10].symbol = 'h';
+		table_[10].state = Sy_Z6;
+		table_[11].symbol = 'e';
+		table_[12].symbol = 'a';
+		table_[13].symbol = 'd';
+		table_[13].state = Sy_Z3;
+		table_[14].symbol = 'r';
+		table_[15].symbol = 'i';
+		table_[16].symbol = 't';
+		table_[17].symbol = 'e';
+		table_[17].state = Sy_Z2;
+		table_[18].symbol = 'o';
+		table_[19].symbol = 'n';
+		table_[20].symbol = 'c';
+		table_[21].symbol = 'a';
+		table_[22].symbol = 't';
+		table_[22].state = Sy_Z12;
+		table_[23].symbol = 'h';
+		table_[23].alternative = 29;
+		table_[24].symbol = 'i';
+		table_[25].symbol = 'f';
+		table_[26].symbol = 't';
+		table_[27].symbol = 'l';
+		table_[27].state = Sy_Z7;
+		table_[27].alternative = 28;
+		table_[28].symbol = 'r';
+		table_[28].state = Sy_Z8;
+		table_[29].symbol = 'u';
+		table_[30].symbol = 'b';
+		table_[31].symbol = 'v';
+		table_[32].symbol = 'e';
+		table_[33].symbol = 'c';
+		table_[33].state = Sy_Z11;
+	}
 	enum RK
 	{
 		Letter, Digit, Ar_Oper, Relationship, Left_Bracket, Right_Bracket, Point, Space, End_Line, End_File
@@ -210,50 +290,6 @@ private:
 		TL[NTL].Class_Lex = t.Class;
 		NTL++;
 
-	}
-	void E2a()
-	{
-		RKL = ROWLABEL;
-		RSTR = RZN;
-		pfunc = &Analyzator::E2;
-	}
-	void E2c()
-	{
-		RSTR *= 10;
-		RSTR += RZN;
-		pfunc = &Analyzator::E2;
-	}
-	void B1e()
-	{
-		CreatToken();
-		ROB = InitialVector[RZN - 1];
-		pfunc = &Analyzator::B1;
-	}
-	void M1()
-	{
-		if (ROB == 0)
-		{
-			G1b();
-			return;
-		}
-		if (RZN == Table[ROB - 1].leter)
-		{
-			(this->*(Table[ROB - 1].pfunc))();
-		}
-		else
-		{
-			ROB = Table[ROB - 1].next;
-			if (ROB)
-				(this->*(Table[ROB - 1].pfunc))();
-			else
-				G1b();
-		}
-	}
-	void G1b()
-	{
-		RKL = ERROR;
-		CreatToken();
-		pfunc = &Analyzator::G1;
 	}
 	void A1()
 	{
@@ -978,7 +1014,7 @@ private:
 		CreatToken();
 		pfunc = &Analyzator::A2;
 	}
-	void A1h()
+	void A2h()
 	{
 		RKL = LEFT_BRACKET;
 		CreatToken();
