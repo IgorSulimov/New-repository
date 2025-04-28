@@ -3,9 +3,8 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
-#include "Hesh_Table.hpp"
-#include "Lex_Table.hpp"
 #include <vector>
+#include "Table_Lex.hpp"
 using namespace std;
 class Analyzator
 {
@@ -27,105 +26,12 @@ private:
 		RSTR, // регистр строка
 		RI, // регистр номера буквы в имени переменной
 		RSE; // регистр счетчика ошибок
-	struct Initial_vector
-	{
-		char symbol;
-		int detection;
-	};
-	void Initial_Vect(Initial_vector* vec_)
-	{
-		vec_[0].symbol = 'E';
-		vec_[0].detection = 1;
-		vec_[1].symbol = 'F';
-		vec_[1].detection = 3;
-		vec_[2].symbol = 'G';
-		vec_[2].detection = 5;
-		vec_[3].symbol = 'I';
-		vec_[3].detection = 11;
-		vec_[4].symbol = 'L';
-		vec_[4].detection = 12;
-		vec_[5].symbol = 'N';
-		vec_[5].detection = 14;
-		vec_[6].symbol = 'R';
-		vec_[6].detection = 17;
-		vec_[7].symbol = 'S';
-		vec_[7].detection = 23;
-		vec_[8].symbol = 'T';
-		vec_[8].detection = 26;
-	}
-	struct Detection_Table
-	{
-		char symbol;
-		int alternative = 0;
-	};
+	struct IV;
+	struct DT;
+	vector<IV> InitialVector;
+	vector<DT> Table;
 
-	void Detection_Tab(Detection_Table* table_)
-	{
-		table_[0].state = Error;
-		table_[1].symbol = 'N';
-		B1d();
-		table_[2].symbol = 'D';
-		A2q();
-
-		table_[3].symbol = 'O';
-		B1d();
-		table_[4].symbol = 'R';
-		F1b();
-
-		table_[5].symbol = 'O';
-		B1d();
-		table_[6].symbol = 'T';
-		table_[6].alternative = 8;
-		B1d();
-		table_[7].symbol = 'O';
-		E1a();
-		table_[8].symbol = 'S';
-		B1d();
-		table_[9].symbol = 'U';
-		B1d();
-		table_[10].symbol = 'B';
-		E1b();
-
-		table_[11].symbol = 'F';
-		A2r();
-
-		table_[12].symbol = 'E';
-		B1d();
-		table_[13].symbol = 'T';
-		F1a();
-
-		table_[14].symbol = 'E';
-		B1d();
-		table_[15].symbol = 'X';
-		B1d();
-		table_[16].symbol = 'T';
-		C1a();
-
-		table_[17].symbol = 'E';
-		B1d();
-		table_[18].symbol = 'T';
-		table_[18].alternative = 22;
-		B1d();
-		table_[19].symbol = 'U';
-		B1d();
-		table_[20].symbol = 'R';
-		B1d();
-		table_[21].symbol = 'N';
-		A2s();
-		table_[22].symbol = 'M';
-		G1a();
-
-
-		table_[23].symbol = 'T';
-		B1d();
-		table_[24].symbol = 'E';
-		B1d();
-		table_[25].symbol = 'P';
-		A2t();
-
-		table_[26].symbol = 'O';
-		A2u();
-	}
+	int BSE = 0;
 	enum RK
 	{
 		Letter, Digit, Ar_Oper, Relationship, Left_Bracket, Right_Bracket, Point, Space, End_Line, End_File
@@ -1038,12 +944,6 @@ private:
 		CreatToken();
 		pfunc = &Analyzator::A2;
 	}
-	void A2h()
-	{
-		RKL = LEFT_BRACKET;
-		CreatToken();
-		pfunc = &Analyzator::A2;
-	}
 	void A2l()
 	{
 		CreatToken();
@@ -1165,25 +1065,25 @@ private:
 	}
 	void B1a()
 	{
-		ROB = InitialVector[RZN - 1];
+		ROB = InitialVector[RZN - 1].detection;
 		pfunc = &Analyzator::B1;
 	}
 	void B1b()
 	{
 		CreatToken;
-		ROB = InitialVector[RZN - 1];
+		ROB = InitialVector[RZN - 1].detection;
 		pfunc = &Analyzator::B1;
 	}
-	void B1c()
+	void B1d()
 	{
 		CreatToken;
-		ROB = InitialVector[RZN - 1];
+		ROB = InitialVector[RZN - 1].detection;
 		pfunc = &Analyzator::B1;
 	}
 	void B1e()
 	{
 		CreatToken;
-		ROB = InitialVector[RZN - 1];
+		ROB = InitialVector[RZN - 1].detection;
 		pfunc = &Analyzator::B1;
 	}
 	void C1a()
@@ -1386,13 +1286,13 @@ private:
 			G1b();
 			return;
 		}
-		if (RZN == Table[ROB - 1].letter)
+		if (RZN == Table[ROB - 1].symbol)
 		{
 			(this->*(Table[ROB - 1].pfunc))();
 		}
 		else
 		{
-			ROB = Table[ROB - 1].alternativa;
+			ROB = Table[ROB - 1].alternative;
 			if (ROB)
 				(this->*(Table[ROB - 1].pfunc))();
 			else
@@ -1409,7 +1309,7 @@ private:
 		else
 		{
 			CreatToken();
-			ROB = InitialVector[RZN - 1];
+			ROB = InitialVector[RZN - 1].detection;
 			pfunc = &Analyzator::B1;
 		}
 	}
@@ -1448,9 +1348,107 @@ private:
 		RKL = END_FILE;
 		CreatToken();
 	}
+	struct IV
+	{
+		char symbol;
+		int detection;
+
+		IV()
+		{
+			IV Initial_vect[10];
+			Initial_vect[0].symbol = 'E';
+			Initial_vect[0].detection = 1;
+			Initial_vect[1].symbol = 'F';
+			Initial_vect[1].detection = 3;
+			Initial_vect[2].symbol = 'G';
+			Initial_vect[2].detection = 5;
+			Initial_vect[3].symbol = 'I';
+			Initial_vect[3].detection = 11;
+			Initial_vect[4].symbol = 'L';
+			Initial_vect[4].detection = 12;
+			Initial_vect[5].symbol = 'N';
+			Initial_vect[5].detection = 14;
+			Initial_vect[6].symbol = 'R';
+			Initial_vect[6].detection = 17;
+			Initial_vect[7].symbol = 'S';
+			Initial_vect[7].detection = 23;
+			Initial_vect[8].symbol = 'T';
+			Initial_vect[8].detection = 26;
+		}
+	};
+	struct DT
+	{
+		char symbol;
+		int alternative = 0;
+		pfuncType pfunc;
+
+		DT(int size_)
+		{
+			vector<DT> Table_[size_];
+
+			Table_[1].symbol = 'N';
+			Table_[1].pfunc = &Analyzator::B1d;
+			Table_[2].symbol = 'D';
+			Table_[2].pfunc = &Analyzator::A2q;
+
+			Table_[3].symbol = 'O';
+			Table_[3].pfunc = &Analyzator::B1d;
+			Table_[4].symbol = 'R';
+			Table_[4].pfunc = &Analyzator::F1b;
+
+			Table_[5].symbol = 'O';
+			Table_[5].pfunc = &Analyzator::B1d;
+			Table_[6].symbol = 'T';
+			Table_[6].alternative = 8;
+			Table_[6].pfunc = &Analyzator::B1d;
+			Table_[7].symbol = 'O';
+			Table_[7].pfunc = &Analyzator::E1a;
+			Table_[8].symbol = 'S';
+			Table_[8].pfunc = &Analyzator::B1d;
+			Table_[9].symbol = 'U';
+			Table_[9].pfunc = &Analyzator::B1d;
+			Table_[10].symbol = 'B';
+			Table_[10].pfunc = &Analyzator::E1b;
+
+			Table_[11].symbol = 'F';
+			Table_[11].pfunc = &Analyzator::A2r;
+
+			Table_[12].symbol = 'E';
+			Table_[12].pfunc = &Analyzator::B1d;
+			Table_[13].symbol = 'T';
+			Table_[13].pfunc = &Analyzator::F1a;
+
+			Table_[14].symbol = 'E';
+			Table_[14].pfunc = &Analyzator::B1d;
+			Table_[15].symbol = 'X';
+			Table_[15].pfunc = &Analyzator::B1d;
+			Table_[16].symbol = 'T';
+			Table_[16].pfunc = &Analyzator::C1a;
+
+			Table_[17].symbol = 'E';
+			Table_[17].pfunc = &Analyzator::B1d;
+			Table_[18].symbol = 'T';
+			Table_[18].alternative = 22;
+			Table_[18].pfunc = &Analyzator::B1d;
+			Table_[19].symbol = 'U';
+			Table_[19].pfunc = &Analyzator::B1d;
+			Table_[20].symbol = 'R';
+			Table_[20].pfunc = &Analyzator::B1d;
+			Table_[21].symbol = 'N';
+			Table_[21].pfunc = &Analyzator::A2s;
+			Table_[22].symbol = 'M';
+			Table_[22].pfunc = &Analyzator::G1a;
+
+
+			Table_[23].symbol = 'T';
+			Table_[23].pfunc = &Analyzator::B1d;
+			Table_[24].symbol = 'E';
+			Table_[24].pfunc = &Analyzator::B1d;
+			Table_[25].symbol = 'P';
+			Table_[25].pfunc = &Analyzator::A2t;
+
+			Table_[26].symbol = 'O';
+			Table_[26].pfunc = &Analyzator::A2u;
+		};
+	}
 };
-main()
-{
-	double* TO;
-	FILE* f = fopen("1.txt", "r");
-}
