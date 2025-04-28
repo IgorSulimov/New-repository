@@ -33,32 +33,46 @@ public:
 			cout << "Íå óäàëîñü îòêðûòü ôàéë " << file_name << endl;
 		}
 		char ch = in.get();
-		while (ch != EOF)
+		int count_faill = 0;
+		if (ch == EOF)
+			cout << "GOOD";
+		else
 		{
-			while (ch != '\n' && ch != EOF)
+			while (ch != EOF)
 			{
-				(this->*q)(ch);
-				cout << ch << endl;
+				while (ch != '\n' && ch != EOF)
+				{
+					(this->*q)(ch);
+					cout << ch;
+					ch = in.get();
+					if (er_fl == 0)
+					{
+						count_faill++;
+					}
+				}
 				ch = in.get();
-			}
-			ch = in.get();
-			if (er_fl == 1)
-			{
-				
-				cout << "Bad" << endl;
-				er_fl = 0;
-			}
-			else
-			{
-				cout << "GOOD" << endl;
+				if (er_fl == 0 && stack.size() == 0)
+				{
+					cout <<'\n' << "GOOD" << endl;
 
+				}
+				else
+				{
+					cout << '\n' << right << setw(count_faill) << '^';
+					cout <<'\n' << "Bad" << endl;
+					er_fl = 0;
+				}
+				while (stack.size() != 0)
+				{
+					stack.pop();
+				}
+				q = &Avto1::q0;
+				count_faill = 0;
 			}
-			q = &Avto1::q0;
 		}
 	}
 	void q0(char ch)
 	{
-		cout << "Work q0" << endl;
 		switch (ch)
 		{
 		case '0': Error(); break;
@@ -71,7 +85,6 @@ public:
 	}
 	void q1(char ch)
 	{
-		cout << "Work q1" << endl;
 		switch (ch)
 		{
 		case '0':
@@ -96,7 +109,6 @@ public:
 	}
 	void q2(char ch)
 	{
-		cout << "Work q2" << endl;
 		switch (ch)
 		{
 		case '0': 
@@ -128,7 +140,6 @@ public:
 	void Error()
 	{
 		er_fl = 1;
-		cout << "Error simbol" << endl;
 	}
 };
 int main()
