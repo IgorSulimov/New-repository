@@ -1,0 +1,139 @@
+#include <string>
+#include <fstream>
+#include <vector>
+#include <cctype>
+#include <iomanip>
+#include <stack>
+#include <iostream>
+using namespace std;
+
+class parent
+{
+protected:
+	string str;
+
+public:
+	virtual void start(string file_name) = 0;
+
+	virtual ~parent() {};
+};
+
+class Avto1 : public parent
+{
+	void (Avto1::* q)(char ch);
+public:
+	Avto1() { q = &Avto1::q0; }
+	int er_fl = 0;
+	stack<int> stack;
+	void start(string file_name)
+	{
+		ifstream in(file_name);
+		if (!in)
+		{
+			cout << "Íå óäàëîñü îòêðûòü ôàéë " << file_name << endl;
+		}
+		char ch = in.get();
+		while (ch != EOF)
+		{
+			while (ch != '\n' && ch != EOF)
+			{
+				(this->*q)(ch);
+				cout << ch << endl;
+				ch = in.get();
+			}
+			ch = in.get();
+			if (er_fl == 1)
+			{
+				
+				cout << "Bad" << endl;
+				er_fl = 0;
+			}
+			else
+			{
+				cout << "GOOD" << endl;
+
+			}
+			q = &Avto1::q0;
+		}
+	}
+	void q0(char ch)
+	{
+		cout << "Work q0" << endl;
+		switch (ch)
+		{
+		case '0': Error(); break;
+		case '1':
+			q = &Avto1::q1;
+			stack.push(1);
+			break;
+		default:Error();
+		}
+	}
+	void q1(char ch)
+	{
+		cout << "Work q1" << endl;
+		switch (ch)
+		{
+		case '0':
+			if (stack.size() >= 1)
+			{
+				if (stack.top() == 1)
+				{
+					stack.pop();
+					q = &Avto1::q2;
+				}
+				else
+					Error();
+			}
+			else
+				Error();
+			break;
+		case '1':
+			q = &Avto1::q1;
+			stack.push(1);
+			break;
+		}
+	}
+	void q2(char ch)
+	{
+		cout << "Work q2" << endl;
+		switch (ch)
+		{
+		case '0': 
+			if (stack.size() >= 1)
+			{
+				if (stack.top() == 1)
+				{
+					stack.pop();
+					q = &Avto1::q2;
+				}
+				else
+					Error();
+			}
+			else
+				Error();
+			break;
+		case '1':
+			if (stack.size() == 0)
+			{
+				q = &Avto1::q1;
+				stack.push(1);
+			}
+			else
+				Error();
+			break;
+		default:Error();
+		}
+	}
+	void Error()
+	{
+		er_fl = 1;
+		cout << "Error simbol" << endl;
+	}
+};
+int main()
+{
+	Avto1 obj;
+	obj.start("i.txt");
+	return 0;
+}
