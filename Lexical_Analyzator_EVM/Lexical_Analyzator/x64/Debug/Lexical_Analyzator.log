@@ -1,0 +1,7 @@
+﻿  Lexical_block.cpp
+C:\Users\issulimov\source\repos\Lexical_Analyzator\Lexical_Analyzator\Lexical_block.cpp(306,13): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\issulimov\source\repos\Lexical_Analyzator\Lexical_Analyzator\Lexical_block.cpp(308,13): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+  main.cpp
+  Создание кода...
+C:\Users\issulimov\source\repos\Lexical_Analyzator\Lexical_Analyzator\Hash.hpp(195): warning C4715: Hash::el_add: значение возвращается не при всех путях выполнения
+  Lexical_Analyzator.vcxproj -> C:\Users\issulimov\source\repos\Lexical_Analyzator\x64\Debug\Lexical_Analyzator.exe
