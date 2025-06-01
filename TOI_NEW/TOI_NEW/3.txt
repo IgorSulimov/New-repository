@@ -1,0 +1,44 @@
+S -> <announ> <prog>
+<announ> -> <ann>
+<ann> -> dim V <vl> as <type> ;
+<vl> -> , V <vl>
+<type> -> int 
+<type> -> multiset
+<prog> -> <op> <prog>
+<prog> -> <op>
+<op> -> <announ>
+<op> -> let V = <E> ;
+<op> -> ;
+<op> -> while <test> do <prog> od ;
+<op> -> for V from <E> to <E> <step> do <prog> od ;
+<step> -> by <E>
+<op> -> if ( <test> ) <prog> <els> fi;
+<els> -> <els> <prog>
+<test> -> <E> <R> <E>
+<op> -> read <V> <op_in> ;
+<op_in> -> , <V> <op_in>
+<op> -> write <E> <op_out> ;
+<op_out> -> , <E> <op_out>
+<op> -> L:
+<op> -> jump L ;
+<op> -> select <E> in case C: <prog> <mult_bran> <o_wise> ni ;
+<mult_bran> -> case C: <prog> <mult_bran>
+<o_wise> -> otherwise <prog>
+<op> -> bad ;
+<op> -> /*K*/
+<E> -> + <T> 
+<E> -> - <T>
+<E> -> <T>
+<T> -> * <F> 
+<T> -> / <F> 
+<T> -> % <F>
+<T> -> & <F>
+<T> -> ^ <F>
+<T> -> <F>
+<F> -> c 
+<F> -> v 
+<F> -> ( <E> ) 
+<F> -> pow ( <E> )
+<F> -> acs ( <E> , <E> )
+<F> -> afm ( <E> )
+<F> -> m 
