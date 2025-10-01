@@ -1,0 +1,15 @@
+push 0
+pop x
+push 0
+pop y
+read
+pop t0
+push t0
+pop x
+push t0
+pop y
+push x
+push y
+concat
+write
+end

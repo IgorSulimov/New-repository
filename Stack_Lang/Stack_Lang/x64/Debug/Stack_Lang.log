@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\variant(12): warning STL4038: The contents of <variant> are available only with C++17 or later.
+  Stack_Lang.vcxproj -> C:\Users\Igor\source\repos\Stack_Lang\x64\Debug\Stack_Lang.exe
