@@ -1,0 +1,6 @@
+dim x , y : int ;
+switch ( x )
+when 1 : set y = 10 ; 
+when 2 : set y = 20 ;
+otherwise set y = 30 ;
+end ;

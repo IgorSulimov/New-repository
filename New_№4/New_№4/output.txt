@@ -1,0 +1,29 @@
+push 0
+pop x
+push 0
+pop y
+push x
+pop t0
+push t0
+push 1
+==
+ji L1
+jmp L2
+label L1
+push 10
+pop y
+jmp L0
+label L2
+push t0
+push 2
+==
+ji L3
+jmp L4
+label L3
+push 20
+pop y
+jmp L0
+label L4
+push 30
+pop y
+label L0

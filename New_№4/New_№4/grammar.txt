@@ -1,0 +1,79 @@
+<S> -> <Ob> <Prog>
+<S> -> <Prog>
+<Prog> -> <Oper> <Prog>
+<Prog> -> <Oper>
+<Ob> -> <Ob> <Ob2> 
+<Ob> -> <Ob2> 
+<Ob2> -> <Ob3> : <Type> ;
+<Ob3> -> dim V
+<Ob3> -> <Ob4> V
+<Ob4> -> <Ob3> ,
+<Type> -> int
+<Type> -> vector
+<Oper> -> ;
+<Oper> -> <Prisv> ;
+<Prisv> -> <Prisv2> = <E>
+<Prisv2> -> set V
+<Prisv2> -> <Prisv3> V
+<Prisv3> -> <Prisv2> ,
+<Oper> -> <For_1> end ;
+<For_1> -> <For_2> do <Prog> 
+<For_2> -> for each V in <E> 
+<Oper> -> <While> end ;
+<While> -> while <Test> do <Prog>
+<Oper> -> <If_1> end ;
+<Oper> -> <If_1> <Else> end ;
+<If_1> -> if <Test> then <Prog>
+<Else> -> else <Prog>
+<Oper> -> <Cin> ;
+<Cin> -> cin <List_V1> 
+<List_V1> -> >> V <List_V1>
+<List_V1> -> >> V 
+<Oper> -> <Output> ;
+<Output> -> cout <List_E1>
+<List_E1> -> <Exp>
+<List_E1> -> << <E> <List_E1>
+<Exp> -> << <E>
+<Oper> -> L:
+<Oper> -> <Jump> ;
+<Jump> -> jump L
+<Oper> -> <Switch_1> end ;
+<Oper> -> <Switch_1> <Other> end ;
+<Switch_1> -> <Switch_2> <When1>
+<Switch_2> -> switch ( <E> )
+<When1> -> <When3> <When1>
+<When1> -> <When3> 
+<When3> -> <When> : <Prog>
+<When> -> when C
+<When> -> <When2> C
+<When2> -> <When> ,
+<Other> -> otherwise <Prog>
+<Test> -> <E> rel <E>
+<Comma> -> ,
+<Oper> -> throw ;
+<Oper> -> rem
+<E> -> <T> <E'> 
+<E> -> <T>
+<E'> -> + <T> <E'>
+<E'> -> - <T> <E'> 
+<E'> -> + <T> 
+<E'> -> - <T> 
+<T> -> <F> <T'> 
+<T> -> <F>
+<T'> -> * <F> <T'>
+<T'> -> / <F> <T'> 
+<T'> -> * <F> 
+<T'> -> / <F> 
+<T'> -> % <F> <T'>
+<T'> -> & <F> <T'> 
+<T'> -> % <F> 
+<T'> -> & <F> 
+<F> -> V
+<F> -> C 
+<F> -> ( <E> )
+<F> -> shiftl ( <E> <Comma> <E_brace>
+<F> -> shiftr ( <E> <Comma> <E_brace>
+<F> -> concat ( <E> <Comma> <E_brace>
+<F> -> subvec ( <E> <Comma> <E_brace'>
+<E_brace'> -> <E> <Comma> <E_brace>
+<E_brace> -> <E> )

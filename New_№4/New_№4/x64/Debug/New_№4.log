@@ -1,0 +1,24 @@
+﻿  main.cpp
+C:\Users\Igor\source\repos\New_№4\New_№4\Parser.hpp(272,41): warning C4101: e: неиспользованная локальная переменная
+  (компиляция исходного файла "main.cpp")
+  
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4267: инициализация: преобразование из "size_t" в "_Ty2"; возможна потеря данных
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4267:         with
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4267:         [
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4267:             _Ty2=int
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4267:         ]
+  (компиляция исходного файла "main.cpp")
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\utility(274,54):
+      контекст создания экземпляра шаблона (сначала самый старый)
+          C:\Users\Igor\source\repos\New_№4\New_№4\Parser.hpp(193,21):
+          выполняется компиляция ссылки на экземпляр шаблон функции "std::pair<std::string,int>::pair<const _Ty1&,unsigned __int64,0>(_Other1,_Other2 &&) noexcept(false)"
+          with
+          [
+              _Ty1=std::string,
+              _Other1=const std::string &,
+              _Other2=unsigned __int64
+          ]
+              C:\Users\Igor\source\repos\New_№4\New_№4\Parser.hpp(193,21):
+              см. первую ссылку на "std::pair<std::string,int>::pair" в "SyntaxParser::findReductionRule"
+  
+  New_№4.vcxproj -> C:\Users\Igor\source\repos\New_№4\x64\Debug\New_№4.exe
