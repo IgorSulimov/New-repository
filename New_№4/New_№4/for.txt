@@ -1,0 +1,8 @@
+dim e , n : int ;
+
+set n = 5 ;
+set e = 2 ;
+
+for each e in n do
+    cout << e ;
+end ;

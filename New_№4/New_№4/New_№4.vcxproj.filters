@@ -53,11 +53,18 @@
     <ClInclude Include="Warning_Situations.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Stack.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="grammar.txt" />
-    <Text Include="1.txt" />
-    <Text Include="2.txt" />
-    <Text Include="input.txt" />
+    <Text Include="switch.txt" />
+    <Text Include="if.txt" />
+    <Text Include="vect_test.txt" />
+    <Text Include="while.txt" />
+    <Text Include="for.txt" />
+    <Text Include="euler.txt" />
+    <Text Include="Lable.txt" />
   </ItemGroup>
 </Project>

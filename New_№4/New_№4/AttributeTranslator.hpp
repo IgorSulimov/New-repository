@@ -116,9 +116,17 @@ public:
             attr.type = "rel";
             attr.value = "rel";
             break;
+        case 51:
+            attr.type2 = "==";
+            attr.type = "rel";
+            attr.type = "rel";
         case 31: // C2 - константа (vector)
             attr.type = "vector";
             attr.value = lexeme.token_name;
+            if (lexeme.token_value != nullptr && std::holds_alternative<Vector>(*lexeme.token_value)) {
+                attr.vectorValue = std::get<Vector>(*lexeme.token_value);
+                attr.value = attr.vectorValue.output(); // Используем правильное строковое представление
+            }
             break;
         case 37: // int
             attr.type = "int";
@@ -195,19 +203,16 @@ public:
     Attribute rule_Ob2_Ob3_Type(const Attribute& ob3_attr, const Attribute& type_attr) {
         Attribute result;
 
-        // Разбираем список переменных
         vector<string> variables;
         stringstream ss(ob3_attr.name);
         string var;
         while (getline(ss, var, ',')) {
-            // Удаляем пробелы вокруг имени переменной
             var.erase(remove_if(var.begin(), var.end(), ::isspace), var.end());
             if (!var.empty()) {
                 variables.push_back(var);
             }
         }
 
-        // Объявляем переменные и генерируем код инициализации
         for (const auto& var_name : variables) {
             try {
                 symbolTable.addSymbol(var_name, type_attr.type);
@@ -217,12 +222,12 @@ public:
                     result.code += "pop " + var_name + "\n";
                 }
                 else if (type_attr.type == "vector") {
-                    result.code += "push [0]\n";
+                    // Инициализируем пустым вектором вместо [0]
+                    result.code += "push []\n";
                     result.code += "pop " + var_name + "\n";
                 }
             }
             catch (const runtime_error& e) {
-                // Добавляем информацию о строке к ошибке
                 string error_msg = e.what();
                 if (ob3_attr.line_number != -1) {
                     error_msg += " at line " + to_string(ob3_attr.line_number);
@@ -287,7 +292,6 @@ public:
         Attribute result;
         result.line_number = prisv2_attr.line_number;
 
-        // Разбираем список переменных для присваивания
         vector<string> variables;
         stringstream ss(prisv2_attr.name);
         string var;
@@ -312,7 +316,13 @@ public:
         // Проверка типов для всех переменных
         for (const auto& var_name : variables) {
             string var_type = symbolTable.getType(var_name);
-            if (var_type != e_attr.type) {
+
+            // Для векторов используем специальную проверку
+            if (var_type == "vector" && e_attr.type == "vector") {
+                // Вектор можно присваивать вектору
+                continue;
+            }
+            else if (var_type != e_attr.type) {
                 string error_msg = "Type mismatch in assignment: cannot assign " +
                     e_attr.type + " to variable '" + var_name + "' of type " + var_type;
                 if (result.line_number != -1) {
@@ -375,7 +385,6 @@ public:
     Attribute rule_Prisv3_Prisv2_comma(const Attribute& prisv2_attr) {
         return prisv2_attr;
     }
-
     // Правило: <Oper> -> <For_1> end ;
     Attribute rule_Oper_For_1_end_semicolon(const Attribute& for1_attr) {
         return for1_attr;
@@ -384,26 +393,25 @@ public:
     // <For_1> -> <For_2> do <Prog>
     Attribute rule_For_1_For_2_do_Prog(const Attribute& for2_attr, const Attribute& prog_attr) {
         Attribute result;
-        string m1 = generateLabel();
-        string m2 = generateLabel();
+        string loop_start_label = generateLabel();
+        string loop_end_label = generateLabel();
 
-        result.code = for2_attr.code2 + // инициализация итератора
-            "pop " + for2_attr.name + "\n" +
-            "label " + m1 + "\n" +
+        result.code = 
+            "lable " + loop_start_label + "\n" +
             "push " + for2_attr.name + "\n" +
-            for2_attr.code + // верхняя граница
-            ">\n" +
-            "ji " + m2 + "\n" +
-            prog_attr.code + // тело цикла
+            for2_attr.code +            // верхняя граница
+            ">\n" +                    // проверяем итератор <= верхней границы
+            "ji " + loop_end_label + "\n" + // если итератор > верхней границы, выходим
+            prog_attr.code +            // тело цикла
             "push " + for2_attr.name + "\n" +
-            for2_attr.code3 + // инкремент
             "push 1\n" +
-            "+\n" +
+            "+\n" +                     // увеличиваем итератор на 1
             "pop " + for2_attr.name + "\n" +
-            "jmp " + m1 + "\n" +
-            "label " + m2 + "\n";
+            "jmp " + loop_start_label + "\n" +
+            "lable " + loop_end_label + "\n";
         return result;
     }
+
     // <For_2> -> for each V in <E>
     Attribute rule_For_2_for_each_V_in_E(const Attribute& v_attr, const Attribute& e_attr) {
         Attribute result;
@@ -420,8 +428,16 @@ public:
 
         // Проверка типов
         string var_type = symbolTable.getType(v_attr.name);
-        if (var_type != "int" || e_attr.type != "int") {
-            string error_msg = "Type mismatch in for each loop: expected int types";
+        if (var_type != "int") {
+            string error_msg = "Loop variable must be of type int";
+            if (result.line_number != -1) {
+                error_msg += " at line " + to_string(result.line_number);
+            }
+            throw runtime_error(error_msg);
+        }
+
+        if (e_attr.type != "int") {
+            string error_msg = "For each loop requires an integer expression";
             if (result.line_number != -1) {
                 error_msg += " at line " + to_string(result.line_number);
             }
@@ -429,9 +445,8 @@ public:
         }
 
         result.name = v_attr.name;
-        result.code = e_attr.code;
-        result.code2 = "push 0\n";
-        result.code3 = "";
+        result.code = e_attr.code;     // верхняя граница
+        result.code2 = "push 0\n";     // инициализация итератора (начинаем с 0)
 
         return result;
     }
@@ -447,39 +462,43 @@ public:
         string m1 = generateLabel();
         string m2 = generateLabel();
 
-        result.code = "label " + m1 + "\n" +
+        result.code = "lable " + m1 + "\n" +
             test_attr.code +
+            "push 0\n" +              // помещаем 0 на стек
+            "==\n" +
             "ji " + m2 + "\n" +
             prog_attr.code +
             "jmp " + m1 + "\n" +
-            "label " + m2 + "\n";
+            "lable " + m2 + "\n";
         return result;
     }
 
     // <Oper> -> <If_1> end ;
     Attribute rule_Oper_If_1_end_semicolon(const Attribute& if1_attr) {
         Attribute result;
-        string m = generateLabel();
+        string skip_label = generateLabel();
 
-        result.code = if1_attr.code + // условие
-            "ji " + m + "\n" +
-            if1_attr.code2 + // then часть
-            "label " + m + "\n";       
+        result.code = if1_attr.code +           // условие
+            "push 0\n" +              // помещаем 0 на стек
+            "==\n" +                  // сравниваем условие с 0 (результат 1 если условие ложно)
+            "ji " + skip_label + "\n" +  // если условие ложно, пропускаем then
+            if1_attr.code2 +          // then часть
+            "lable " + skip_label + "\n";
         return result;
     }
     // <Oper> -> <If_1> <Else> end ;
     Attribute rule_Oper_If_1_Else_end_semicolon(const Attribute& if1_attr, const Attribute& else_attr) {
         Attribute result;
-        string m1 = generateLabel();
-        string m2 = generateLabel();
+        string then_label = generateLabel();
+        string end_label = generateLabel();
 
-        result.code = if1_attr.code + // условие
-            "ji " + m1 + "\n" +
-            if1_attr.code2 + // then часть
-            "jmp " + m2 + "\n" +
-            "label " + m1 + "\n" +
-            else_attr.code + // else часть
-            "label " + m2 + "\n";
+        result.code = if1_attr.code +           // условие (оставляет 0 или 1 на стеке)
+            "ji " + then_label + "\n" +  // если условие истинно (1), переходим к then
+            else_attr.code +          // else часть (выполняется при лжи)
+            "jmp " + end_label + "\n" +  // переходим в конец после else
+            "lable " + then_label + "\n" +
+            if1_attr.code2 +          // then часть (выполняется при истине)
+            "lable " + end_label + "\n";
         return result;
     }
 
@@ -557,7 +576,7 @@ public:
         Attribute result;
         string l = l_attr.name;
         l.pop_back();
-        result.code = "label " + l + "\n";
+        result.code = "lable " + l + "\n";
         return result;
     }
 
@@ -578,7 +597,7 @@ public:
     Attribute rule_Oper_Switch_1_end(const Attribute& switch1_attr) {
         Attribute result;
         // Добавляем метку конца switch после всех веток
-        result.code = switch1_attr.code + "label " + switch1_attr.end_label + "\n";
+        result.code = switch1_attr.code + "lable " + switch1_attr.end_label + "\n";
 
         // Удаляем контекст switch из стека
         if (!temp_var_stack.empty()) temp_var_stack.pop();
@@ -591,7 +610,7 @@ public:
     Attribute rule_Oper_Switch_1_Other_end(const Attribute& switch1_attr, const Attribute& other_attr) {
         Attribute result;
         // Объединяем код switch, otherwise и добавляем метку конца
-        result.code = switch1_attr.code + other_attr.code + "label " + switch1_attr.end_label + "\n";
+        result.code = switch1_attr.code + other_attr.code + "lable " + switch1_attr.end_label + "\n";
 
         // Удаляем контекст switch из стека
         if (!temp_var_stack.empty()) temp_var_stack.pop();
@@ -668,7 +687,7 @@ public:
         result.code = when_attr.code +                    // Код проверки условий
             prog_attr.code +                     // Код тела ветки
             "jmp " + end_label + "\n" +          // Переход в конец после выполнения тела
-            "label " + when_attr.next_label + "\n"; // Метка для следующей проверки
+            "lable " + when_attr.next_label + "\n"; // Метка для следующей проверки
 
         result.end_label = end_label;
 
@@ -695,7 +714,7 @@ public:
             "==\n" +                            // Сравнение
             "ji " + case_label + "\n" +         // Условный переход на тело case
             "jmp " + next_case + "\n" +         // Безусловный переход на следующий case
-            "label " + case_label + "\n";       // Метка начала тела case
+            "lable " + case_label + "\n";       // Метка начала тела case
 
         result.next_label = next_case;
 
@@ -722,7 +741,7 @@ public:
             "==\n" +                               // Сравнение
             "ji " + case_label + "\n" +            // Условный переход на тело case
             "jmp " + when2_attr.next_label + "\n" + // Переход к следующему условию
-            "label " + case_label + "\n";          // Метка начала тела case
+            "lable " + case_label + "\n";          // Метка начала тела case
 
         result.next_label = when2_attr.next_label;
 
@@ -770,6 +789,7 @@ public:
         else if (rel_attr.type2 == "<=") op = "<=";
         else if (rel_attr.type2 == ">") op = ">";
         else if (rel_attr.type2 == "<") op = "<";
+        else if (rel_attr.type2 == "==") op = "==";
         else op = rel_attr.type2;
 
         result.code = e1_attr.code + e2_attr.code + op + "\n";
@@ -805,18 +825,10 @@ public:
             result = t_attr;
         }
         else {
-            // Проверка типов
-            if (t_attr.type != eprime_attr.type) {
-                string error_msg = "Type mismatch in expression: cannot operate on " + t_attr.type + " and " + eprime_attr.type;
-                if (result.line_number != -1) {
-                    error_msg += " at line " + to_string(result.line_number);
-                }
-                throw runtime_error(error_msg);
-            }
             result.type = t_attr.type;
             result.temp_var = generateTempVar(result.type);
             result.code = t_attr.code + eprime_attr.code;
-            result.code += result.temp_var + " = " + t_attr.temp_var + " " + eprime_attr.temp_var + ";\n";
+            result.code +=  eprime_attr.temp_var + "\n";
         }
         return result;
     }
@@ -831,7 +843,7 @@ public:
         Attribute result;
         string temp = generateTempVar(t_attr.type);
         result.code = t_attr.code + eprime_attr.code;
-        result.code += temp + " = " + t_attr.temp_var + " " + eprime_attr.temp_var + ";\n";
+        result.code += eprime_attr.temp_var + "\n";
         result.temp_var = temp;
         return result;
     }
@@ -841,7 +853,7 @@ public:
         Attribute result;
         string temp = generateTempVar(t_attr.type);
         result.code = t_attr.code + eprime_attr.code;
-        result.code += temp + " = " + t_attr.temp_var + " " + eprime_attr.temp_var + ";\n";
+        result.code += eprime_attr.temp_var + "\n";
         result.temp_var = temp;
         return result;
     }
@@ -849,7 +861,7 @@ public:
     // Правило: <E'> -> + <T>
     Attribute rule_Eprime_plus_T(const Attribute& t_attr) {
         Attribute result;
-        result.temp_var = "+ " + t_attr.temp_var;
+        result.temp_var = "+ ";
         result.code = t_attr.code;
         return result;
     }
@@ -857,7 +869,7 @@ public:
     // Правило: <E'> -> - <T>
     Attribute rule_Eprime_minus_T(const Attribute& t_attr) {
         Attribute result;
-        result.temp_var = "- " + t_attr.temp_var;
+        result.temp_var = "- ";
         result.code = t_attr.code;
         return result;
     }
@@ -876,7 +888,7 @@ public:
             string op = extractOperator(tprime_attr.temp_var);
             string right_operand = extractOperand(tprime_attr.temp_var);
 
-            result.code += result.temp_var + " = " + f_attr.temp_var + " " + op + " " + right_operand + ";\n";
+            result.code += op + '\n';
             return result;
         }
     }
@@ -891,7 +903,7 @@ public:
         Attribute result;
         string temp = generateTempVar(f_attr.type);
         result.code = f_attr.code + tprime_attr.code;
-        result.code += temp + " = " + f_attr.temp_var + " " + tprime_attr.temp_var + ";\n";
+        result.code += "*\n";
         result.temp_var = temp;
         return result;
     }
@@ -901,7 +913,7 @@ public:
         Attribute result;
         string temp = generateTempVar(f_attr.type);
         result.code = f_attr.code + tprime_attr.code;
-        result.code += temp + " = " + f_attr.temp_var + " " + tprime_attr.temp_var + ";\n";
+        result.code += "/\n";
         result.temp_var = temp;
         return result;
     }
@@ -911,7 +923,7 @@ public:
         Attribute result;
         string temp = generateTempVar(f_attr.type);
         result.code = f_attr.code + tprime_attr.code;
-        result.code += temp + " = " + f_attr.temp_var + " " + tprime_attr.temp_var + ";\n";
+        result.code += "%\n";
         result.temp_var = temp;
         return result;
     }
@@ -921,7 +933,7 @@ public:
         Attribute result;
         string temp = generateTempVar(f_attr.type);
         result.code = f_attr.code + tprime_attr.code;
-        result.code += temp + " = " + f_attr.temp_var + " " + tprime_attr.temp_var + ";\n";
+        result.code += "&\n";
         result.temp_var = temp;
         return result;
     }
@@ -929,7 +941,7 @@ public:
     // Правило: <T'> -> * <F>
     Attribute rule_Tprime_star_F(const Attribute& f_attr) {
         Attribute result;
-        result.temp_var = "* " + f_attr.temp_var;
+        result.temp_var = "* ";
         result.code = f_attr.code;
         return result;
     }
@@ -937,7 +949,7 @@ public:
     // Правило: <T'> -> / <F>
     Attribute rule_Tprime_slash_F(const Attribute& f_attr) {
         Attribute result;
-        result.temp_var = "/ " + f_attr.temp_var;
+        result.temp_var = "/ ";
         result.code = f_attr.code;
         return result;
     }
@@ -945,7 +957,7 @@ public:
     // Правило: <T'> -> % <F>
     Attribute rule_Tprime_percent_F(const Attribute& f_attr) {
         Attribute result;
-        result.temp_var = "% " + f_attr.temp_var;
+        result.temp_var = "% ";
         result.code = f_attr.code;
         return result;
     }
@@ -953,7 +965,7 @@ public:
     // Правило: <T'> -> & <F>
     Attribute rule_Tprime_ampersand_F(const Attribute& f_attr) {
         Attribute result;
-        result.temp_var = "& " + f_attr.temp_var;
+        result.temp_var = "& ";
         result.code = f_attr.code;
         return result;
     }
@@ -986,17 +998,18 @@ public:
         if (c_attr.type == "int") {
             result.type = "int";
             result.code = "push " + c_attr.value + "\n";
-            // Не используем временную переменную, потому что мы просто помещаем значение на стек
-            // Временная переменная не нужна, т.к. мы не делаем вычислений, которые требуют временных переменных.
-            // Присваивание заберет значение со стека.
         }
         else if (c_attr.type == "vector") {
-            // Для векторных констант используем специальное правило
-            return rule_F_C_vector(c_attr);
+            // Для векторных констант используем правильное представление
+            result.type = "vector";
+            Vector copy_cattr = c_attr.vectorValue;
+            string vector_str = copy_cattr.output(); // Используем метод output()
+            result.code = "push " + vector_str + "\n";
         }
 
         return result;
     }
+
     Attribute rule_F_C_vector(const Attribute& c_attr) {
         Attribute result;
         result.type = "vector";

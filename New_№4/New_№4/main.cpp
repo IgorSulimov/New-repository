@@ -3,31 +3,18 @@
 #include "AttributeTranslator.hpp"
 #include "SymbolTable.hpp"
 #include "Complier.hpp"
-
-bool fileExists(const string& filename) {
-    FILE* file = nullptr;
-    errno_t err = fopen_s(&file, filename.c_str(), "r");  
-    if (err == 0 && file) {
-        fclose(file);
-        return true;
-    }
-    return false;
-}
+#include "Stack.hpp"
 
 int main() {
     setlocale(LC_ALL, "Russian");
     Compiler compiler;
     string filename;
     Lex_Analyze Pars;
-    char name_file[] = "input.txt";
+    char name_file[] = "if.txt";
     Lexeme* lex = new Lexeme[200];
     lex = Pars.Lexical_analyzer(name_file);
     Pars.Print_Table_Lexem(lex);
-    //Grammar grammar;
-    //grammar = grammar.readGrammarFromFile("1.txt");
-    //grammar.print();
-
-    string possibleFiles = "input.txt";
+    string possibleFiles = "if.txt";
 
 
 
@@ -38,20 +25,24 @@ int main() {
         // Записываем результат в output.txt
         ofstream outputFile("output.txt");
         if (outputFile.is_open()) {
-            outputFile << result;
+            outputFile << result + "end ";
             outputFile.close();
             cout << "Compilation successful! Result written to output.txt" << endl;
 
             // Также выводим результат на консоль для информации
             cout << "Generated code:" << endl;
             cout << "==========================================" << endl;
-            cout << result << endl;
+            cout << result + "end " << endl;
             cout << "==========================================" << endl;
         }
         else {
             cerr << "Error: Could not open output.txt for writing" << endl;
             return 1;
         }
+        char out_file[] = "output.txt";
+        Lexeme_* l = Lexical_analyzer_(out_file);
+        //Print_Table_Lex(l);
+        Interpreter_int(l);
     }
     catch (const exception& e) {
         cerr << "Compilation error: " << e.what() << endl;

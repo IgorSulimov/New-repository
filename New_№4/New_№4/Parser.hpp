@@ -29,7 +29,7 @@ private:
         {23, "subvec"}, {25, "&"}, {26, "set"}, {27, "for"}, {28, ">>"}, {29, "<<"},
         {30, "cout"},{31,"C"}, { 32, "jump" }, {33, "switch"}, {34, "when"}, {35, "throw"},
         {36, "rem"}, {39, "L"}, {40, "do"}, {43, "("}, {44, ")"}, {45, "C"},
-        {46, "L:"}, {47, "otherwise"}
+        {46, "L:"}, {47, "otherwise"}, {51, "=="}
     };
 
     // Правила грамматики для свертки
@@ -128,7 +128,8 @@ public:
                 lexemes[i].token_class == 11 || // >=  
                 lexemes[i].token_class == 12 || // <=
                 lexemes[i].token_class == 18 || // >
-                lexemes[i].token_class == 19) { // <
+                lexemes[i].token_class == 19 || // <
+                lexemes[i].token_class == 51) { // ==
                 symbol = "rel";
             }                                     
             else if (lexemes[i].token_class == 9)   // =
@@ -151,6 +152,7 @@ public:
             else if (lexemes[i].token_class == 18) attr.type2 = ">";
             else if (lexemes[i].token_class == 19) attr.type2 = "<";
             else if (lexemes[i].token_class == 9) attr.type2 = "=";
+            else if (lexemes[i].token_class == 51) attr.type2 = "==";
             // Проверка меток 
             else if (lexemes[i].token_class == 39) // L
             {

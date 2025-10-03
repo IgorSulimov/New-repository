@@ -1,0 +1,8 @@
+dim y , x : int ;
+cin >> x ;
+switch ( x )
+when 1 : set y = 11 ;
+when 2 : set y = 22 ;
+otherwise set y = 33 ;
+end ;
+cout << y ;

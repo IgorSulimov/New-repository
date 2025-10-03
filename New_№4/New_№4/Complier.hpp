@@ -7,7 +7,7 @@ class Compiler {
 private:
     Lex_Analyze lexer;
     Grammar grammar;
-    unique_ptr<SyntaxParser> parser; // Используем умный указатель
+    unique_ptr<SyntaxParser> parser;
     map<pair<string, string>, char> precedenceTable;
 
 public:

@@ -135,15 +135,20 @@
     <ClInclude Include="Creat_Table.hpp" />
     <ClInclude Include="Lexical_Analyzator.hpp" />
     <ClInclude Include="Parser.hpp" />
+    <ClInclude Include="Stack.hpp" />
     <ClInclude Include="SymbolTable.hpp" />
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="Warning_Situations.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="1.txt" />
-    <Text Include="2.txt" />
+    <Text Include="euler.txt" />
+    <Text Include="for.txt" />
+    <Text Include="Lable.txt" />
+    <Text Include="switch.txt" />
+    <Text Include="if.txt" />
     <Text Include="grammar.txt" />
-    <Text Include="input.txt" />
+    <Text Include="vect_test.txt" />
+    <Text Include="while.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

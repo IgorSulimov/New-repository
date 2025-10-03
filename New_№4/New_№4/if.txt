@@ -1,0 +1,4 @@
+dim x , y : int ;
+set x = 2 ;
+set y = 5 ;
+if x > y then cout << x ; else cout << y ; end ;

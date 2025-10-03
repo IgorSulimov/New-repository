@@ -63,8 +63,14 @@ void Lex_Analyze::See_number(int token_str, int number_lex, string Lex_, std::va
         cout << left << setw(10) << "<< " << right << setw(3) << "|";
     if (number_lex == 30)
         cout << left << setw(10) << "cout " << right << setw(3) << "|";
-    if (number_lex == 31)
-        cout << left << setw(10) << "C2 " << right << setw(3) << "|" << std::get<Vector>(*vec); // ??????
+    if (number_lex == 31) 
+    {
+        cout << left << setw(10) << "C2 " << right << setw(3) << "|";
+        if (vec && std::holds_alternative<Vector>(*vec))
+            cout << std::get<Vector>(*vec);
+        else
+            cout << "null";
+    }
     if (number_lex == 32)
         cout << left << setw(10) << "jump " << right << setw(3) << "|";
     if (number_lex == 33)
@@ -109,6 +115,8 @@ void Lex_Analyze::See_number(int token_str, int number_lex, string Lex_, std::va
         cout << left << setw(10) << ", " << right << setw(3) << "|";
     if (number_lex == 50)
         cout << left << setw(10) << ": " << right << setw(3) << "|";
+    if (number_lex == 51)
+        cout << left << setw(10) << "== " << right << setw(3) << "|";
 }
 
 SymbolicToken Lex_Analyze::transliterator(int ch)
@@ -464,7 +472,7 @@ Lexeme* Lex_Analyze::Lexical_analyzer(const char* filename)
                 if (ch == '=')
                 {
                     Lex += ch;
-                    state = Ar_A1;
+                    state = Co_B2;
                     break;
                 }
                 else if (ch == '[')
@@ -589,6 +597,8 @@ Lexeme* Lex_Analyze::Lexical_analyzer(const char* filename)
                 zn = 29;
             if (Lex == ">>")
                 zn = 28;
+            if (Lex == "==")
+                zn = 51;
             switch (s.token_class)
             {
             case Space:
@@ -616,7 +626,7 @@ Lexeme* Lex_Analyze::Lexical_analyzer(const char* filename)
                 break;
             }
             break;
-        case Co_B2: // >= <= !=
+        case Co_B2: // >= <= != ==
             if (Lex == ">")
                 zn = 18;
             if (Lex == "<")
@@ -631,6 +641,8 @@ Lexeme* Lex_Analyze::Lexical_analyzer(const char* filename)
                 zn = 49;
             if (Lex == ":")
                 zn = 50;
+            if (Lex == "=")
+                zn = 9;
             switch (s.token_class)
             {
             case Comparison:

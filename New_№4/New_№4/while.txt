@@ -1,0 +1,7 @@
+dim x , y : int ;
+cin >> x ;
+cin >> y ;
+while x < y do 
+set x = x + 1 ;
+cout << x ;
+end ;

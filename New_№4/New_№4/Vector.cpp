@@ -1,5 +1,6 @@
 #include "Vector.hpp"
 #include "Lexical_Analyzator.hpp"
+#include <iterator> 
 Vector& Vector::operator=(const Vector other_)
 {
 	if (other_.size == 0)

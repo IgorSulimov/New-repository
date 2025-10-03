@@ -1,0 +1,26 @@
+dim n , res , temp , p , h , k  : int ;
+cin >> n ;
+
+set res = n ;
+set temp = n ;
+
+set p = 2 ;
+while p * p <= n do 
+	if temp % p == 0 then 
+		while temp % p == 0 do 
+			set temp = temp / p ;
+		end ;
+		set h = p - 1 ;
+		set k = res * h ;
+		set res = k / p ;
+		end ;
+	set p = p + 1 ;
+end ;
+
+if temp > 1 then 
+	set h = temp - 1 ;
+	set k = res * h ;
+	set res = k / temp ;
+end ;
+
+cout << res ;
