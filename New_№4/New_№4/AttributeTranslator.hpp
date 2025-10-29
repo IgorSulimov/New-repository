@@ -9,25 +9,25 @@
 #include "Creat_Table.hpp"
 #include "Warning_Situations.hpp"
 using namespace std;
-// Структура для хранения атрибутов символов грамматики
+// РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ Р°С‚СЂРёР±СѓС‚РѕРІ СЃРёРјРІРѕР»РѕРІ РіСЂР°РјРјР°С‚РёРєРё
 struct Attribute {
-    string code;        // Сгенерированный код
-    string type;        // Тип данных (int, vector, etc.)
-    string value;       // Значение (для констант и переменных)
-    string name;        // Имя (для идентификаторов)
-    string temp_var;    // Временная переменная
-    string label;       // Метка для переходов
-    Vector vectorValue; // векторное значение
-    int line_number;    //Номер строки
-    // Для хранения нескольких атрибутов
+    string code;        // РЎРіРµРЅРµСЂРёСЂРѕРІР°РЅРЅС‹Р№ РєРѕРґ
+    string type;        // РўРёРї РґР°РЅРЅС‹С… (int, vector, etc.)
+    string value;       // Р—РЅР°С‡РµРЅРёРµ (РґР»СЏ РєРѕРЅСЃС‚Р°РЅС‚ Рё РїРµСЂРµРјРµРЅРЅС‹С…)
+    string name;        // РРјСЏ (РґР»СЏ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ)
+    string temp_var;    // Р’СЂРµРјРµРЅРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ
+    string label;       // РњРµС‚РєР° РґР»СЏ РїРµСЂРµС…РѕРґРѕРІ
+    Vector vectorValue; // РІРµРєС‚РѕСЂРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+    int line_number;    //РќРѕРјРµСЂ СЃС‚СЂРѕРєРё
+    // Р”Р»СЏ С…СЂР°РЅРµРЅРёСЏ РЅРµСЃРєРѕР»СЊРєРёС… Р°С‚СЂРёР±СѓС‚РѕРІ
     string code2;
     string code3;
     string code4;
     string type2;
     string value2;
 
-    string end_label;   // Метка конца switch
-    string next_label;  // Метка для следующего условия
+    string end_label;   // РњРµС‚РєР° РєРѕРЅС†Р° switch
+    string next_label;  // РњРµС‚РєР° РґР»СЏ СЃР»РµРґСѓСЋС‰РµРіРѕ СѓСЃР»РѕРІРёСЏ
 
     vector<string> variable_list;
 
@@ -57,11 +57,11 @@ void Warning_Lable(vector<string> labl_, vector<string> Labl_jm)
 class AttributeTranslator
 {
 private:
-    int temp_counter;      // Счетчик для генерации временных переменных
-    int label_counter;     // Счетчик для генерации меток
+    int temp_counter;      // РЎС‡РµС‚С‡РёРє РґР»СЏ РіРµРЅРµСЂР°С†РёРё РІСЂРµРјРµРЅРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
+    int label_counter;     // РЎС‡РµС‚С‡РёРє РґР»СЏ РіРµРЅРµСЂР°С†РёРё РјРµС‚РѕРє
     SymbolTable symbolTable;
 
-    // Стек для хранения контекста switch (для вложенных switch)
+    // РЎС‚РµРє РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РєРѕРЅС‚РµРєСЃС‚Р° switch (РґР»СЏ РІР»РѕР¶РµРЅРЅС‹С… switch)
     stack<string> temp_var_stack;
     stack<string> end_label_stack;
 
@@ -85,7 +85,7 @@ public:
         }
         attr.line_number = lexeme.token_str;
 
-        // Определение типа лексемы
+        // РћРїСЂРµРґРµР»РµРЅРёРµ С‚РёРїР° Р»РµРєСЃРµРјС‹
         switch (lexeme.token_class) {
         case 9:attr.type = "rel";
             attr.value = "rel";
@@ -120,28 +120,28 @@ public:
             attr.type2 = "==";
             attr.type = "rel";
             attr.type = "rel";
-        case 31: // C2 - константа (vector)
+        case 31: // C2 - РєРѕРЅСЃС‚Р°РЅС‚Р° (vector)
             attr.type = "vector";
             attr.value = lexeme.token_name;
             if (lexeme.token_value != nullptr && std::holds_alternative<Vector>(*lexeme.token_value)) {
                 attr.vectorValue = std::get<Vector>(*lexeme.token_value);
-                attr.value = attr.vectorValue.output(); // Используем правильное строковое представление
+                attr.value = attr.vectorValue.output(); // РСЃРїРѕР»СЊР·СѓРµРј РїСЂР°РІРёР»СЊРЅРѕРµ СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ
             }
             break;
         case 37: // int
             attr.type = "int";
             break;
-        case 38: // vector (тип)
+        case 38: // vector (С‚РёРї)
             attr.type = "vector";
             break;
-        case 39: // L (метка)
+        case 39: // L (РјРµС‚РєР°)
             attr.type = "label";
             attr.label = lexeme.token_name;
             break;
-        case 45: // C (константа int)
+        case 45: // C (РєРѕРЅСЃС‚Р°РЅС‚Р° int)
             attr.type = "int";
             break;
-        case 41: // V (переменная)
+        case 41: // V (РїРµСЂРµРјРµРЅРЅР°СЏ)
             attr.name = lexeme.token_name;
             attr.type = "unknown";
             break;
@@ -152,49 +152,49 @@ public:
         return attr;
     }
 
-    // Генерация новой временной переменной
+    // Р“РµРЅРµСЂР°С†РёСЏ РЅРѕРІРѕР№ РІСЂРµРјРµРЅРЅРѕР№ РїРµСЂРµРјРµРЅРЅРѕР№
     string generateTempVar(const string& type = "int") {
         string temp_name = "t" + to_string(temp_counter++);
         symbolTable.addSymbol(temp_name, type);
         return temp_name;
     }
 
-    // Семантические действия для правил грамматики
+    // РЎРµРјР°РЅС‚РёС‡РµСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ РґР»СЏ РїСЂР°РІРёР» РіСЂР°РјРјР°С‚РёРєРё
 
-// В класс AttributeTranslator добавляем следующие методы:
-    // Правило: <S> -> <Ob> <Prog>
+// Р’ РєР»Р°СЃСЃ AttributeTranslator РґРѕР±Р°РІР»СЏРµРј СЃР»РµРґСѓСЋС‰РёРµ РјРµС‚РѕРґС‹:
+    // РџСЂР°РІРёР»Рѕ: <S> -> <Ob> <Prog>
     Attribute rule_S_Ob_Prog(const Attribute& ob_attr, const Attribute& prog_attr) {
         Attribute result;
-        // Объединяем код объявлений и основной программы
+        // РћР±СЉРµРґРёРЅСЏРµРј РєРѕРґ РѕР±СЉСЏРІР»РµРЅРёР№ Рё РѕСЃРЅРѕРІРЅРѕР№ РїСЂРѕРіСЂР°РјРјС‹
         result.code = ob_attr.code + prog_attr.code;
 
         return result;
     }
 
-    // Правило: <S> -> <Prog>
+    // РџСЂР°РІРёР»Рѕ: <S> -> <Prog>
     Attribute rule_S_Prog(const Attribute& prog_attr) {
         return prog_attr;
     }
-    // Правило: <Prog> -> <Oper> <Prog>
+    // РџСЂР°РІРёР»Рѕ: <Prog> -> <Oper> <Prog>
     Attribute rule_Prog_Oper_Prog(const Attribute& oper_attr, const Attribute& prog_attr) {
         Attribute result;
         result.code = oper_attr.code + prog_attr.code;
         return result;
     }
 
-    // Правило: <Prog> -> <Oper>
+    // РџСЂР°РІРёР»Рѕ: <Prog> -> <Oper>
     Attribute rule_Prog_Oper(const Attribute& oper_attr) {
         return oper_attr;
     }
 
-    // Правило: <Ob> -> <Ob> <Ob2>
+    // РџСЂР°РІРёР»Рѕ: <Ob> -> <Ob> <Ob2>
     Attribute rule_Ob_Ob_Ob2(const Attribute& ob_attr, const Attribute& ob2_attr) {
         Attribute result;
         result.code = ob_attr.code + ob2_attr.code;
         return result;
     }
 
-    // Правило: <Ob> -> <Ob2>
+    // РџСЂР°РІРёР»Рѕ: <Ob> -> <Ob2>
     Attribute rule_Ob_Ob2(const Attribute& ob2_attr) {
         return ob2_attr;
     }
@@ -222,7 +222,7 @@ public:
                     result.code += "pop " + var_name + "\n";
                 }
                 else if (type_attr.type == "vector") {
-                    // Инициализируем пустым вектором вместо [0]
+                    // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РїСѓСЃС‚С‹Рј РІРµРєС‚РѕСЂРѕРј РІРјРµСЃС‚Рѕ [0]
                     result.code += "push []\n";
                     result.code += "pop " + var_name + "\n";
                 }
@@ -263,14 +263,14 @@ public:
         return ob3_attr;
     }
 
-    // Правило: <Type> -> int
+    // РџСЂР°РІРёР»Рѕ: <Type> -> int
     Attribute rule_Type_int() {
         Attribute result;
         result.type = "int";
         return result;
     }
 
-    // Правило: <Type> -> vector
+    // РџСЂР°РІРёР»Рѕ: <Type> -> vector
     Attribute rule_Type_vector() {
         Attribute result;
         result.type = "vector";
@@ -279,10 +279,10 @@ public:
 
     // <Oper> -> ;
     Attribute rule_Oper_semicolon() {
-        return Attribute(); // Пустой оператор
+        return Attribute(); // РџСѓСЃС‚РѕР№ РѕРїРµСЂР°С‚РѕСЂ
     }
 
-    // Правило: <Oper> -> <Prisv> ;
+    // РџСЂР°РІРёР»Рѕ: <Oper> -> <Prisv> ;
     Attribute rule_Oper_Prisv_semicolon(const Attribute& prisv_attr) {
         return prisv_attr;
     }
@@ -302,7 +302,7 @@ public:
             }
         }
 
-        // Проверяем, что все переменные объявлены
+        // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РІСЃРµ РїРµСЂРµРјРµРЅРЅС‹Рµ РѕР±СЉСЏРІР»РµРЅС‹
         for (const auto& var_name : variables) {
             if (!symbolTable.exists(var_name)) {
                 string error_msg = "Variable '" + var_name + "' is not declared";
@@ -313,13 +313,13 @@ public:
             }
         }
 
-        // Проверка типов для всех переменных
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїРѕРІ РґР»СЏ РІСЃРµС… РїРµСЂРµРјРµРЅРЅС‹С…
         for (const auto& var_name : variables) {
             string var_type = symbolTable.getType(var_name);
 
-            // Для векторов используем специальную проверку
+            // Р”Р»СЏ РІРµРєС‚РѕСЂРѕРІ РёСЃРїРѕР»СЊР·СѓРµРј СЃРїРµС†РёР°Р»СЊРЅСѓСЋ РїСЂРѕРІРµСЂРєСѓ
             if (var_type == "vector" && e_attr.type == "vector") {
-                // Вектор можно присваивать вектору
+                // Р’РµРєС‚РѕСЂ РјРѕР¶РЅРѕ РїСЂРёСЃРІР°РёРІР°С‚СЊ РІРµРєС‚РѕСЂСѓ
                 continue;
             }
             else if (var_type != e_attr.type) {
@@ -332,7 +332,7 @@ public:
             }
         }
 
-        // Генерация кода присваивания
+        // Р“РµРЅРµСЂР°С†РёСЏ РєРѕРґР° РїСЂРёСЃРІР°РёРІР°РЅРёСЏ
         if (variables.size() == 1) {
             result.code = e_attr.code + "pop " + variables[0] + "\n";
         }
@@ -352,7 +352,7 @@ public:
     Attribute rule_Prisv2_set_V(const Attribute& v_attr) {
         Attribute result;
 
-        // Проверяем, что переменная объявлена
+        // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РїРµСЂРµРјРµРЅРЅР°СЏ РѕР±СЉСЏРІР»РµРЅР°
         if (!symbolTable.exists(v_attr.name)) {
             string error_msg = "Variable '" + v_attr.name + "' is not declared";
             if (v_attr.line_number != -1) {
@@ -362,7 +362,7 @@ public:
         }
 
         result.name = v_attr.name;
-        result.type = symbolTable.getType(v_attr.name); // Получаем тип из таблицы символов
+        result.type = symbolTable.getType(v_attr.name); // РџРѕР»СѓС‡Р°РµРј С‚РёРї РёР· С‚Р°Р±Р»РёС†С‹ СЃРёРјРІРѕР»РѕРІ
         result.line_number = v_attr.line_number;
 
         return result;
@@ -385,7 +385,7 @@ public:
     Attribute rule_Prisv3_Prisv2_comma(const Attribute& prisv2_attr) {
         return prisv2_attr;
     }
-    // Правило: <Oper> -> <For_1> end ;
+    // РџСЂР°РІРёР»Рѕ: <Oper> -> <For_1> end ;
     Attribute rule_Oper_For_1_end_semicolon(const Attribute& for1_attr) {
         return for1_attr;
     }
@@ -399,13 +399,13 @@ public:
         result.code = 
             "lable " + loop_start_label + "\n" +
             "push " + for2_attr.name + "\n" +
-            for2_attr.code +            // верхняя граница
-            ">\n" +                    // проверяем итератор <= верхней границы
-            "ji " + loop_end_label + "\n" + // если итератор > верхней границы, выходим
-            prog_attr.code +            // тело цикла
+            for2_attr.code +            // РІРµСЂС…РЅСЏСЏ РіСЂР°РЅРёС†Р°
+            ">\n" +                    // РїСЂРѕРІРµСЂСЏРµРј РёС‚РµСЂР°С‚РѕСЂ <= РІРµСЂС…РЅРµР№ РіСЂР°РЅРёС†С‹
+            "ji " + loop_end_label + "\n" + // РµСЃР»Рё РёС‚РµСЂР°С‚РѕСЂ > РІРµСЂС…РЅРµР№ РіСЂР°РЅРёС†С‹, РІС‹С…РѕРґРёРј
+            prog_attr.code +            // С‚РµР»Рѕ С†РёРєР»Р°
             "push " + for2_attr.name + "\n" +
             "push 1\n" +
-            "+\n" +                     // увеличиваем итератор на 1
+            "+\n" +                     // СѓРІРµР»РёС‡РёРІР°РµРј РёС‚РµСЂР°С‚РѕСЂ РЅР° 1
             "pop " + for2_attr.name + "\n" +
             "jmp " + loop_start_label + "\n" +
             "lable " + loop_end_label + "\n";
@@ -417,7 +417,7 @@ public:
         Attribute result;
         result.line_number = v_attr.line_number;
 
-        // Проверяем, что переменная объявлена
+        // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РїРµСЂРµРјРµРЅРЅР°СЏ РѕР±СЉСЏРІР»РµРЅР°
         if (!symbolTable.exists(v_attr.name)) {
             string error_msg = "Variable '" + v_attr.name + "' is not declared";
             if (result.line_number != -1) {
@@ -426,7 +426,7 @@ public:
             throw runtime_error(error_msg);
         }
 
-        // Проверка типов
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїРѕРІ
         string var_type = symbolTable.getType(v_attr.name);
         if (var_type != "int") {
             string error_msg = "Loop variable must be of type int";
@@ -445,13 +445,13 @@ public:
         }
 
         result.name = v_attr.name;
-        result.code = e_attr.code;     // верхняя граница
-        result.code2 = "push 0\n";     // инициализация итератора (начинаем с 0)
+        result.code = e_attr.code;     // РІРµСЂС…РЅСЏСЏ РіСЂР°РЅРёС†Р°
+        result.code2 = "push 0\n";     // РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёС‚РµСЂР°С‚РѕСЂР° (РЅР°С‡РёРЅР°РµРј СЃ 0)
 
         return result;
     }
 
-    // Правило: <Oper> -> <While> end ;
+    // РџСЂР°РІРёР»Рѕ: <Oper> -> <While> end ;
     Attribute rule_Oper_While_end_semicolon(const Attribute& while_attr) {
         return while_attr;
     }
@@ -464,7 +464,7 @@ public:
 
         result.code = "lable " + m1 + "\n" +
             test_attr.code +
-            "push 0\n" +              // помещаем 0 на стек
+            "push 0\n" +              // РїРѕРјРµС‰Р°РµРј 0 РЅР° СЃС‚РµРє
             "==\n" +
             "ji " + m2 + "\n" +
             prog_attr.code +
@@ -478,11 +478,11 @@ public:
         Attribute result;
         string skip_label = generateLabel();
 
-        result.code = if1_attr.code +           // условие
-            "push 0\n" +              // помещаем 0 на стек
-            "==\n" +                  // сравниваем условие с 0 (результат 1 если условие ложно)
-            "ji " + skip_label + "\n" +  // если условие ложно, пропускаем then
-            if1_attr.code2 +          // then часть
+        result.code = if1_attr.code +           // СѓСЃР»РѕРІРёРµ
+            "push 0\n" +              // РїРѕРјРµС‰Р°РµРј 0 РЅР° СЃС‚РµРє
+            "==\n" +                  // СЃСЂР°РІРЅРёРІР°РµРј СѓСЃР»РѕРІРёРµ СЃ 0 (СЂРµР·СѓР»СЊС‚Р°С‚ 1 РµСЃР»Рё СѓСЃР»РѕРІРёРµ Р»РѕР¶РЅРѕ)
+            "ji " + skip_label + "\n" +  // РµСЃР»Рё СѓСЃР»РѕРІРёРµ Р»РѕР¶РЅРѕ, РїСЂРѕРїСѓСЃРєР°РµРј then
+            if1_attr.code2 +          // then С‡Р°СЃС‚СЊ
             "lable " + skip_label + "\n";
         return result;
     }
@@ -492,12 +492,12 @@ public:
         string then_label = generateLabel();
         string end_label = generateLabel();
 
-        result.code = if1_attr.code +           // условие (оставляет 0 или 1 на стеке)
-            "ji " + then_label + "\n" +  // если условие истинно (1), переходим к then
-            else_attr.code +          // else часть (выполняется при лжи)
-            "jmp " + end_label + "\n" +  // переходим в конец после else
+        result.code = if1_attr.code +           // СѓСЃР»РѕРІРёРµ (РѕСЃС‚Р°РІР»СЏРµС‚ 0 РёР»Рё 1 РЅР° СЃС‚РµРєРµ)
+            "ji " + then_label + "\n" +  // РµСЃР»Рё СѓСЃР»РѕРІРёРµ РёСЃС‚РёРЅРЅРѕ (1), РїРµСЂРµС…РѕРґРёРј Рє then
+            else_attr.code +          // else С‡Р°СЃС‚СЊ (РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РїСЂРё Р»Р¶Рё)
+            "jmp " + end_label + "\n" +  // РїРµСЂРµС…РѕРґРёРј РІ РєРѕРЅРµС† РїРѕСЃР»Рµ else
             "lable " + then_label + "\n" +
-            if1_attr.code2 +          // then часть (выполняется при истине)
+            if1_attr.code2 +          // then С‡Р°СЃС‚СЊ (РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РїСЂРё РёСЃС‚РёРЅРµ)
             "lable " + end_label + "\n";
         return result;
     }
@@ -505,8 +505,8 @@ public:
     // <If_1> -> if <Test> then <Prog>
     Attribute rule_If_1_if_Test_then_Prog(const Attribute& test_attr, const Attribute& prog_attr) {
         Attribute result;
-        result.code = test_attr.code;  // условие
-        result.code2 = prog_attr.code; // then часть
+        result.code = test_attr.code;  // СѓСЃР»РѕРІРёРµ
+        result.code2 = prog_attr.code; // then С‡Р°СЃС‚СЊ
         return result;
     }
 
@@ -515,7 +515,7 @@ public:
         return prog_attr;
     }
 
-    // Правило: <Oper> -> <Cin> ;
+    // РџСЂР°РІРёР»Рѕ: <Oper> -> <Cin> ;
     Attribute rule_Oper_Cin_semicolon(const Attribute& cin_attr) {
         return cin_attr;
     }
@@ -540,7 +540,7 @@ public:
         return result;
     }
 
-    // Правило: <Oper> -> <Output> ;
+    // РџСЂР°РІРёР»Рѕ: <Oper> -> <Output> ;
     Attribute rule_Oper_Output_semicolon(const Attribute& output_attr) {
         return output_attr;
     }
@@ -552,7 +552,7 @@ public:
         return result;
     }
 
-    // Правило: <List_E1> -> <Exp>
+    // РџСЂР°РІРёР»Рѕ: <List_E1> -> <Exp>
     Attribute rule_List_E1_Exp(const Attribute& exp_attr) {
         return exp_attr;
     }
@@ -580,7 +580,7 @@ public:
         return result;
     }
 
-    // Правило: <Oper> -> <Jump> ;
+    // РџСЂР°РІРёР»Рѕ: <Oper> -> <Jump> ;
     Attribute rule_Oper_Jump_semicolon(const Attribute& jump_attr) {
         return jump_attr;
     }
@@ -596,10 +596,10 @@ public:
     // <Oper> -> <Switch_1> end ;
     Attribute rule_Oper_Switch_1_end(const Attribute& switch1_attr) {
         Attribute result;
-        // Добавляем метку конца switch после всех веток
+        // Р”РѕР±Р°РІР»СЏРµРј РјРµС‚РєСѓ РєРѕРЅС†Р° switch РїРѕСЃР»Рµ РІСЃРµС… РІРµС‚РѕРє
         result.code = switch1_attr.code + "lable " + switch1_attr.end_label + "\n";
 
-        // Удаляем контекст switch из стека
+        // РЈРґР°Р»СЏРµРј РєРѕРЅС‚РµРєСЃС‚ switch РёР· СЃС‚РµРєР°
         if (!temp_var_stack.empty()) temp_var_stack.pop();
         if (!end_label_stack.empty()) end_label_stack.pop();
 
@@ -609,10 +609,10 @@ public:
     // <Oper> -> <Switch_1> <Other> end ;
     Attribute rule_Oper_Switch_1_Other_end(const Attribute& switch1_attr, const Attribute& other_attr) {
         Attribute result;
-        // Объединяем код switch, otherwise и добавляем метку конца
+        // РћР±СЉРµРґРёРЅСЏРµРј РєРѕРґ switch, otherwise Рё РґРѕР±Р°РІР»СЏРµРј РјРµС‚РєСѓ РєРѕРЅС†Р°
         result.code = switch1_attr.code + other_attr.code + "lable " + switch1_attr.end_label + "\n";
 
-        // Удаляем контекст switch из стека
+        // РЈРґР°Р»СЏРµРј РєРѕРЅС‚РµРєСЃС‚ switch РёР· СЃС‚РµРєР°
         if (!temp_var_stack.empty()) temp_var_stack.pop();
         if (!end_label_stack.empty()) end_label_stack.pop();
 
@@ -623,7 +623,7 @@ public:
     Attribute rule_Switch_1_Switch_2_When1(const Attribute& switch2_attr, const Attribute& when1_attr) {
         Attribute result;
 
-        // Объединяем код вычисления выражения и код всех веток
+        // РћР±СЉРµРґРёРЅСЏРµРј РєРѕРґ РІС‹С‡РёСЃР»РµРЅРёСЏ РІС‹СЂР°Р¶РµРЅРёСЏ Рё РєРѕРґ РІСЃРµС… РІРµС‚РѕРє
         result.code = switch2_attr.code + when1_attr.code;
         result.end_label = switch2_attr.end_label;
 
@@ -634,17 +634,17 @@ public:
     Attribute rule_Switch_2_switch_lpar_E_rpar(const Attribute& e_attr) {
         Attribute result;
 
-        // Проверка типа
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїР°
         if (e_attr.type != "int") {
             throw runtime_error("Switch expression must be of type int");
         }
 
-        // Сохраняем выражение во временную переменную
+        // РЎРѕС…СЂР°РЅСЏРµРј РІС‹СЂР°Р¶РµРЅРёРµ РІРѕ РІСЂРµРјРµРЅРЅСѓСЋ РїРµСЂРµРјРµРЅРЅСѓСЋ
         string temp_var = generateTempVar("int");
         result.code = e_attr.code + "pop " + temp_var + "\n";
         result.end_label = generateLabel();
 
-        // Сохраняем контекст switch в стек
+        // РЎРѕС…СЂР°РЅСЏРµРј РєРѕРЅС‚РµРєСЃС‚ switch РІ СЃС‚РµРє
         temp_var_stack.push(temp_var);
         end_label_stack.push(result.end_label);
 
@@ -655,7 +655,7 @@ public:
     Attribute rule_When1_When3_When1(const Attribute& when3_attr, const Attribute& when1_attr) {
         Attribute result;
 
-        // Объединяем код текущей ветки и следующих веток
+        // РћР±СЉРµРґРёРЅСЏРµРј РєРѕРґ С‚РµРєСѓС‰РµР№ РІРµС‚РєРё Рё СЃР»РµРґСѓСЋС‰РёС… РІРµС‚РѕРє
         result.code = when3_attr.code + when1_attr.code;
         result.end_label = when1_attr.end_label;
 
@@ -666,7 +666,7 @@ public:
     Attribute rule_When1_When3(const Attribute& when3_attr) {
         Attribute result;
 
-        // Просто возвращаем код ветки
+        // РџСЂРѕСЃС‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј РєРѕРґ РІРµС‚РєРё
         result.code = when3_attr.code;
         result.end_label = when3_attr.end_label;
 
@@ -683,11 +683,11 @@ public:
 
         string end_label = end_label_stack.top();
 
-        // Объединяем код проверки условий и код тела
-        result.code = when_attr.code +                    // Код проверки условий
-            prog_attr.code +                     // Код тела ветки
-            "jmp " + end_label + "\n" +          // Переход в конец после выполнения тела
-            "lable " + when_attr.next_label + "\n"; // Метка для следующей проверки
+        // РћР±СЉРµРґРёРЅСЏРµРј РєРѕРґ РїСЂРѕРІРµСЂРєРё СѓСЃР»РѕРІРёР№ Рё РєРѕРґ С‚РµР»Р°
+        result.code = when_attr.code +                    // РљРѕРґ РїСЂРѕРІРµСЂРєРё СѓСЃР»РѕРІРёР№
+            prog_attr.code +                     // РљРѕРґ С‚РµР»Р° РІРµС‚РєРё
+            "jmp " + end_label + "\n" +          // РџРµСЂРµС…РѕРґ РІ РєРѕРЅРµС† РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ С‚РµР»Р°
+            "lable " + when_attr.next_label + "\n"; // РњРµС‚РєР° РґР»СЏ СЃР»РµРґСѓСЋС‰РµР№ РїСЂРѕРІРµСЂРєРё
 
         result.end_label = end_label;
 
@@ -708,13 +708,13 @@ public:
         string case_label = generateLabel();
         string next_case = generateLabel();
 
-        // Генерируем проверку условия
-        result.code = "push " + temp_var + "\n" +         // Выражение switch
-            "push " + c_attr.value + "\n" +     // Значение для сравнения
-            "==\n" +                            // Сравнение
-            "ji " + case_label + "\n" +         // Условный переход на тело case
-            "jmp " + next_case + "\n" +         // Безусловный переход на следующий case
-            "lable " + case_label + "\n";       // Метка начала тела case
+        // Р“РµРЅРµСЂРёСЂСѓРµРј РїСЂРѕРІРµСЂРєСѓ СѓСЃР»РѕРІРёСЏ
+        result.code = "push " + temp_var + "\n" +         // Р’С‹СЂР°Р¶РµРЅРёРµ switch
+            "push " + c_attr.value + "\n" +     // Р—РЅР°С‡РµРЅРёРµ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
+            "==\n" +                            // РЎСЂР°РІРЅРµРЅРёРµ
+            "ji " + case_label + "\n" +         // РЈСЃР»РѕРІРЅС‹Р№ РїРµСЂРµС…РѕРґ РЅР° С‚РµР»Рѕ case
+            "jmp " + next_case + "\n" +         // Р‘РµР·СѓСЃР»РѕРІРЅС‹Р№ РїРµСЂРµС…РѕРґ РЅР° СЃР»РµРґСѓСЋС‰РёР№ case
+            "lable " + case_label + "\n";       // РњРµС‚РєР° РЅР°С‡Р°Р»Р° С‚РµР»Р° case
 
         result.next_label = next_case;
 
@@ -734,14 +734,14 @@ public:
 
         string case_label = generateLabel();
 
-        // Используем код из предыдущих условий и добавляем новое
-        result.code = when2_attr.code +                      // Код предыдущих проверок
-            "push " + temp_var + "\n" +            // Выражение switch
-            "push " + c_attr.value + "\n" +        // Новое значение для сравнения
-            "==\n" +                               // Сравнение
-            "ji " + case_label + "\n" +            // Условный переход на тело case
-            "jmp " + when2_attr.next_label + "\n" + // Переход к следующему условию
-            "lable " + case_label + "\n";          // Метка начала тела case
+        // РСЃРїРѕР»СЊР·СѓРµРј РєРѕРґ РёР· РїСЂРµРґС‹РґСѓС‰РёС… СѓСЃР»РѕРІРёР№ Рё РґРѕР±Р°РІР»СЏРµРј РЅРѕРІРѕРµ
+        result.code = when2_attr.code +                      // РљРѕРґ РїСЂРµРґС‹РґСѓС‰РёС… РїСЂРѕРІРµСЂРѕРє
+            "push " + temp_var + "\n" +            // Р’С‹СЂР°Р¶РµРЅРёРµ switch
+            "push " + c_attr.value + "\n" +        // РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
+            "==\n" +                               // РЎСЂР°РІРЅРµРЅРёРµ
+            "ji " + case_label + "\n" +            // РЈСЃР»РѕРІРЅС‹Р№ РїРµСЂРµС…РѕРґ РЅР° С‚РµР»Рѕ case
+            "jmp " + when2_attr.next_label + "\n" + // РџРµСЂРµС…РѕРґ Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СѓСЃР»РѕРІРёСЋ
+            "lable " + case_label + "\n";          // РњРµС‚РєР° РЅР°С‡Р°Р»Р° С‚РµР»Р° case
 
         result.next_label = when2_attr.next_label;
 
@@ -752,7 +752,7 @@ public:
     Attribute rule_When2_When_comma(const Attribute& when_attr) {
         Attribute result;
 
-        // Просто передаем атрибуты дальше
+        // РџСЂРѕСЃС‚Рѕ РїРµСЂРµРґР°РµРј Р°С‚СЂРёР±СѓС‚С‹ РґР°Р»СЊС€Рµ
         result.code = when_attr.code;
         result.next_label = when_attr.next_label;
 
@@ -763,7 +763,7 @@ public:
     Attribute rule_Other_otherwise_Prog(const Attribute& prog_attr) {
         Attribute result;
 
-        // Ветка otherwise - просто выполняем код
+        // Р’РµС‚РєР° otherwise - РїСЂРѕСЃС‚Рѕ РІС‹РїРѕР»РЅСЏРµРј РєРѕРґ
         result.code = prog_attr.code;
 
         return result;
@@ -774,7 +774,7 @@ public:
         Attribute result;
         result.line_number = e1_attr.line_number;
 
-        // Проверка типов
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїРѕРІ
         if (e1_attr.type != e2_attr.type) {
             string error_msg = "Type mismatch in comparison: cannot compare " + e1_attr.type + " with " + e2_attr.type;
             if (result.line_number != -1) {
@@ -797,19 +797,19 @@ public:
         return result;
     }
 
-    // Правило: <Comma> -> ,
+    // РџСЂР°РІРёР»Рѕ: <Comma> -> ,
     Attribute rule_Comma_comma() {
         return Attribute();
     }
 
-    // Правило: <Oper> -> throw ;
+    // РџСЂР°РІРёР»Рѕ: <Oper> -> throw ;
     Attribute rule_Oper_throw_semicolon() {
         Attribute result;
         result.code = "throw;\n";
         return result;
     }
 
-    // Правило: <Oper> -> rem
+    // РџСЂР°РІРёР»Рѕ: <Oper> -> rem
     Attribute rule_Oper_rem() {
         Attribute result;
         result.code = "rem\n";
@@ -833,7 +833,7 @@ public:
         return result;
     }
 
-    // Правило: <E> -> <T>
+    // РџСЂР°РІРёР»Рѕ: <E> -> <T>
     Attribute rule_E_T(const Attribute& t_attr) {
         return t_attr;
     }
@@ -848,7 +848,7 @@ public:
         return result;
     }
 
-    // Правило: <E'> -> - <T> <E'>
+    // РџСЂР°РІРёР»Рѕ: <E'> -> - <T> <E'>
     Attribute rule_Eprime_minus_T_Eprime(const Attribute& t_attr, const Attribute& eprime_attr) {
         Attribute result;
         string temp = generateTempVar(t_attr.type);
@@ -858,7 +858,7 @@ public:
         return result;
     }
 
-    // Правило: <E'> -> + <T>
+    // РџСЂР°РІРёР»Рѕ: <E'> -> + <T>
     Attribute rule_Eprime_plus_T(const Attribute& t_attr) {
         Attribute result;
         result.temp_var = "+ ";
@@ -866,7 +866,7 @@ public:
         return result;
     }
 
-    // Правило: <E'> -> - <T>
+    // РџСЂР°РІРёР»Рѕ: <E'> -> - <T>
     Attribute rule_Eprime_minus_T(const Attribute& t_attr) {
         Attribute result;
         result.temp_var = "- ";
@@ -874,7 +874,7 @@ public:
         return result;
     }
 
-    // Правило: <T> -> <F> <T'>
+    // РџСЂР°РІРёР»Рѕ: <T> -> <F> <T'>
     Attribute rule_T_F_Tprime(const Attribute& f_attr, const Attribute& tprime_attr) {
         Attribute result;
         if (tprime_attr.code.empty()) {
@@ -893,12 +893,12 @@ public:
         }
     }
 
-    // Правило: <T> -> <F>
+    // РџСЂР°РІРёР»Рѕ: <T> -> <F>
     Attribute rule_T_F(const Attribute& f_attr) {
         return f_attr;
     }
 
-    // Правило: <T'> -> * <F> <T'>
+    // РџСЂР°РІРёР»Рѕ: <T'> -> * <F> <T'>
     Attribute rule_Tprime_star_F_Tprime(const Attribute& f_attr, const Attribute& tprime_attr) {
         Attribute result;
         string temp = generateTempVar(f_attr.type);
@@ -908,7 +908,7 @@ public:
         return result;
     }
 
-    // Правило: <T'> -> / <F> <T'>
+    // РџСЂР°РІРёР»Рѕ: <T'> -> / <F> <T'>
     Attribute rule_Tprime_slash_F_Tprime(const Attribute& f_attr, const Attribute& tprime_attr) {
         Attribute result;
         string temp = generateTempVar(f_attr.type);
@@ -918,7 +918,7 @@ public:
         return result;
     }
 
-    // Правило: <T'> -> % <F> <T'>
+    // РџСЂР°РІРёР»Рѕ: <T'> -> % <F> <T'>
     Attribute rule_Tprime_percent_F_Tprime(const Attribute& f_attr, const Attribute& tprime_attr) {
         Attribute result;
         string temp = generateTempVar(f_attr.type);
@@ -928,7 +928,7 @@ public:
         return result;
     }
 
-    // Правило: <T'> -> & <F> <T'>
+    // РџСЂР°РІРёР»Рѕ: <T'> -> & <F> <T'>
     Attribute rule_Tprime_ampersand_F_Tprime(const Attribute& f_attr, const Attribute& tprime_attr) {
         Attribute result;
         string temp = generateTempVar(f_attr.type);
@@ -938,7 +938,7 @@ public:
         return result;
     }
 
-    // Правило: <T'> -> * <F>
+    // РџСЂР°РІРёР»Рѕ: <T'> -> * <F>
     Attribute rule_Tprime_star_F(const Attribute& f_attr) {
         Attribute result;
         result.temp_var = "* ";
@@ -946,7 +946,7 @@ public:
         return result;
     }
 
-    // Правило: <T'> -> / <F>
+    // РџСЂР°РІРёР»Рѕ: <T'> -> / <F>
     Attribute rule_Tprime_slash_F(const Attribute& f_attr) {
         Attribute result;
         result.temp_var = "/ ";
@@ -954,7 +954,7 @@ public:
         return result;
     }
 
-    // Правило: <T'> -> % <F>
+    // РџСЂР°РІРёР»Рѕ: <T'> -> % <F>
     Attribute rule_Tprime_percent_F(const Attribute& f_attr) {
         Attribute result;
         result.temp_var = "% ";
@@ -962,7 +962,7 @@ public:
         return result;
     }
 
-    // Правило: <T'> -> & <F>
+    // РџСЂР°РІРёР»Рѕ: <T'> -> & <F>
     Attribute rule_Tprime_ampersand_F(const Attribute& f_attr) {
         Attribute result;
         result.temp_var = "& ";
@@ -974,7 +974,7 @@ public:
     Attribute rule_F_V(const Attribute& v_attr) {
         Attribute result;
 
-        // Проверяем, что переменная объявлена
+        // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РїРµСЂРµРјРµРЅРЅР°СЏ РѕР±СЉСЏРІР»РµРЅР°
         if (!symbolTable.exists(v_attr.name)) {
             string error_msg = "Variable '" + v_attr.name + "' is not declared";
             if (v_attr.line_number != -1) {
@@ -983,7 +983,7 @@ public:
             throw runtime_error(error_msg);
         }
 
-        // Получаем тип переменной из таблицы символов
+        // РџРѕР»СѓС‡Р°РµРј С‚РёРї РїРµСЂРµРјРµРЅРЅРѕР№ РёР· С‚Р°Р±Р»РёС†С‹ СЃРёРјРІРѕР»РѕРІ
         result.type = symbolTable.getType(v_attr.name);
         result.temp_var = v_attr.name;
         result.code = "push " + v_attr.name + "\n";
@@ -1000,10 +1000,10 @@ public:
             result.code = "push " + c_attr.value + "\n";
         }
         else if (c_attr.type == "vector") {
-            // Для векторных констант используем правильное представление
+            // Р”Р»СЏ РІРµРєС‚РѕСЂРЅС‹С… РєРѕРЅСЃС‚Р°РЅС‚ РёСЃРїРѕР»СЊР·СѓРµРј РїСЂР°РІРёР»СЊРЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ
             result.type = "vector";
             Vector copy_cattr = c_attr.vectorValue;
-            string vector_str = copy_cattr.output(); // Используем метод output()
+            string vector_str = copy_cattr.output(); // РСЃРїРѕР»СЊР·СѓРµРј РјРµС‚РѕРґ output()
             result.code = "push " + vector_str + "\n";
         }
 
@@ -1022,7 +1022,7 @@ public:
         return result;
     }
 
-    // Правило: <F> -> ( <E> )
+    // РџСЂР°РІРёР»Рѕ: <F> -> ( <E> )
     Attribute rule_F_lpar_E_rpar(const Attribute& e_attr) {
         return e_attr;
     }
@@ -1032,7 +1032,7 @@ public:
         Attribute result;
         result.line_number = e1_attr.line_number;
 
-        // Проверка типов
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїРѕРІ
         if (e1_attr.type != "vector" && e2_attr.type != "int") {
             string error_msg = "Invalid argument types for shiftl function: expected vector and int";
             if (result.line_number != -1) {
@@ -1054,7 +1054,7 @@ public:
         Attribute result;
         result.line_number = e1_attr.line_number;
 
-        // Проверка типов
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїРѕРІ
         if (e1_attr.type != "vector" && e2_attr.type != "int") {
             string error_msg = "Invalid argument types for shiftr function: expected vector and int";
             if (result.line_number != -1) {
@@ -1072,7 +1072,7 @@ public:
     // <F> -> concat ( <E> <Comma> <E_brace>
     Attribute rule_F_concat_lpar_E_Comma_E_brace(const Attribute& e1_attr, const Attribute& e2_attr) {
         Attribute result;
-        // Проверка типов
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїРѕРІ
         if (e1_attr.type != "vector" && e2_attr.type != "vector") {
             throw runtime_error("Invalid argument types for concat function");
         }
@@ -1086,7 +1086,7 @@ public:
     // <F> -> subvec ( <E> <Comma> <E_brace'>
     Attribute rule_F_subvec_lpar_E_Comma_E_brace_prime(const Attribute& e1_attr, const Attribute& e2_attr) {
         Attribute result;
-        // Проверка типов
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїРѕРІ
         if (e1_attr.type != "vector" && e2_attr.type != "int" && e2_attr.type2 != "int") {
             throw runtime_error("Invalid argument types for subvec function");
         }
@@ -1109,12 +1109,12 @@ public:
         return result;
     }
 
-    // Правило: <E_brace> -> <E> )
+    // РџСЂР°РІРёР»Рѕ: <E_brace> -> <E> )
     Attribute rule_E_brace_E_rpar(const Attribute& e_attr) {
         return e_attr;
     }
 
-    // Вспомогательные методы
+    // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РјРµС‚РѕРґС‹
 private:
     string extractOperator(const string& expression) {
         if (expression.find('+') != string::npos) return "+";
