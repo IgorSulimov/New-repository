@@ -523,20 +523,20 @@ public:
     // <Cin> -> cin <List_V1>
     Attribute rule_Cin_cin_List_V1(const Attribute& list_attr) {
         Attribute result;
-        result.code = "read\n" + list_attr.code;
+        result.code = list_attr.code;
         return result;
     }
 
     // <List_V1> -> >> V <List_V1>
     Attribute rule_List_V1_shiftr_V_List_V1(const Attribute& v_attr, const Attribute& list_attr) {
         Attribute result;
-        result.code = "pop " + v_attr.name + "\n" + list_attr.code;
+        result.code = "read\n"  "pop " + v_attr.name + "\n" + list_attr.code;
         return result;
     }
     // <List_V1> -> >> V
     Attribute rule_List_V1_shiftr_V(const Attribute& v_attr) {
         Attribute result;
-        result.code = "pop " + v_attr.name + "\n";
+        result.code = "read\n" "pop " + v_attr.name + "\n";
         return result;
     }
 
@@ -826,9 +826,8 @@ public:
         }
         else {
             result.type = t_attr.type;
-            result.temp_var = generateTempVar(result.type);
             result.code = t_attr.code + eprime_attr.code;
-            result.code +=  eprime_attr.temp_var + "\n";
+            // Убрана генерация лишней временной переменной и ненужный pop
         }
         return result;
     }
@@ -842,8 +841,7 @@ public:
     Attribute rule_Eprime_plus_T_Eprime(const Attribute& t_attr, const Attribute& eprime_attr) {
         Attribute result;
         string temp = generateTempVar(t_attr.type);
-        result.code = t_attr.code + eprime_attr.code;
-        result.code += eprime_attr.temp_var + "\n";
+        result.code = t_attr.code +"+\n" + eprime_attr.code ;
         result.temp_var = temp;
         return result;
     }
@@ -852,8 +850,7 @@ public:
     Attribute rule_Eprime_minus_T_Eprime(const Attribute& t_attr, const Attribute& eprime_attr) {
         Attribute result;
         string temp = generateTempVar(t_attr.type);
-        result.code = t_attr.code + eprime_attr.code;
-        result.code += eprime_attr.temp_var + "\n";
+        result.code = t_attr.code +"- \n" + eprime_attr.code ;
         result.temp_var = temp;
         return result;
     }
@@ -862,7 +859,7 @@ public:
     Attribute rule_Eprime_plus_T(const Attribute& t_attr) {
         Attribute result;
         result.temp_var = "+ ";
-        result.code = t_attr.code;
+        result.code = t_attr.code + "+ \n";
         return result;
     }
 
@@ -870,7 +867,7 @@ public:
     Attribute rule_Eprime_minus_T(const Attribute& t_attr) {
         Attribute result;
         result.temp_var = "- ";
-        result.code = t_attr.code;
+        result.code = t_attr.code + "- \n";
         return result;
     }
 
@@ -902,8 +899,7 @@ public:
     Attribute rule_Tprime_star_F_Tprime(const Attribute& f_attr, const Attribute& tprime_attr) {
         Attribute result;
         string temp = generateTempVar(f_attr.type);
-        result.code = f_attr.code + tprime_attr.code;
-        result.code += "*\n";
+        result.code = f_attr.code  + tprime_attr.code;
         result.temp_var = temp;
         return result;
     }
@@ -913,7 +909,6 @@ public:
         Attribute result;
         string temp = generateTempVar(f_attr.type);
         result.code = f_attr.code + tprime_attr.code;
-        result.code += "/\n";
         result.temp_var = temp;
         return result;
     }
@@ -923,7 +918,6 @@ public:
         Attribute result;
         string temp = generateTempVar(f_attr.type);
         result.code = f_attr.code + tprime_attr.code;
-        result.code += "%\n";
         result.temp_var = temp;
         return result;
     }
@@ -933,7 +927,6 @@ public:
         Attribute result;
         string temp = generateTempVar(f_attr.type);
         result.code = f_attr.code + tprime_attr.code;
-        result.code += "&\n";
         result.temp_var = temp;
         return result;
     }
