@@ -9,17 +9,17 @@
 using namespace std;
 int size_ = 5;
 int Warning = 0;
-// Перечисление содержит константы для обозначения классов символьных лексем: ЦИФРА, ЗНАК, ПРОБЕЛ, ОШИБКА, КОНЕЦ.
+// РџРµСЂРµС‡РёСЃР»РµРЅРёРµ СЃРѕРґРµСЂР¶РёС‚ РєРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ РѕР±РѕР·РЅР°С‡РµРЅРёСЏ РєР»Р°СЃСЃРѕРІ СЃРёРјРІРѕР»СЊРЅС‹С… Р»РµРєСЃРµРј: Р¦РР¤Р Рђ, Р—РќРђРљ, РџР РћР‘Р•Р›, РћРЁРР‘РљРђ, РљРћРќР•Р¦.
 enum Symbol_icTokenClass { Symbol_, Digit_, Arithmetic_, Comparison_, EndOfLine_, Semicolon_, Space_, LeftBracket_, RightBracke_t, Comma_, Error_, EndOfFile_ };
 
-// Перечисление содержит константы для обозначения состояний автомата и одну дополнительную константу Stop_.
+// РџРµСЂРµС‡РёСЃР»РµРЅРёРµ СЃРѕРґРµСЂР¶РёС‚ РєРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ РѕР±РѕР·РЅР°С‡РµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёР№ Р°РІС‚РѕРјР°С‚Р° Рё РѕРґРЅСѓ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ РєРѕРЅСЃС‚Р°РЅС‚Сѓ Stop_.
 enum States_ {
-    A1_, /*начало*/
-    Sy_B1_, /*все лексемы*/
-    Sy_D8, Sy_D2_, /*Константа*/
-    Sy_E4, Sy_F4, /*Числа*/
+    A1_, /*РЅР°С‡Р°Р»Рѕ*/
+    Sy_B1_, /*РІСЃРµ Р»РµРєСЃРµРјС‹*/
+    Sy_D8, Sy_D2_, /*РљРѕРЅСЃС‚Р°РЅС‚Р°*/
+    Sy_E4, Sy_F4, /*Р§РёСЃР»Р°*/
     Sy_E5,
-    Ar_B1, /*проверка до ;*/
+    Ar_B1, /*РїСЂРѕРІРµСЂРєР° РґРѕ ;*/
     Co_B2_, /* < >*/
     Sy_Z1_, /* pop */
     Sy_Z2_, /*write*/
@@ -35,24 +35,24 @@ enum States_ {
     Sy_Z1_1,/*subvec*/
     Sy_Z1_2,/*concat*/
     Sy_L1_, /*lable*/
-    VectorStart,    // Начало вектора
-    VectorNumber,   // Число в векторе
-    VectorComma_,    // Запятая в векторе
-    VectorEnd,       // Конец вектора
+    VectorStart,    // РќР°С‡Р°Р»Рѕ РІРµРєС‚РѕСЂР°
+    VectorNumber,   // Р§РёСЃР»Рѕ РІ РІРµРєС‚РѕСЂРµ
+    VectorComma_,    // Р—Р°РїСЏС‚Р°СЏ РІ РІРµРєС‚РѕСЂРµ
+    VectorEnd,       // РљРѕРЅРµС† РІРµРєС‚РѕСЂР°
     Stop_
 };
 
-// Структура для представления символьной лексемы.
+// РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃРёРјРІРѕР»СЊРЅРѕР№ Р»РµРєСЃРµРјС‹.
 struct Symbol_icToken
 {
-    Symbol_icTokenClass token_class; // Класс лексемы.
-    int value;                      // Значение лексемы.
+    Symbol_icTokenClass token_class; // РљР»Р°СЃСЃ Р»РµРєСЃРµРјС‹.
+    int value;                      // Р—РЅР°С‡РµРЅРёРµ Р»РµРєСЃРµРјС‹.
     char value_c;
 
 };
 //Word:
-// push число = 1
-// push значение = 2
+// push С‡РёСЃР»Рѕ = 1
+// push Р·РЅР°С‡РµРЅРёРµ = 2
 // pop = 3
 // write = 4
 // read = 5
@@ -76,7 +76,7 @@ struct Symbol_icToken
 // subvec = 23
 // ; = 24
 // & = 25
-// push = 26 вектор
+// push = 26 РІРµРєС‚РѕСЂ
 // lable = 27
 struct Lexeme_
 {
@@ -85,8 +85,8 @@ struct Lexeme_
     vector<int> Word;
     int value_int;
     string value_char;
-    vector<int> value_vector; // Добавить это поле
-    int int_or_char = -1; // 0-символ, 1-цифра, 2-вектор
+    vector<int> value_vector; // Р”РѕР±Р°РІРёС‚СЊ СЌС‚Рѕ РїРѕР»Рµ
+    int int_or_char = -1; // 0-СЃРёРјРІРѕР», 1-С†РёС„СЂР°, 2-РІРµРєС‚РѕСЂ
 
 };
 
@@ -151,7 +151,7 @@ void See_number(int number)
 
 void Print_Table_Lex(Lexeme_* Table)
 {
-    cout << left << setw(10) << "Номер" << setw(10) << "Лексема" << right << setw(10) << "Значение" << endl;
+    cout << left << setw(10) << "РќРѕРјРµСЂ" << setw(10) << "Р›РµРєСЃРµРјР°" << right << setw(10) << "Р—РЅР°С‡РµРЅРёРµ" << endl;
     for (int i = 0; i < size_; i++)
     {
         if (Table[i].int_or_char == 0)
@@ -380,7 +380,7 @@ Lexeme_* Lexical_analyzer_(const char* filename)
     ifstream in(filename);
     if (!in)
     {
-        cout << "Не удалось открыть файл " << filename << endl;
+        cout << "РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» " << filename << endl;
     }
     int count_line = 0;
     Initial_vector_ vec_[8];
@@ -640,10 +640,10 @@ Lexeme_* Lexical_analyzer_(const char* filename)
                 Table_Of_Lexeme_s[count_line].value_int = s.value;
                 state = Sy_F4;
                 break;
-                // Обработка вектора
+                // РћР±СЂР°Р±РѕС‚РєР° РІРµРєС‚РѕСЂР°
             case LeftBracket_:
-                Table_Of_Lexeme_s[count_line].Word.push_back(26); // Новый код для push вектора
-                Table_Of_Lexeme_s[count_line].int_or_char = 2; // 2 - признак вектора
+                Table_Of_Lexeme_s[count_line].Word.push_back(26); // РќРѕРІС‹Р№ РєРѕРґ РґР»СЏ push РІРµРєС‚РѕСЂР°
+                Table_Of_Lexeme_s[count_line].int_or_char = 2; // 2 - РїСЂРёР·РЅР°Рє РІРµРєС‚РѕСЂР°
                 state = VectorStart;
                 break;
             case EndOfLine_:
@@ -664,7 +664,7 @@ Lexeme_* Lexical_analyzer_(const char* filename)
                 Table_Of_Lexeme_s[count_line].value_vector.push_back(s.value);
                 state = VectorNumber;
                 break;
-            case RightBracke_t: // пустой вектор
+            case RightBracke_t: // РїСѓСЃС‚РѕР№ РІРµРєС‚РѕСЂ
                 state = VectorEnd;
                 break;
             default:
@@ -1215,7 +1215,7 @@ Lexeme_* Lexical_analyzer_(const char* filename)
             break;
 
         case Stop_:
-            cout << "Обнаружена ошибка в строке №" << count_line + 1 << endl;
+            cout << "РћР±РЅР°СЂСѓР¶РµРЅР° РѕС€РёР±РєР° РІ СЃС‚СЂРѕРєРµ в„–" << count_line + 1 << endl;
             Warning = 1;
             while (ch != '\n' && ch != EOF)
                 ch = in.get();
@@ -1253,7 +1253,7 @@ void Interpreter_int(Lexeme_* Table_Lex)
     vector<Variable> vect_variable_mean;
     int line = 0;
 
-    // Пропускаем пустые строки
+    // РџСЂРѕРїСѓСЃРєР°РµРј РїСѓСЃС‚С‹Рµ СЃС‚СЂРѕРєРё
     while (line < size_ && Table_Lex[line].Word.empty())
         line++;
 
@@ -1265,21 +1265,21 @@ void Interpreter_int(Lexeme_* Table_Lex)
             if (cin.peek() == '[')
             {
                 cin >> value.vector_value;
-                value.type = 0; // вектор
+                value.type = 0; // РІРµРєС‚РѕСЂ
                 st.push(value);
             }
             else
             {
                 cin >> value.integer_value;
-                value.type = 1; // число
+                value.type = 1; // С‡РёСЃР»Рѕ
                 st.push(value);
             }
-            cin.ignore(); // игнорируем символ новой строки
+            cin.ignore(); // РёРіРЅРѕСЂРёСЂСѓРµРј СЃРёРјРІРѕР» РЅРѕРІРѕР№ СЃС‚СЂРѕРєРё
             line++;
         }
-        else if (Table_Lex[line].Word[0] == 1 || Table_Lex[line].Word[0] == 2) // push число или переменную
+        else if (Table_Lex[line].Word[0] == 1 || Table_Lex[line].Word[0] == 2) // push С‡РёСЃР»Рѕ РёР»Рё РїРµСЂРµРјРµРЅРЅСѓСЋ
         {
-            if (Table_Lex[line].int_or_char == 0) // переменная
+            if (Table_Lex[line].int_or_char == 0) // РїРµСЂРµРјРµРЅРЅР°СЏ
             {
                 bool found = false;
                 for (int i = 0; i < vect_variable_mean.size(); i++)
@@ -1295,11 +1295,11 @@ void Interpreter_int(Lexeme_* Table_Lex)
                 {
                     Variable new_var;
                     new_var.name = Table_Lex[line].value_char;
-                    new_var.type = -1; // неинициализированная переменная
+                    new_var.type = -1; // РЅРµРёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ
                     st.push(new_var);
                 }
             }
-            else if (Table_Lex[line].int_or_char == 1) // число
+            else if (Table_Lex[line].int_or_char == 1) // С‡РёСЃР»Рѕ
             {
                 Variable value;
                 value.integer_value = Table_Lex[line].value_int;
@@ -1319,12 +1319,21 @@ void Interpreter_int(Lexeme_* Table_Lex)
                 bool found = false;
                 for (int i = 0; i < vect_variable_mean.size(); i++)
                 {
-                    if (vect_variable_mean[i].name == Table_Lex[line].value_char)
+                    if (vect_variable_mean[i].type == top_val.type)
                     {
-                        vect_variable_mean[i] = top_val;
-                        vect_variable_mean[i].name = Table_Lex[line].value_char;
-                        found = true;
-                        break;
+
+                        if (vect_variable_mean[i].name == Table_Lex[line].value_char)
+                        {
+                            vect_variable_mean[i] = top_val;
+                            vect_variable_mean[i].name = Table_Lex[line].value_char;
+                            found = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        string error_msg = "the wrong type is served in cin: " + vect_variable_mean[i].name;
+                        throw runtime_error(error_msg);
                     }
                 }
                 if (!found)
@@ -1373,7 +1382,7 @@ void Interpreter_int(Lexeme_* Table_Lex)
         }
         else if (Table_Lex[line].Word[0] == 13 || Table_Lex[line].Word[0] == 14 ||
             Table_Lex[line].Word[0] == 15 || Table_Lex[line].Word[0] == 16 ||
-            Table_Lex[line].Word[0] == 17 || Table_Lex[line].Word[0] == 25) // арифметические операции
+            Table_Lex[line].Word[0] == 17 || Table_Lex[line].Word[0] == 25) // Р°СЂРёС„РјРµС‚РёС‡РµСЃРєРёРµ РѕРїРµСЂР°С†РёРё
         {
             if (st.size() >= 2)
             {
@@ -1381,7 +1390,7 @@ void Interpreter_int(Lexeme_* Table_Lex)
                 Variable a = st.top(); st.pop();
                 Variable c;
 
-                if (a.type == 1 && b.type == 1) // оба числа
+                if (a.type == 1 && b.type == 1) // РѕР±Р° С‡РёСЃР»Р°
                 {
                     c.type = 1;
                     switch (Table_Lex[line].Word[0])
@@ -1391,7 +1400,7 @@ void Interpreter_int(Lexeme_* Table_Lex)
                     case 15: c.integer_value = a.integer_value * b.integer_value; break;
                     case 17:
                         if (b.integer_value == 0) {
-                            cout << "Ошибка: деление на ноль" << endl;
+                            cout << "РћС€РёР±РєР°: РґРµР»РµРЅРёРµ РЅР° РЅРѕР»СЊ" << endl;
                             c.integer_value = 0;
                         }
                         else {
@@ -1400,7 +1409,7 @@ void Interpreter_int(Lexeme_* Table_Lex)
                         break;
                     case 16:
                         if (b.integer_value == 0) {
-                            cout << "Ошибка: деление на ноль" << endl;
+                            cout << "РћС€РёР±РєР°: РґРµР»РµРЅРёРµ РЅР° РЅРѕР»СЊ" << endl;
                             c.integer_value = 0;
                         }
                         else {
@@ -1411,7 +1420,7 @@ void Interpreter_int(Lexeme_* Table_Lex)
                     }
                     st.push(c);
                 }
-                else if (a.type == 0 && b.type == 0) // оба вектора
+                else if (a.type == 0 && b.type == 0) // РѕР±Р° РІРµРєС‚РѕСЂР°
                 {
                     c.type = 0;
                     switch (Table_Lex[line].Word[0])
@@ -1433,7 +1442,7 @@ void Interpreter_int(Lexeme_* Table_Lex)
         }
         else if (Table_Lex[line].Word[0] == 9 || Table_Lex[line].Word[0] == 10 ||
             Table_Lex[line].Word[0] == 11 || Table_Lex[line].Word[0] == 12 ||
-            Table_Lex[line].Word[0] == 18 || Table_Lex[line].Word[0] == 19) // операции ==,!=,>=,<=,>,<
+            Table_Lex[line].Word[0] == 18 || Table_Lex[line].Word[0] == 19) // РѕРїРµСЂР°С†РёРё ==,!=,>=,<=,>,<
         {
             Variable b = st.top(); st.pop();
             Variable a = st.top(); st.pop();
@@ -1499,12 +1508,12 @@ void Interpreter_int(Lexeme_* Table_Lex)
             }
             line++;
         }
-        else if (Table_Lex[line].Word[0] == 26) // push вектора
+        else if (Table_Lex[line].Word[0] == 26) // push РІРµРєС‚РѕСЂР°
         {
             Variable value;
-            value.type = 0; // вектор
+            value.type = 0; // РІРµРєС‚РѕСЂ
 
-            // Создаем массив для инициализации вектора
+            // РЎРѕР·РґР°РµРј РјР°СЃСЃРёРІ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РІРµРєС‚РѕСЂР°
             int* arr = new int[Table_Lex[line].value_vector.size()];
             for (size_t i = 0; i < Table_Lex[line].value_vector.size(); i++) {
                 arr[i] = Table_Lex[line].value_vector[i];
@@ -1533,7 +1542,7 @@ void Interpreter_int(Lexeme_* Table_Lex)
             line++;
         }
 
-        // Пропускаем пустые строки
+        // РџСЂРѕРїСѓСЃРєР°РµРј РїСѓСЃС‚С‹Рµ СЃС‚СЂРѕРєРё
         while (line < size_ && Table_Lex[line].Word.empty())
             line++;
     }
